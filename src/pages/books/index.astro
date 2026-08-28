@@ -25,7 +25,7 @@ const standalone = books.filter(b => !b.series);
           <div class="book-grid">
             {vols.map(b => (
               <a class="book-card" href={`/books/${b.slug}`}>
-                <figure class="cover">
+                <figure class={"cover" + (b.cover.mockup ? " is-mockup" : "")}>
                   <img src={`${b.cover.src}-320.webp`} width={b.cover.w} height={b.cover.h}
                        loading="lazy" alt="" />
                 </figure>
@@ -52,7 +52,7 @@ const standalone = books.filter(b => !b.series);
       <div class="book-grid">
         {standalone.map(b => (
           <a class="book-card" href={`/books/${b.slug}`}>
-            <figure class="cover">
+            <figure class={"cover" + (b.cover.mockup ? " is-mockup" : "")}>
               <img src={`${b.cover.src}-320.webp`} width={b.cover.w} height={b.cover.h}
                    loading="lazy" alt="" />
             </figure>

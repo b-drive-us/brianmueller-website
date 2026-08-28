@@ -15,7 +15,8 @@
     "cover": {
       "src": "/covers/trust-stillness",
       "w": 640,
-      "h": 1024
+      "h": 1024,
+      "mockup": false
     }
   },
   {
@@ -34,7 +35,8 @@
     "cover": {
       "src": "/covers/cock-a-doodle-doo",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -53,7 +55,8 @@
     "cover": {
       "src": "/covers/bull-head",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -72,7 +75,8 @@
     "cover": {
       "src": "/covers/bull-heart",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -91,7 +95,8 @@
     "cover": {
       "src": "/covers/more-bull",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -115,7 +120,8 @@
     "cover": {
       "src": "/covers/complete-bull",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -134,7 +140,8 @@
     "cover": {
       "src": "/covers/tomorrow-could-be-wonderful",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -153,7 +160,8 @@
     "cover": {
       "src": "/covers/second-communion",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -172,7 +180,8 @@
     "cover": {
       "src": "/covers/jonah",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -191,7 +200,8 @@
     "cover": {
       "src": "/covers/the-invitation",
       "w": 640,
-      "h": 960
+      "h": 960,
+      "mockup": false
     }
   },
   {
@@ -210,7 +220,8 @@
     "cover": {
       "src": "/covers/men-writing-for-change-vol-1",
       "w": 640,
-      "h": 572
+      "h": 610,
+      "mockup": true
     }
   },
   {
@@ -229,7 +240,8 @@
     "cover": {
       "src": "/covers/men-writing-for-change-vol-2",
       "w": 640,
-      "h": 584
+      "h": 610,
+      "mockup": true
     }
   }
 ]

@@ -170,6 +170,8 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 .cover{margin:0}
 .cover img{display:block;width:100%;height:auto;border-radius:2px;
            box-shadow:0 1px 2px rgba(23,19,15,.10), 0 8px 22px -10px rgba(23,19,15,.35)}
+/* 3D mockups carry their own baked-in shadow; a second one reads as a card */
+.cover.is-mockup img{box-shadow:none;border-radius:0;mix-blend-mode:multiply}
 .cover-lg{max-width:22rem;margin-inline:auto}
 @media (min-width:52rem){.cover-lg{margin-inline:0}}
 
