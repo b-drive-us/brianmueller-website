@@ -104,8 +104,12 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- book card ---------- */
 .book-grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
 @media (min-width:44rem){.book-grid{grid-template-columns:1fr 1fr}}
-.book-card{background:var(--surface);padding:1.5rem 1.6rem;display:flex;flex-direction:column;gap:.55rem;text-decoration:none;color:inherit}
+.book-card{background:var(--surface);padding:1.5rem 1.6rem;display:flex;gap:1.25rem;
+           align-items:flex-start;text-decoration:none;color:inherit}
 .book-card:hover{background:var(--paper-2)}
+.book-card.is-here{background:var(--paper-2)}
+.book-card .bc-text{display:flex;flex-direction:column;gap:.55rem;min-width:0}
+.book-card .cover{flex:0 0 84px}
 .book-card .t{font-size:1.4rem;line-height:1.15;color:var(--ink)}
 .book-card .s{font-size:.98rem;color:var(--ink-2);font-style:italic;line-height:1.4}
 .book-card .m{font-family:"Archivo",sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:.2rem}
@@ -160,3 +164,23 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 .legal ul{margin:0;padding-left:1.1rem}
 .legal li{font-size:.98rem;line-height:1.65;color:var(--ink-2);margin-block:.3rem}
 .legal a{color:var(--ember);text-underline-offset:2px}
+
+
+/* ---------- covers ---------- */
+.cover{margin:0}
+.cover img{display:block;width:100%;height:auto;border-radius:2px;
+           box-shadow:0 1px 2px rgba(23,19,15,.10), 0 8px 22px -10px rgba(23,19,15,.35)}
+.cover-lg{max-width:22rem;margin-inline:auto}
+@media (min-width:52rem){.cover-lg{margin-inline:0}}
+
+/* book detail: cover beside the copy */
+.book-lead{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
+@media (min-width:52rem){
+  .book-lead{grid-template-columns:22rem minmax(0,34rem);align-items:start}
+  .book-lead > .stack{max-width:34rem}
+}
+.book-lead .cover-lg{position:sticky;top:5.5rem}
+@media (max-width:52rem){
+  .book-lead .cover-lg{position:static;max-width:15rem}
+}
+.poem-left{margin-inline:0}

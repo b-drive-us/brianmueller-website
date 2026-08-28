@@ -11,7 +11,12 @@
     "epigraph": "Drop anchor\ntry gardening\nplant tea trees\nmend and paint the fence\nget a library card\npractice daily meditation\n- trust stillness -",
     "blurb": "For decades I kept moving — too afraid to slow down, certain that in stillness, I would slip below the waves of life. This new collection of poems intersects with a mature perspective, one that emerges when you become content to drift, allowing the waves carry you. It is then you may discover you can breathe under water. These are poems for anyone learning, slowly, to surrender into the second half of life.",
     "quote": null,
-    "quoteBy": null
+    "quoteBy": null,
+    "cover": {
+      "src": "/covers/trust-stillness",
+      "w": 640,
+      "h": 1024
+    }
   },
   {
     "slug": "cock-a-doodle-doo",
@@ -25,7 +30,12 @@
     "epigraph": "Good morning to you\nintrepid wanderers all.\nLet's go chase the sun!",
     "blurb": "Enjoy these 100 haiku written to greet the new day and wake you up. Haiku is a short form of poetry originating from Japan. In English, a haiku is typically broken into three lines with a syllable pattern of 5 / 7 / 5. In a very busy and noisy world, the haiku cuts through the cacophony with striking simplicity.",
     "quote": "A beautiful way to greet the morning.",
-    "quoteBy": "Nancy Anderson"
+    "quoteBy": "Nancy Anderson",
+    "cover": {
+      "src": "/covers/cock-a-doodle-doo",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "bull-head",
@@ -39,7 +49,12 @@
     "epigraph": null,
     "blurb": "A collection of writings exploring a wide variety of subjects, emotions and life events. Taken as a whole it gives tremendous insight into the mind and heart of a young man coming of age in America during the 1990s. The first section contains works of prose ranging from the intensely romantic to the imaginative and fantastic.",
     "quote": "Brian's insight and life giving poetry had touched my life at so many levels. Many days his poems bring peace to me about a situation in my life, uncanny in the way his poems are a balm for what ails me.",
-    "quoteBy": "Jenny Hardin"
+    "quoteBy": "Jenny Hardin",
+    "cover": {
+      "src": "/covers/bull-head",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "bull-heart",
@@ -53,7 +68,12 @@
     "epigraph": null,
     "blurb": "A collection of poems chronicling more than a year spent processing and recovering from divorce. These poems not only address the pain, sadness, and anger one feels at the end of a marriage, but also the transformation of this great anguish through the overwhelming surrender to something greater. Employing the lyrical language of poetry in this journey provides a wonderful conduit to the world of healing and forgiveness.",
     "quote": "I read his poems every day. Brian is a poet with no rival.",
-    "quoteBy": "Robert Kowal"
+    "quoteBy": "Robert Kowal",
+    "cover": {
+      "src": "/covers/bull-heart",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "more-bull",
@@ -67,7 +87,12 @@
     "epigraph": null,
     "blurb": "The third collection of poetry published by Brian Mueller. His earlier collections Bull Head (2002) and Bull Heart (2015) explored familiar themes of growing up, romantic love, and the sometimes inevitable falling apart of relationships. The poems in More Bull mark a transition into a new chapter, one in which themes of surrender, life and death, and simplicity come to the forefront.",
     "quote": "There's something about holding this volume in my hands each morning as I start the day that makes it even sweeter. Thanks for sharing your heart with all of us.",
-    "quoteBy": "Donna Rust"
+    "quoteBy": "Donna Rust",
+    "cover": {
+      "src": "/covers/more-bull",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "complete-bull",
@@ -78,11 +103,20 @@
     "position": 4,
     "year": null,
     "featured": false,
-    "collects": ["bull-head", "bull-heart", "more-bull"],
+    "collects": [
+      "bull-head",
+      "bull-heart",
+      "more-bull"
+    ],
     "epigraph": null,
     "blurb": "A poetry anthology of the collected works of Brian J. Mueller. Comprised of Bull Head (2002), Bull Heart (2015) and More Bull (2016), Complete Bull is a chronicle of spiritual growth through the many challenges and experiences of life. Within the greater narrative, readers will appreciate the development of Brian's unique personal voice.",
     "quote": "If you're looking for understanding and inspiration in this one life we're given, this book is an excellent choice.",
-    "quoteBy": "Bob Harbuck"
+    "quoteBy": "Bob Harbuck",
+    "cover": {
+      "src": "/covers/complete-bull",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "tomorrow-could-be-wonderful",
@@ -96,7 +130,12 @@
     "epigraph": null,
     "blurb": "In this first volume of poems collected from Brian's Poem of the Day, heartfelt meditations inspired by his favourite poets, artists and teachers. Each daily poem paints a picture with words while attempting to connect with you on a soul level.",
     "quote": "I highly recommend this book for the sheer joy of the music of words.",
-    "quoteBy": "Michael W. Whitman"
+    "quoteBy": "Michael W. Whitman",
+    "cover": {
+      "src": "/covers/tomorrow-could-be-wonderful",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "second-communion",
@@ -110,7 +149,12 @@
     "epigraph": null,
     "blurb": "Thought-provoking meditations collected from Brian's personal life as well as his own spiritual work. Each daily poem contains a story, feeling or an idea which you will be able to relate to from your own experience or that of someone close to you.",
     "quote": "Very encouraging and at times enlightening daily readings book.",
-    "quoteBy": "Parnelli Purdy"
+    "quoteBy": "Parnelli Purdy",
+    "cover": {
+      "src": "/covers/second-communion",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "jonah",
@@ -124,7 +168,12 @@
     "epigraph": null,
     "blurb": "An accessible and compelling collection of thought-provoking meditations for every day of the year. Each day's poem contains a different theme and perspective about life, love, family, friends, work and happiness, enhanced with subtitles and relevant quotes.",
     "quote": "Brian's poems are a daily dose of thoughtfulness that I always find meaningful.",
-    "quoteBy": "Robert L. Sprengard"
+    "quoteBy": "Robert L. Sprengard",
+    "cover": {
+      "src": "/covers/jonah",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "the-invitation",
@@ -138,7 +187,12 @@
     "epigraph": null,
     "blurb": "Thought-provoking meditations for each day of the year. Every poem contains a different theme and perspective about life, love, family, friends, work and happiness — poems that often reference familiar life experiences.",
     "quote": "Brian's poems are fresh, honest and insightful.",
-    "quoteBy": "James Helmuth"
+    "quoteBy": "James Helmuth",
+    "cover": {
+      "src": "/covers/the-invitation",
+      "w": 640,
+      "h": 960
+    }
   },
   {
     "slug": "men-writing-for-change-vol-1",
@@ -152,7 +206,12 @@
     "epigraph": null,
     "blurb": "Poetry is not some esoteric art, practiced by cloistered academics. Rather it is the language of nature in which we are all fluent. These poems are the product of time spent together, where we summoned our own inner poet to help us make sense of our life experiences.",
     "quote": null,
-    "quoteBy": null
+    "quoteBy": null,
+    "cover": {
+      "src": "/covers/men-writing-for-change-vol-1",
+      "w": 640,
+      "h": 572
+    }
   },
   {
     "slug": "men-writing-for-change-vol-2",
@@ -166,6 +225,11 @@
     "epigraph": null,
     "blurb": "In January 2018, we gathered in a council circle of twenty-five men from Ohio and Kentucky to journey on a creative exploration of our experiences and interiors. The weather was unusually frigid that winter weekend, but we found great warmth and companionship. Sitting together, listening to the wisdom of others, and then sharing our own stories in song or verse resulted in the poems published within this collection.",
     "quote": null,
-    "quoteBy": null
+    "quoteBy": null,
+    "cover": {
+      "src": "/covers/men-writing-for-change-vol-2",
+      "w": 640,
+      "h": 584
+    }
   }
 ]

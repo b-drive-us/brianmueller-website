@@ -21,12 +21,18 @@ const vols = books.filter(b => b.series === s.slug).sort((a,b) => a.position - b
     <div class="book-grid">
       {vols.map(b => (
         <a class="book-card" href={`/books/${b.slug}`}>
-          <div class="m">{b.position} of {vols.length}{b.year ? ` · ${b.year}` : ""}</div>
-          <div class="t">{b.title}</div>
-          <div class="s">{b.subtitle}</div>
-          {b.kind !== "collection" && (
-            <div style="padding-top:.4rem"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
-          )}
+          <figure class="cover">
+            <img src={`${b.cover.src}-320.webp`} width={b.cover.w} height={b.cover.h}
+                 loading="lazy" alt="" />
+          </figure>
+          <div class="bc-text">
+            <div class="m">{b.position} of {vols.length}{b.year ? ` · ${b.year}` : ""}</div>
+            <div class="t">{b.title}</div>
+            <div class="s">{b.subtitle}</div>
+            {b.kind !== "collection" && (
+              <div style="padding-top:.45rem"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
+            )}
+          </div>
         </a>
       ))}
     </div>
