@@ -1,0 +1,18 @@
+---
+const { title = "Brian J. Mueller", description = "" } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- STAGING: remove this line at cutover, not before. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="stylesheet" href="/styles/base.css" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
