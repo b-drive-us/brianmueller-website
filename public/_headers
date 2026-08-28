@@ -5,3 +5,11 @@
 # REMOVE THIS FILE AT CUTOVER, and not before.
 /*
   X-Robots-Tag: noindex, nofollow
+
+# Fonts are self-hosted and their filenames are stable, so they are renamed
+# (not overwritten) if they are ever regenerated. Safe to cache hard.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/styles/*
+  Cache-Control: public, max-age=3600
