@@ -1,24 +1,152 @@
+/* ============================================================
+   brianmueller.com — design tokens and base
+   Display + poems: Newsreader (bookish, real italic, optical sizes)
+   Labels + nav:    Archivo (grotesque with some spine)
+   Palette derived from the existing site: dark bull hero, warm paper,
+   the amber of the cape under stage light.
+   ============================================================ */
+
 :root{
-  --paper:#F4F2EE;
-  --ink:#1A1714;
-  --ink-2:#5A5149;
-  --rule:#DCD6CD;
-  --accent:#8C5426;
+  --paper:#F7F4EF;
+  --paper-2:#EFEAE1;
+  --surface:#FFFFFF;
+  --ink:#17130F;
+  --ink-2:#544A40;
+  --ink-3:#7C7065;
+  --rule:#E0D8CC;
+  --rule-2:#C9BDAC;
+  --ember:#8C4A22;
+  --ember-deep:#6F3915;
+  --ember-soft:#F3E7DA;
+  --wheat:#C9A063;
+  --measure:34rem;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --paper:#141210; --ink:#EFEAE3; --ink-2:#A79C91; --rule:#2C2723; --accent:#D9A163; }
+  :root{
+    --paper:#131110;
+    --paper-2:#1A1715;
+    --surface:#1C1917;
+    --ink:#F2EDE6;
+    --ink-2:#B3A89D;
+    --ink-3:#8A7F74;
+    --rule:#2E2823;
+    --rule-2:#443B33;
+    --ember:#D98A55;
+    --ember-deep:#E9A778;
+    --ember-soft:#2A1D14;
+    --wheat:#C9A063;
+  }
 }
+
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+
 body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:Georgia,"Times New Roman",serif;
-  display:grid; place-items:center; min-height:100svh; padding:2rem;
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  font-size:19px;
+  line-height:1.62;
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
-main{max-width:34rem; text-align:center; display:flex; flex-direction:column; gap:1.1rem}
-h1{font-size:clamp(2rem,7vw,3rem); font-weight:500; margin:0; letter-spacing:-.02em}
-p{margin:0; color:var(--ink-2); line-height:1.65; font-size:1.05rem}
-a{color:var(--accent)}
-.rule{width:48px; height:2px; background:var(--accent); margin:.4rem auto}
-.tag{font-family:ui-monospace,Menlo,monospace; font-size:.72rem; letter-spacing:.14em;
-     text-transform:uppercase; color:var(--accent)}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--ember-deep);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:2px}
+
+/* ---------- type roles ---------- */
+h1,h2,h3{font-weight:500;margin:0;line-height:1.14;text-wrap:balance;letter-spacing:-.012em}
+h1{font-size:clamp(2.4rem,6vw,3.9rem)}
+h2{font-size:clamp(1.7rem,3.6vw,2.4rem)}
+h3{font-size:1.3rem}
+p{margin:0}
+.eyebrow{
+  font-family:"Archivo",system-ui,sans-serif;font-size:.7rem;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ember);
+}
+.lede{font-size:clamp(1.15rem,2.4vw,1.4rem);line-height:1.55;color:var(--ink-2)}
+.small{font-family:"Archivo",system-ui,sans-serif;font-size:.83rem;line-height:1.55;color:var(--ink-3)}
+.serif-italic{font-style:italic}
+
+/* ---------- layout ---------- */
+.wrap{width:min(72rem,100% - 2.5rem);margin-inline:auto}
+.prose{max-width:var(--measure)}
+.stack{display:flex;flex-direction:column}
+.stack-s{gap:.6rem}.stack-m{gap:1.1rem}.stack-l{gap:2rem}.stack-xl{gap:3.4rem}
+section{padding-block:clamp(3rem,7vw,5.5rem)}
+.rule-short{width:52px;height:2px;background:var(--ember);border:0;margin:0}
+
+/* ---------- header ---------- */
+.site-head{border-bottom:1px solid var(--rule);background:var(--paper);position:sticky;top:0;z-index:20}
+.site-head .bar{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1rem}
+.wordmark{font-size:1.25rem;font-weight:500;letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.wordmark span{color:var(--ember)}
+.nav{display:flex;gap:1.4rem;flex-wrap:wrap;font-family:"Archivo",system-ui,sans-serif;
+     font-size:.82rem;font-weight:500;letter-spacing:.03em}
+.nav a{color:var(--ink-2);text-decoration:none;padding-block:.2rem;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--ink);border-bottom-color:var(--wheat)}
+.nav a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ember)}
+@media (max-width:640px){
+  .site-head .bar{flex-direction:column;align-items:flex-start;gap:.7rem}
+  .nav{gap:1rem}
+}
+
+/* ---------- footer ---------- */
+.site-foot{border-top:1px solid var(--rule);margin-top:2rem;padding-block:2.5rem 3.5rem;color:var(--ink-3)}
+.site-foot .cols{display:flex;flex-wrap:wrap;gap:2rem 3rem;justify-content:space-between}
+.site-foot a{color:var(--ink-2);text-decoration:none}
+.site-foot a:hover{color:var(--ink);text-decoration:underline}
+.foot-links{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-family:"Archivo",sans-serif;font-size:.8rem}
+
+/* ---------- book card ---------- */
+.book-grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+@media (min-width:44rem){.book-grid{grid-template-columns:1fr 1fr}}
+.book-card{background:var(--surface);padding:1.5rem 1.6rem;display:flex;flex-direction:column;gap:.55rem;text-decoration:none;color:inherit}
+.book-card:hover{background:var(--paper-2)}
+.book-card .t{font-size:1.4rem;line-height:1.15;color:var(--ink)}
+.book-card .s{font-size:.98rem;color:var(--ink-2);font-style:italic;line-height:1.4}
+.book-card .m{font-family:"Archivo",sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:.2rem}
+
+/* ---------- kind badge ---------- */
+.badge{display:inline-block;font-family:"Archivo",sans-serif;font-size:.66rem;font-weight:600;
+  letter-spacing:.11em;text-transform:uppercase;padding:.24rem .55rem;border-radius:3px;
+  background:var(--ember-soft);color:var(--ember-deep)}
+
+/* ---------- poem / epigraph setting ----------
+   Flush left, block centred on the page.
+   Turned lines get a hanging indent so a long line never reads
+   as a new line of the poem on a narrow screen. */
+.poem{
+  white-space:pre-wrap;
+  font-size:1.12rem;
+  line-height:1.5;
+  color:var(--ink);
+  max-width:26rem;
+  margin-inline:auto;
+  padding-left:1.4em;
+  text-indent:-1.4em;
+}
+.poem em{font-style:italic}
+
+/* ---------- quote ---------- */
+.pull{font-style:italic;font-size:1.15rem;line-height:1.5;color:var(--ink);
+  border-left:2px solid var(--wheat);padding-left:1.1rem}
+.pull cite{display:block;font-style:normal;font-family:"Archivo",sans-serif;
+  font-size:.78rem;letter-spacing:.06em;color:var(--ink-3);margin-top:.5rem}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-block;font-family:"Archivo",sans-serif;font-size:.85rem;font-weight:600;
+  letter-spacing:.04em;padding:.7rem 1.3rem;border-radius:3px;text-decoration:none;
+  background:var(--ember);color:#fff;border:1px solid var(--ember)}
+.btn:hover{background:var(--ember-deep);border-color:var(--ember-deep)}
+.btn-ghost{background:transparent;color:var(--ember-deep);border-color:var(--rule-2)}
+.btn-ghost:hover{background:var(--ember-soft);color:var(--ember-deep);border-color:var(--ember)}
+.btn-row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+
+/* ---------- notice ---------- */
+.notice{background:var(--paper-2);border:1px solid var(--rule);border-radius:4px;
+  padding:1.1rem 1.3rem;font-size:.95rem;color:var(--ink-2)}
+.notice b{color:var(--ink)}

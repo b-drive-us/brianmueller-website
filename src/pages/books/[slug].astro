@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import books from '../../data/books.json';
+import series from '../../data/series.json';
+
+export function getStaticPaths() {
+  return books.map(b => ({ params: { slug: b.slug }, props: { book: b } }));
+}
+const { book } = Astro.props;
+const s = series.find(x => x.slug === book.series);
+const siblings = book.series
+  ? books.filter(b => b.series === book.series).sort((a,b) => a.position - b.position)
+  : [];
+const collects = (book.collects || []).map(sl => books.find(b => b.slug === sl)).filter(Boolean);
+const AMAZON = "https://www.amazon.com/stores/Brian-J.-Mueller/author/B00JQMV412";
+const kindLabel = { collection: null, anthology: "Anthology", "multi-author": "Many voices" }[book.kind];
+---
+<Base title={`${book.title} — Brian J. Mueller`} description={book.blurb.slice(0,150)}>
+  <section class="wrap stack stack-l">
+    <div class="stack stack-m prose">
+      {s && <div class="eyebrow"><a href={`/series/${s.slug}`} style="color:inherit">{s.name}</a> · {book.position} of {siblings.length}</div>}
+      {!s && <div class="eyebrow">Standalone</div>}
+      <h1>{book.title}</h1>
+      <p class="lede serif-italic">{book.subtitle}</p>
+      {kindLabel && <div><span class="badge">{kindLabel}</span></div>}
+      <hr class="rule-short" />
+    </div>
+
+    {book.epigraph && <div class="poem">{book.epigraph}</div>}
+
+    <div class="prose stack stack-m">
+      <p>{book.blurb}</p>
+      {book.quote && (
+        <blockquote class="pull">{book.quote}<cite>— {book.quoteBy}</cite></blockquote>
+      )}
+      <div class="btn-row"><a class="btn" href={AMAZON}>Buy on Amazon</a></div>
+    </div>
+
+    {collects.length > 0 && (
+      <div class="notice prose">
+        <b>This volume collects three earlier books.</b> If you already own
+        {" "}{collects.map((c,i) => (<span>{i > 0 ? (i === collects.length-1 ? " and " : ", ") : " "}<a href={`/books/${c.slug}`}>{c.title}</a></span>))},
+        you have everything inside it.
+      </div>
+    )}
+
+    {book.kind === "multi-author" && (
+      <div class="notice prose">
+        <b>These poems are not mine alone.</b> They were written by the men who came to the
+        retreat, in council circle, and read aloud to one another. The retreat continues each
+        January as <a href="/retreat">Rooted in the Land</a>.
+      </div>
+    )}
+
+    {siblings.length > 1 && (
+      <div class="stack stack-m">
+        <h2>{s.name}</h2>
+        <div class="book-grid">
+          {siblings.map(b => (
+            <a class="book-card" href={`/books/${b.slug}`}
+               style={b.slug === book.slug ? "background:var(--paper-2)" : ""}>
+              <div class="m">{b.position} of {siblings.length}{b.slug === book.slug ? " · you are here" : ""}</div>
+              <div class="t">{b.title}</div>
+              <div class="s">{b.subtitle}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+</Base>

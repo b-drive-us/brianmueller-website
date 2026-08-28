@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import books from '../../data/books.json';
+import series from '../../data/series.json';
+const standalone = books.filter(b => !b.series);
+---
+<Base title="Books — Brian J. Mueller">
+  <section class="wrap stack stack-l">
+    <div class="stack stack-m prose">
+      <div class="eyebrow">Twelve volumes</div>
+      <h1>The books</h1>
+      <hr class="rule-short" />
+      <p class="lede">Each one stands on its own. Three of them belong to series, which you can
+         read in order or dip into anywhere.</p>
+    </div>
+
+    {series.map(s => {
+      const vols = books.filter(b => b.series === s.slug).sort((a,b) => a.position - b.position);
+      return (
+        <div class="stack stack-m">
+          <div class="stack stack-s">
+            <h2><a href={`/series/${s.slug}`} style="text-decoration:none;color:inherit">{s.name}</a></h2>
+            <p class="small">{s.tagline}</p>
+          </div>
+          <div class="book-grid">
+            {vols.map(b => (
+              <a class="book-card" href={`/books/${b.slug}`}>
+                <div class="m">{b.position} of {vols.length}{b.year ? ` · ${b.year}` : ""}</div>
+                <div class="t">{b.title}</div>
+                <div class="s">{b.subtitle}</div>
+                {b.kind !== "collection" && (
+                  <div style="padding-top:.4rem"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+
+    <div class="stack stack-m">
+      <div class="stack stack-s">
+        <h2>Standalone volumes</h2>
+        <p class="small">Not part of a series.</p>
+      </div>
+      <div class="book-grid">
+        {standalone.map(b => (
+          <a class="book-card" href={`/books/${b.slug}`}>
+            <div class="t">{b.title}</div>
+            <div class="s">{b.subtitle}</div>
+            <div class="m">Read more →</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,5 +1,14 @@
 ---
-const { title = "Brian J. Mueller", description = "" } = Astro.props;
+const { title = "Brian J. Mueller", description = "Poet. Twelve collections of poetry, and a men's writing retreat each January." } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const nav = [
+  { href: "/books",   label: "Books" },
+  { href: "/poems",   label: "Poems" },
+  { href: "/retreat", label: "Retreat" },
+  { href: "/about",   label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+const isCurrent = (href) => path === href || path.startsWith(href + "/");
 ---
 <!doctype html>
 <html lang="en">
@@ -9,10 +18,53 @@ const { title = "Brian J. Mueller", description = "" } = Astro.props;
     <!-- STAGING: remove this line at cutover, not before. -->
     <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Archivo:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="/styles/base.css" />
   </head>
   <body>
-    <slot />
+    <header class="site-head">
+      <div class="wrap bar">
+        <a class="wordmark" href="/">Brian<span>Mueller</span></a>
+        <nav class="nav" aria-label="Main">
+          {nav.map((n) => (
+            <a href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>{n.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+
+    <main id="main"><slot /></main>
+
+    <footer class="site-foot">
+      <div class="wrap stack stack-l">
+        <div class="cols">
+          <div class="stack stack-s" style="max-width:22rem">
+            <div class="wordmark">Brian<span>Mueller</span></div>
+            <p class="small">Experience the Power of a Poem.™ Twelve collections of poetry, and a
+               men's writing retreat each January in Ohio.</p>
+          </div>
+          <div class="stack stack-s">
+            <div class="eyebrow">Elsewhere</div>
+            <div class="foot-links" style="flex-direction:column">
+              <a href="https://brianspoems.com">Read the poems</a>
+              <a href="https://www.amazon.com/stores/Brian-J.-Mueller/author/B00JQMV412">Books on Amazon</a>
+              <a href="/retreat">Rooted in the Land</a>
+            </div>
+          </div>
+        </div>
+        <div class="foot-links">
+          <a href="/privacy-policy">Privacy</a>
+          <a href="/terms-conditions">Terms</a>
+          <a href="/cookies-policy">Cookies</a>
+          <a href="/disclaimer">Disclaimer</a>
+        </div>
+        <p class="small">Poems licensed CC BY-NC-ND 4.0 — attribute, don't sell, don't change.
+           Some book links are Amazon Associate links; a purchase may earn a small commission at
+           no cost to you.</p>
+      </div>
+    </footer>
   </body>
 </html>

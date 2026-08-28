@@ -1,13 +1,73 @@
 ---
 import Base from '../layouts/Base.astro';
+import books from '../data/books.json';
+import series from '../data/series.json';
+const featured = books.filter(b => b.featured);
 ---
-<Base title="Brian J. Mueller — in progress" description="A new site is being built here.">
-  <main>
-    <div class="tag">Staging</div>
-    <h1>Something is being built here.</h1>
-    <div class="rule"></div>
-    <p>This is the staging address for the new <strong>brianmueller.com</strong> — poems, books,
-       and the men's writing retreat. It isn't finished, and it isn't meant to be found yet.</p>
-    <p>The published site lives at <a href="https://brianmueller.com">brianmueller.com</a>.</p>
-  </main>
+<Base title="Brian J. Mueller — Poet">
+  <section class="wrap">
+    <div class="stack stack-m prose">
+      <div class="eyebrow">Poet</div>
+      <h1>Trust the first line.</h1>
+      <hr class="rule-short" />
+      <p class="lede">I write poems for everyone.</p>
+      <p>My journey with poetry began between college lectures, but it truly took flight through
+         the rhythm of my favourite songs and the landscapes of my travels. In 2002 I published my
+         debut collection, <em>Bull Head</em>. Since then I have evolved my craft across eight
+         subsequent volumes.</p>
+      <p>I believe poetry is the language of the soul. It offers the depth and meaning we often
+         crave, stirring our passions while anchoring us in the intuitive truth that there is
+         always more to life than meets the eye.</p>
+      <div class="btn-row" style="padding-top:.6rem">
+        <a class="btn" href="https://brianspoems.com">Read the poems</a>
+        <a class="btn btn-ghost" href="/books">See the books</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap stack stack-l" style="border-top:1px solid var(--rule)">
+    <div class="stack stack-s">
+      <div class="eyebrow">Latest</div>
+      <h2>New and standalone</h2>
+    </div>
+    <div class="book-grid">
+      {featured.map(b => (
+        <a class="book-card" href={`/books/${b.slug}`}>
+          <div class="t">{b.title}</div>
+          <div class="s">{b.subtitle}</div>
+          {b.epigraph && <div class="poem" style="margin-top:.6rem;font-size:1rem;text-align:left">{b.epigraph}</div>}
+          <div class="m">Read more →</div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap stack stack-l" style="border-top:1px solid var(--rule)">
+    <div class="stack stack-s">
+      <div class="eyebrow">Series</div>
+      <h2>Three bodies of work</h2>
+      <p class="lede prose">Every book stands on its own. These are the threads that run between them.</p>
+    </div>
+    <div class="book-grid">
+      {series.map(s => (
+        <a class="book-card" href={`/series/${s.slug}`}>
+          <div class="t">{s.name}</div>
+          <div class="s">{s.tagline}</div>
+          <div class="m">{books.filter(b => b.series === s.slug).length} volumes →</div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap" style="border-top:1px solid var(--rule)">
+    <div class="stack stack-m prose">
+      <div class="eyebrow">Each January</div>
+      <h2>A men's writing retreat</h2>
+      <p>For five years I shared my work daily through <em>Brian's Poem of the Day</em>. That
+         project blossomed into a deeper calling: a request to design a writing retreat focused on
+         healing and spiritual growth for men. I have now had the privilege of co-leading this
+         annual retreat for a decade.</p>
+      <div class="btn-row"><a class="btn btn-ghost" href="/retreat">Rooted in the Land, January 2027</a></div>
+    </div>
+  </section>
 </Base>

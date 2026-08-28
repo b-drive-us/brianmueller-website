@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "the-bull-series",
+    "name": "The Bull Series",
+    "tagline": "Three decades, three collections, and the anthology that gathers them.",
+    "description": "Brian's origin as a poet. Bull Head collects the writing of his twenties; Bull Heart walks through a divorce; More Bull turns toward surrender and simplicity. Complete Bull gathers all three into one volume."
+  },
+  {
+    "slug": "poem-of-the-day",
+    "name": "Brian's Poem of the Day",
+    "tagline": "Five years of writing a poem every morning, gathered into four volumes.",
+    "description": "For five years Brian published a poem each day. These four volumes select 365 poems apiece — meditations shaped by his reading, his practice, and the people who read along with him."
+  },
+  {
+    "slug": "men-writing-for-change",
+    "name": "Men Writing for Change",
+    "tagline": "Poems written together, by the men who came to the retreats.",
+    "description": "Not Brian's poems alone. These anthologies gather the work of men who sat in council circle, wrote, and read aloud to one another — the same weekend that continues each January as Rooted in the Land."
+  }
+]
