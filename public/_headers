@@ -1,0 +1,7 @@
+# STAGING GUARD — brianmueller.org
+# Cloudflare injects a managed robots.txt that begins with "User-agent: * / Allow: /",
+# which can override the Disallow in our own robots.txt. This header cannot be overridden
+# and is the guard that actually keeps the staging site out of search results.
+# REMOVE THIS FILE AT CUTOVER, and not before.
+/*
+  X-Robots-Tag: noindex, nofollow
