@@ -15,9 +15,9 @@
     "cover": {
       "src": "/covers/trust-stillness",
       "w": 640,
-      "h": 1024,
-      "mockup": false
-    }
+      "h": 1024
+    },
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "cock-a-doodle-doo",
@@ -26,7 +26,7 @@
     "kind": "collection",
     "series": null,
     "position": null,
-    "year": null,
+    "year": 2022,
     "featured": true,
     "epigraph": "Good morning to you\nintrepid wanderers all.\nLet's go chase the sun!",
     "blurb": "Enjoy these 100 haiku written to greet the new day and wake you up. Haiku is a short form of poetry originating from Japan. In English, a haiku is typically broken into three lines with a syllable pattern of 5 / 7 / 5. In a very busy and noisy world, the haiku cuts through the cacophony with striking simplicity.",
@@ -35,9 +35,12 @@
     "cover": {
       "src": "/covers/cock-a-doodle-doo",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 149,
+    "isbn13": "978-1733501255",
+    "isbn10": "1733501258",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "bull-head",
@@ -55,9 +58,12 @@
     "cover": {
       "src": "/covers/bull-head",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 174,
+    "isbn13": "978-0996812030",
+    "isbn10": "0996812032",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "bull-heart",
@@ -75,9 +81,12 @@
     "cover": {
       "src": "/covers/bull-heart",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 118,
+    "isbn13": "978-0996812023",
+    "isbn10": "0996812024",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "more-bull",
@@ -95,9 +104,12 @@
     "cover": {
       "src": "/covers/more-bull",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 86,
+    "isbn13": "978-0996812054",
+    "isbn10": "0996812059",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "complete-bull",
@@ -106,7 +118,7 @@
     "kind": "anthology",
     "series": "the-bull-series",
     "position": 4,
-    "year": null,
+    "year": 2017,
     "featured": false,
     "collects": [
       "bull-head",
@@ -120,9 +132,12 @@
     "cover": {
       "src": "/covers/complete-bull",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 354,
+    "isbn13": "978-0996812061",
+    "isbn10": "0996812067",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "tomorrow-could-be-wonderful",
@@ -131,7 +146,7 @@
     "kind": "collection",
     "series": "poem-of-the-day",
     "position": 1,
-    "year": null,
+    "year": 2017,
     "featured": false,
     "epigraph": null,
     "blurb": "In this first volume of poems collected from Brian's Poem of the Day, heartfelt meditations inspired by his favourite poets, artists and teachers. Each daily poem paints a picture with words while attempting to connect with you on a soul level.",
@@ -140,9 +155,12 @@
     "cover": {
       "src": "/covers/tomorrow-could-be-wonderful",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 430,
+    "isbn13": "978-1733501224",
+    "isbn10": "1733501223",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "second-communion",
@@ -151,7 +169,7 @@
     "kind": "collection",
     "series": "poem-of-the-day",
     "position": 2,
-    "year": null,
+    "year": 2018,
     "featured": false,
     "epigraph": null,
     "blurb": "Thought-provoking meditations collected from Brian's personal life as well as his own spiritual work. Each daily poem contains a story, feeling or an idea which you will be able to relate to from your own experience or that of someone close to you.",
@@ -160,9 +178,12 @@
     "cover": {
       "src": "/covers/second-communion",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 436,
+    "isbn13": "978-1733501231",
+    "isbn10": "1733501231",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "jonah",
@@ -171,7 +192,7 @@
     "kind": "collection",
     "series": "poem-of-the-day",
     "position": 3,
-    "year": null,
+    "year": 2019,
     "featured": false,
     "epigraph": null,
     "blurb": "An accessible and compelling collection of thought-provoking meditations for every day of the year. Each day's poem contains a different theme and perspective about life, love, family, friends, work and happiness, enhanced with subtitles and relevant quotes.",
@@ -180,9 +201,12 @@
     "cover": {
       "src": "/covers/jonah",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 478,
+    "isbn13": "978-1733501200",
+    "isbn10": "1733501207",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "the-invitation",
@@ -191,7 +215,7 @@
     "kind": "collection",
     "series": "poem-of-the-day",
     "position": 4,
-    "year": null,
+    "year": 2020,
     "featured": false,
     "epigraph": null,
     "blurb": "Thought-provoking meditations for each day of the year. Every poem contains a different theme and perspective about life, love, family, friends, work and happiness — poems that often reference familiar life experiences.",
@@ -200,9 +224,12 @@
     "cover": {
       "src": "/covers/the-invitation",
       "w": 640,
-      "h": 960,
-      "mockup": false
-    }
+      "h": 960
+    },
+    "pages": 466,
+    "isbn13": "978-1733501248",
+    "isbn10": "173350124X",
+    "publisher": "Digital Alphabet Books"
   },
   {
     "slug": "men-writing-for-change-vol-1",
@@ -211,7 +238,7 @@
     "kind": "multi-author",
     "series": "men-writing-for-change",
     "position": 1,
-    "year": null,
+    "year": 2017,
     "featured": false,
     "epigraph": null,
     "blurb": "Poetry is not some esoteric art, practiced by cloistered academics. Rather it is the language of nature in which we are all fluent. These poems are the product of time spent together, where we summoned our own inner poet to help us make sense of our life experiences.",
@@ -220,9 +247,13 @@
     "cover": {
       "src": "/covers/men-writing-for-change-vol-1",
       "w": 640,
-      "h": 610,
-      "mockup": true
-    }
+      "h": 960
+    },
+    "pages": 52,
+    "isbn13": "978-1717351692",
+    "isbn10": "1717351697",
+    "publisher": "Digital Alphabet Books",
+    "occasion": "Poems by men from Indiana, Michigan and Ohio, written at the retreat of May 19–20, 2017."
   },
   {
     "slug": "men-writing-for-change-vol-2",
@@ -231,7 +262,7 @@
     "kind": "multi-author",
     "series": "men-writing-for-change",
     "position": 2,
-    "year": null,
+    "year": 2018,
     "featured": false,
     "epigraph": null,
     "blurb": "In January 2018, we gathered in a council circle of twenty-five men from Ohio and Kentucky to journey on a creative exploration of our experiences and interiors. The weather was unusually frigid that winter weekend, but we found great warmth and companionship. Sitting together, listening to the wisdom of others, and then sharing our own stories in song or verse resulted in the poems published within this collection.",
@@ -240,8 +271,12 @@
     "cover": {
       "src": "/covers/men-writing-for-change-vol-2",
       "w": 640,
-      "h": 610,
-      "mockup": true
-    }
+      "h": 960
+    },
+    "pages": 76,
+    "isbn13": "978-1986895415",
+    "isbn10": "1986895416",
+    "publisher": "Digital Alphabet Books",
+    "occasion": "Poems by men from Ohio and Kentucky, written at the retreat of January 5–6, 2018, at the Jesuit Spiritual Center in Milford, Ohio."
   }
 ]

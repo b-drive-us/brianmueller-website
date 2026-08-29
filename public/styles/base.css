@@ -170,8 +170,7 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 .cover{margin:0}
 .cover img{display:block;width:100%;height:auto;border-radius:2px;
            box-shadow:0 1px 2px rgba(23,19,15,.10), 0 8px 22px -10px rgba(23,19,15,.35)}
-/* 3D mockups carry their own baked-in shadow; a second one reads as a card */
-.cover.is-mockup img{box-shadow:none;border-radius:0;mix-blend-mode:multiply}
+
 .cover-lg{max-width:22rem;margin-inline:auto}
 @media (min-width:52rem){.cover-lg{margin-inline:0}}
 
@@ -186,3 +185,40 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
   .book-lead .cover-lg{position:static;max-width:15rem}
 }
 .poem-left{margin-inline:0}
+
+
+/* ---------- colophon ---------- */
+.colophon{display:grid;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));
+          gap:.9rem 1.5rem;margin:0;padding-top:.4rem;border-top:1px solid var(--rule)}
+.colophon dt{font-family:"Archivo",system-ui,sans-serif;font-size:.7rem;letter-spacing:.1em;
+             text-transform:uppercase;color:var(--ink-3);margin-bottom:.15rem}
+.colophon dd{margin:0;font-size:.95rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.occasion{font-style:italic;max-width:30rem}
+
+
+/* ---------- about ---------- */
+.about-lead{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
+@media (min-width:52rem){
+  .about-lead{grid-template-columns:18rem minmax(0,34rem);align-items:start}
+  .about-lead > .stack{max-width:34rem}
+}
+.portrait{margin:0;max-width:18rem}
+@media (max-width:52rem){.portrait{max-width:12rem}}
+.portrait img{display:block;width:100%;height:auto;border-radius:50%}
+
+
+/* ---------- faq ---------- */
+.faq{border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;padding:1.05rem 2rem 1.05rem 0;position:relative;
+             font-size:1.12rem;color:var(--ink)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:.25rem;top:.95rem;
+                    font-size:1.3rem;line-height:1;color:var(--ember)}
+.faq details[open] summary::after{content:"\2212"}
+.faq summary:hover{color:var(--ember-deep)}
+.faq-body{padding:0 0 1.2rem}
+.faq-body p{font-size:.98rem;line-height:1.65;color:var(--ink-2);margin:0 0 .8rem}
+.faq-body ul{margin:0 0 .8rem;padding-left:1.1rem}
+.faq-body li{font-size:.98rem;line-height:1.65;color:var(--ink-2);margin-block:.35rem}
+.faq-body a{color:var(--ember)}

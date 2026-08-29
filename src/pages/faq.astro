@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+const faqs = [
+  {
+    q: "How do I contact Brian?",
+    a: `<p>Use the <a href="/contact">contact page</a> to send a message. Brian usually responds
+        within a day or two.</p>`
+  },
+  {
+    q: "Where can I buy the books?",
+    a: `<p>All twelve titles are on
+        <a href="https://www.amazon.com/stores/Brian-J.-Mueller/author/B00JQMV412">Amazon</a>, and
+        other online retailers carry them too. Local bookshops can usually order them for you.
+        PDF copies are available on request — just <a href="/contact">ask</a>.</p>`
+  },
+  {
+    q: "Are the poems copyrighted?",
+    a: `<p>Yes — all of them have some form of copyright protection, and none are in the public
+        domain.</p>
+        <p>Poems in the <a href="/series/the-bull-series">Bull Series</a> and
+        <a href="/series/poem-of-the-day">Brian's Poem of the Day Series</a> are licensed under a
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons
+        Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.</p>
+        <p>Poems in <a href="/books/cock-a-doodle-doo"><em>Cock-A-Doodle-Doo: 100 Morning
+        Haiku</em></a> are under traditional copyright and cannot be used, adapted, copied or
+        published without permission.</p>`
+  },
+  {
+    q: "What does that Creative Commons licence let me do?",
+    a: `<p>You are free to share, copy and redistribute the material in any medium or format,
+        under three conditions:</p>
+        <ul>
+          <li><b>Attribution</b> — give appropriate credit, link to the licence, and say if you
+              changed anything. Not in any way that suggests Brian endorses you or your use.</li>
+          <li><b>NonCommercial</b> — you may not use the material commercially.</li>
+          <li><b>NoDerivatives</b> — if you remix or build on it, you may not distribute the
+              modified version.</li>
+        </ul>`
+  },
+  {
+    q: "Can I get permissions beyond that?",
+    a: `<p>Often, yes. Permissions beyond the scope of the Creative Commons licence or the
+        traditional copyright may be available — <a href="/contact">write with your specific
+        request</a>.</p>`
+  },
+  {
+    q: "How do I request a review copy?",
+    a: `<p><a href="/contact">Get in touch</a>. Review copies usually go out as PDFs by email,
+        though a physical copy can be arranged. Please say where and roughly when your review
+        will appear.</p>
+        <p>Copies are also gladly provided to anyone who can't afford the purchase price.</p>`
+  },
+];
+---
+<Base title="Questions — Brian J. Mueller"
+      description="Buying the books, copyright and Creative Commons licensing, review copies, and how to reach Brian.">
+  <section class="wrap stack stack-l">
+    <div class="stack stack-m prose">
+      <div class="eyebrow">Questions</div>
+      <h1>Frequently asked</h1>
+      <hr class="rule-short" />
+      <p class="lede">The things people write in to ask most often.</p>
+    </div>
+
+    <div class="faq prose">
+      {faqs.map(f => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="faq-body" set:html={f.a} />
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>

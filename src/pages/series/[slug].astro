@@ -21,7 +21,7 @@ const vols = books.filter(b => b.series === s.slug).sort((a,b) => a.position - b
     <div class="book-grid">
       {vols.map(b => (
         <a class="book-card" href={`/books/${b.slug}`}>
-          <figure class={"cover" + (b.cover.mockup ? " is-mockup" : "")}>
+          <figure class="cover">
             <img src={`${b.cover.src}-200.webp`} srcset={`${b.cover.src}-200.webp 200w, ${b.cover.src}-320.webp 320w`}
                        sizes="84px" width={b.cover.w} height={b.cover.h}
                  loading="lazy" alt="" />

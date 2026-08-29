@@ -1,23 +1,63 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="About — Brian J. Mueller">
-  <section class="wrap stack stack-l">
-    <div class="stack stack-m prose">
-      <div class="eyebrow">About</div>
-      <h1>Brian J. Mueller</h1>
-      <hr class="rule-short" />
-      <p>My journey with poetry began between college lectures, but it truly took flight through
-         the rhythm of my favourite songs and the landscapes of my travels. In 2002 I published my
-         debut collection, <em>Bull Head</em>. Since then I have evolved my craft across eight
-         subsequent volumes.</p>
-      <p>For five years I shared my work daily through <em>Brian's Poem of the Day</em>. That
-         project blossomed into a deeper calling: a request to design a writing retreat focused on
-         healing and spiritual growth for men. I have now had the privilege of co-leading this
-         annual retreat for a decade.</p>
-      <p>I believe poetry is the language of the soul.</p>
-      <div class="notice"><b>Placeholder.</b> The old site had no About page — it 404s today.
-        This needs writing properly.</div>
+<Base title="About — Brian J. Mueller"
+      description="Poet, retreat co-leader, and Director of Education & Engagement for Choosing Presence. Twelve books of poetry from southwestern Ohio.">
+  <section class="wrap">
+    <div class="about-lead">
+      <figure class="portrait">
+        <img src="/img/brian-2021-640.webp"
+             srcset="/img/brian-2021-320.webp 320w, /img/brian-2021-640.webp 640w"
+             sizes="(max-width: 800px) 60vw, 18rem"
+             width="640" height="640" alt="Brian J. Mueller" />
+      </figure>
+
+      <div class="stack stack-l">
+        <div class="stack stack-m">
+          <div class="eyebrow">About</div>
+          <h1>Brian J. Mueller</h1>
+          <hr class="rule-short" />
+          <p class="lede">I write poems for everyone.</p>
+        </div>
+
+        <div class="stack stack-m">
+          <p>My journey with poetry began between college lectures, but it truly took flight
+             through the rhythm of my favourite songs and the landscapes of my travels. In 2002
+             I published my first collection, <em>Bull Head</em>. Eleven volumes have followed.</p>
+
+          <p>For five years I shared my work daily through <em>Brian's Poem of the Day</em>,
+             from 2016 to 2020, and I picked the practice back up in 2023. Readers tell me they
+             like that the writing is candid and easy to get into. I believe every one of us
+             carries the voice and spirit of a poet. The real work is hearing that voice, and
+             then having the nerve to share it.</p>
+
+          <p>The daily poem turned into something larger: a request to design a writing retreat
+             for men, built around healing and spiritual growth. I have now co-led that retreat
+             for a decade. It continues each January as
+             <a href="/retreat">Rooted in the Land</a>, and two of the books on this site —
+             the <a href="/series/men-writing-for-change">Men Writing for Change</a> volumes —
+             are not mine alone but the work of the men who came.</p>
+
+          <p>I believe poetry is the language of the soul. It offers the depth and meaning we
+             often crave, stirring our passions while anchoring us in the intuitive truth that
+             there is always more to life than meets the eye. Among the poets I keep returning
+             to are Rumi, Mary Oliver, Mark Nepo, Charles Bukowski and Wendell Berry.</p>
+
+          <p>Away from the page, I serve as Director of Education &amp; Engagement for
+             <a href="https://www.choosingpresence.org">Choosing Presence</a>, and I am an
+             active member of the <a href="https://illuman.org/ohio">Ohio chapter of Illuman</a>,
+             which supports men on their spiritual journeys. My books are published under my own
+             imprint, Digital Alphabet Books.</p>
+
+          <p>I live in southwestern Ohio with my wife and our dogs, who snooze and keep me
+             company while I write.</p>
+        </div>
+
+        <div class="btn-row">
+          <a class="btn" href="/books">The books</a>
+          <a class="btn btn-ghost" href="/contact">Get in touch</a>
+        </div>
+      </div>
     </div>
   </section>
 </Base>
