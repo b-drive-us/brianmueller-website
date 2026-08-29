@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Poem from '../components/Poem.astro';
 import books from '../data/books.json';
 import series from '../data/series.json';
 import poems from '../data/poems.json';
@@ -47,7 +48,7 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
           <div class="eyebrow">The new book · {newest.year}</div>
           <h2>{newest.title}</h2>
           <p class="lede serif-italic">{newest.subtitle}</p>
-          {newest.epigraph && <div class="poem poem-left" style="font-size:1.05rem">{newest.epigraph}</div>}
+          {newest.epigraph && <Poem text={newest.epigraph} class="poem-left" style="font-size:1.05rem" />}
           <div class="btn-row">
             <a class="btn" href={newest.buy} rel="sponsored nofollow">Buy on Amazon</a>
             <a class="btn btn-ghost" href={`/books/${newest.slug}`}>More about it</a>
@@ -62,7 +63,7 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
       <div class="stack stack-m" style="max-width:34rem">
         <div class="eyebrow">A poem</div>
         <h2>{taste.title}</h2>
-        <div class="poem poem-left">{taste.text}</div>
+        <Poem text={taste.text} class="poem-left" />
         <p class="poem-source">from <a href={`/books/${taste.slug}`}>{books.find(b=>b.slug===taste.slug).title}</a></p>
         <div class="btn-row">
           <a class="btn btn-ghost" href="/poems">Ten more like it</a>

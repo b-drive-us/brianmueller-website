@@ -123,16 +123,13 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
    Flush left, block centred on the page.
    Turned lines get a hanging indent so a long line never reads
    as a new line of the poem on a narrow screen. */
-.poem{
-  white-space:pre-wrap;
-  font-size:1.12rem;
-  line-height:1.5;
-  color:var(--ink);
-  max-width:26rem;
-  margin-inline:auto;
-  padding-left:1.4em;
-  text-indent:-1.4em;
-}
+.poem{font-size:1.12rem;line-height:1.5;color:var(--ink);
+      max-width:26rem;margin-inline:auto}
+/* Each line is its own block, so a turned line hangs. Do not put white-space:pre-wrap
+   back on .poem — with pre-wrap, text-indent only reaches the first line of the whole
+   block and every other line ends up indented instead, which is backwards. */
+.poem .pl{display:block;padding-left:1.4em;text-indent:-1.4em}
+.poem .pl.br,.poem .pl:empty{height:.78em}
 .poem em{font-style:italic}
 
 /* ---------- quote ---------- */

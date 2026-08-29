@@ -1,0 +1,10 @@
+---
+// Renders a poem with a true hanging indent: each line is its own block, so a line
+// that is too long for the measure wraps and its continuation hangs indented.
+// A blank line becomes a stanza break.
+const { text, class: cls = "", ...rest } = Astro.props;
+const lines = String(text).replace(/\r\n?/g, "\n").split("\n");
+---
+<div class={`poem ${cls}`} {...rest}>
+  {lines.map(l => (l.trim() === "" ? <span class="pl br"></span> : <span class="pl">{l}</span>))}
+</div>

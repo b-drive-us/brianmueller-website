@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Poem from '../../components/Poem.astro';
 import books from '../../data/books.json';
 import series from '../../data/series.json';
 
@@ -34,7 +35,7 @@ const c = book.cover;
           <hr class="rule-short" />
         </div>
 
-        {book.epigraph && <div class="poem poem-left">{book.epigraph}</div>}
+        {book.epigraph && <Poem text={book.epigraph} class="poem-left" />}
 
         <div class="stack stack-m">
           <p>{book.blurb}</p>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Poem from '../components/Poem.astro';
 import poems from '../data/poems.json';
 import books from '../data/books.json';
 const byBook = Object.fromEntries(books.map(b => [b.slug, b]));
@@ -32,7 +33,7 @@ const BSP = "https://brianspoems.com";
               <h2>{p.title}</h2>
               {p.subtitle && <p class="poem-sub">{p.subtitle}</p>}
             </header>
-            <div class="poem poem-left">{p.text}</div>
+            <Poem text={p.text} class="poem-left" />
             <footer class="poem-source">
               from <a href={`/books/${p.slug}`}>{b.title}</a>{b.year ? `, ${b.year}` : ""}
             </footer>

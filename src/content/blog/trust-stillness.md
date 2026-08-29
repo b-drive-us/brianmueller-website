@@ -18,25 +18,27 @@ These are poems for anyone learning, slowly, to surrender into the second half o
 
 Here is one of them.
 
-<div class="poem poem-left">When getting a physical,
-the doctor may test
-the strength of our grip
-to measure aging and health.
-Yet whether we are young or old,
-fit or beginning to fail,
-there's something good happening
-when we slowly release
-all the fear and uncertainty
-we've been desperately clutching
-and clinging to for survival.
-As our ability to break rocks
-and hurl stones diminishes,
-we may begin to feel something new,
-something softer emerging
-in the palms of our hands.
-We grip and grind our way through life
-until grace arrives asking us
-to let go.</div>
+<div class="poem poem-left">
+<span class="pl">When getting a physical,</span>
+<span class="pl">the doctor may test</span>
+<span class="pl">the strength of our grip</span>
+<span class="pl">to measure aging and health.</span>
+<span class="pl">Yet whether we are young or old,</span>
+<span class="pl">fit or beginning to fail,</span>
+<span class="pl">there's something good happening</span>
+<span class="pl">when we slowly release</span>
+<span class="pl">all the fear and uncertainty</span>
+<span class="pl">we've been desperately clutching</span>
+<span class="pl">and clinging to for survival.</span>
+<span class="pl">As our ability to break rocks</span>
+<span class="pl">and hurl stones diminishes,</span>
+<span class="pl">we may begin to feel something new,</span>
+<span class="pl">something softer emerging</span>
+<span class="pl">in the palms of our hands.</span>
+<span class="pl">We grip and grind our way through life</span>
+<span class="pl">until grace arrives asking us</span>
+<span class="pl">to let go.</span>
+</div>
 
 <p class="poem-source">Our Grip Weakens · from <em>Trust Stillness</em></p>
 
