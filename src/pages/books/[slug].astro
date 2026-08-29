@@ -12,7 +12,6 @@ const siblings = book.series
   ? books.filter(b => b.series === book.series).sort((a,b) => a.position - b.position)
   : [];
 const collects = (book.collects || []).map(sl => books.find(b => b.slug === sl)).filter(Boolean);
-const AMAZON = "https://www.amazon.com/stores/Brian-J.-Mueller/author/B00JQMV412";
 const kindLabel = { collection: null, anthology: "Anthology", "multi-author": "Many voices" }[book.kind];
 const c = book.cover;
 ---
@@ -42,7 +41,7 @@ const c = book.cover;
           {book.quote && (
             <blockquote class="pull">{book.quote}<cite>— {book.quoteBy}</cite></blockquote>
           )}
-          <div class="btn-row"><a class="btn" href={AMAZON}>Buy on Amazon</a></div>
+          <div class="btn-row"><a class="btn" href={book.buy} rel="sponsored nofollow">Buy on Amazon</a></div>
         </div>
 
         {collects.length > 0 && (
@@ -61,6 +60,8 @@ const c = book.cover;
           <div><dt>Publisher</dt><dd>{book.publisher}</dd></div>
           {book.isbn13 && <div><dt>ISBN</dt><dd>{book.isbn13}</dd></div>}
         </dl>
+        {book.published && <p class="small">Published {book.published}.</p>}
+        {book.isbnNote && <p class="small">{book.isbnNote}</p>}
 
         {book.kind === "multi-author" && (
           <div class="notice">

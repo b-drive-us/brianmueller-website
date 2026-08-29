@@ -222,3 +222,64 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 .faq-body ul{margin:0 0 .8rem;padding-left:1.1rem}
 .faq-body li{font-size:.98rem;line-height:1.65;color:var(--ink-2);margin-block:.35rem}
 .faq-body a{color:var(--ember)}
+
+
+/* ---------- poems page ---------- */
+.archive-note{background:var(--ember-soft);border:1px solid var(--rule);border-radius:4px;
+              padding:1.3rem 1.5rem;max-width:var(--measure)}
+.archive-note p{font-size:1rem;line-height:1.6;color:var(--ink-2);margin:0}
+.archive-note b{color:var(--ink)}
+.archive-note a{color:var(--ember-deep)}
+.archive-note .btn-row{margin-top:1rem}
+.poem-list{display:flex;flex-direction:column;gap:clamp(2.6rem,6vw,4rem)}
+.poem-entry{max-width:34rem}
+.poem-entry h2{font-size:clamp(1.4rem,3vw,1.75rem);margin:0}
+.poem-sub{font-style:italic;color:var(--ink-3);font-size:1rem;margin:0}
+.poem-entry .poem{margin-top:1.2rem}
+.poem-source{margin-top:1.1rem;padding-top:.7rem;border-top:1px solid var(--rule);
+             font-family:"Archivo",system-ui,sans-serif;font-size:.78rem;letter-spacing:.06em;
+             text-transform:uppercase;color:var(--ink-3)}
+.poem-source a{color:var(--ink-2)}
+
+
+/* ---------- blog ---------- */
+.post-list{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+           border-radius:4px;overflow:hidden}
+.post-card{background:var(--surface);padding:1.5rem 1.6rem;display:flex;flex-direction:column;
+           gap:.5rem;text-decoration:none;color:inherit}
+.post-card:hover{background:var(--paper-2)}
+.post-card .m{font-family:"Archivo",system-ui,sans-serif;font-size:.72rem;letter-spacing:.1em;
+              text-transform:uppercase;color:var(--ink-3)}
+.post-card .t{font-size:1.4rem;line-height:1.2;color:var(--ink)}
+.post-card .s{font-size:.98rem;color:var(--ink-2);line-height:1.5}
+
+.post{max-width:34rem}
+.post-body{margin-top:1.6rem}
+.post-body > p{font-size:1.05rem;line-height:1.7;color:var(--ink-2);margin:0 0 1.15rem}
+.post-body h2{font-size:1.4rem;margin:2rem 0 .7rem}
+.post-body a{color:var(--ember)}
+.post-body .poem{margin-block:1.8rem}
+.post-body .poem-source{margin-top:-1.2rem;margin-bottom:2rem;padding-top:.6rem;
+                        border-top:1px solid var(--rule);max-width:26rem;
+                        font-family:"Archivo",system-ui,sans-serif;font-size:.78rem;
+                        letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+
+.book-plug{display:flex;gap:1.5rem;align-items:flex-start;max-width:34rem;
+           border-top:1px solid var(--rule);padding-top:1.8rem}
+.book-plug .cover{flex:0 0 140px}
+.book-plug .bp-title{font-size:1.3rem;line-height:1.2}
+.book-plug .bp-title a{color:var(--ink);text-decoration:none}
+.book-plug .bp-title a:hover{color:var(--ember-deep)}
+.book-plug .s{font-size:.98rem;font-style:italic;color:var(--ink-2);margin:0}
+@media (max-width:34rem){.book-plug{flex-direction:column}.book-plug .cover{flex:0 0 auto;max-width:9rem}}
+
+
+/* ---------- home feature ---------- */
+.feature{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
+@media (min-width:52rem){
+  .feature{grid-template-columns:18rem minmax(0,34rem);align-items:center}
+}
+.feature .cover{display:block;max-width:18rem}
+@media (max-width:52rem){.feature .cover{max-width:13rem}}
+.feature .cover img{display:block;width:100%;height:auto;border-radius:2px;
+  box-shadow:0 1px 2px rgba(23,19,15,.10), 0 8px 22px -10px rgba(23,19,15,.35)}

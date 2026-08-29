@@ -4,28 +4,25 @@
     "title": "Trust Stillness",
     "subtitle": "Poems for the Second Half of Life",
     "kind": "collection",
-    "series": null,
-    "position": null,
-    "year": null,
+    "year": 2026,
     "featured": true,
     "epigraph": "Drop anchor\ntry gardening\nplant tea trees\nmend and paint the fence\nget a library card\npractice daily meditation\n- trust stillness -",
     "blurb": "For decades I kept moving — too afraid to slow down, certain that in stillness, I would slip below the waves of life. This new collection of poems intersects with a mature perspective, one that emerges when you become content to drift, allowing the waves carry you. It is then you may discover you can breathe under water. These are poems for anyone learning, slowly, to surrender into the second half of life.",
-    "quote": null,
-    "quoteBy": null,
     "cover": {
       "src": "/covers/trust-stillness",
       "w": 640,
       "h": 1024
     },
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4y1JBiR",
+    "published": "May 23, 2026",
+    "isbn13": "979-8195992392"
   },
   {
     "slug": "cock-a-doodle-doo",
     "title": "Cock-A-Doodle-Doo",
     "subtitle": "100 Morning Haiku",
     "kind": "collection",
-    "series": null,
-    "position": null,
     "year": 2022,
     "featured": true,
     "epigraph": "Good morning to you\nintrepid wanderers all.\nLet's go chase the sun!",
@@ -40,7 +37,8 @@
     "pages": 149,
     "isbn13": "978-1733501255",
     "isbn10": "1733501258",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4vEYsOt"
   },
   {
     "slug": "bull-head",
@@ -51,7 +49,6 @@
     "position": 1,
     "year": 2002,
     "featured": false,
-    "epigraph": null,
     "blurb": "A collection of writings exploring a wide variety of subjects, emotions and life events. Taken as a whole it gives tremendous insight into the mind and heart of a young man coming of age in America during the 1990s. The first section contains works of prose ranging from the intensely romantic to the imaginative and fantastic.",
     "quote": "Brian's insight and life giving poetry had touched my life at so many levels. Many days his poems bring peace to me about a situation in my life, uncanny in the way his poems are a balm for what ails me.",
     "quoteBy": "Jenny Hardin",
@@ -63,7 +60,8 @@
     "pages": 174,
     "isbn13": "978-0996812030",
     "isbn10": "0996812032",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4vVqe9u"
   },
   {
     "slug": "bull-heart",
@@ -74,7 +72,6 @@
     "position": 2,
     "year": 2015,
     "featured": false,
-    "epigraph": null,
     "blurb": "A collection of poems chronicling more than a year spent processing and recovering from divorce. These poems not only address the pain, sadness, and anger one feels at the end of a marriage, but also the transformation of this great anguish through the overwhelming surrender to something greater. Employing the lyrical language of poetry in this journey provides a wonderful conduit to the world of healing and forgiveness.",
     "quote": "I read his poems every day. Brian is a poet with no rival.",
     "quoteBy": "Robert Kowal",
@@ -86,7 +83,8 @@
     "pages": 118,
     "isbn13": "978-0996812023",
     "isbn10": "0996812024",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4aCcuYN"
   },
   {
     "slug": "more-bull",
@@ -97,7 +95,6 @@
     "position": 3,
     "year": 2016,
     "featured": false,
-    "epigraph": null,
     "blurb": "The third collection of poetry published by Brian Mueller. His earlier collections Bull Head (2002) and Bull Heart (2015) explored familiar themes of growing up, romantic love, and the sometimes inevitable falling apart of relationships. The poems in More Bull mark a transition into a new chapter, one in which themes of surrender, life and death, and simplicity come to the forefront.",
     "quote": "There's something about holding this volume in my hands each morning as I start the day that makes it even sweeter. Thanks for sharing your heart with all of us.",
     "quoteBy": "Donna Rust",
@@ -109,7 +106,8 @@
     "pages": 86,
     "isbn13": "978-0996812054",
     "isbn10": "0996812059",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4gEZLsn"
   },
   {
     "slug": "complete-bull",
@@ -125,7 +123,6 @@
       "bull-heart",
       "more-bull"
     ],
-    "epigraph": null,
     "blurb": "A poetry anthology of the collected works of Brian J. Mueller. Comprised of Bull Head (2002), Bull Heart (2015) and More Bull (2016), Complete Bull is a chronicle of spiritual growth through the many challenges and experiences of life. Within the greater narrative, readers will appreciate the development of Brian's unique personal voice.",
     "quote": "If you're looking for understanding and inspiration in this one life we're given, this book is an excellent choice.",
     "quoteBy": "Bob Harbuck",
@@ -137,7 +134,8 @@
     "pages": 354,
     "isbn13": "978-0996812061",
     "isbn10": "0996812067",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4gTXzNq"
   },
   {
     "slug": "tomorrow-could-be-wonderful",
@@ -148,7 +146,6 @@
     "position": 1,
     "year": 2017,
     "featured": false,
-    "epigraph": null,
     "blurb": "In this first volume of poems collected from Brian's Poem of the Day, heartfelt meditations inspired by his favourite poets, artists and teachers. Each daily poem paints a picture with words while attempting to connect with you on a soul level.",
     "quote": "I highly recommend this book for the sheer joy of the music of words.",
     "quoteBy": "Michael W. Whitman",
@@ -160,7 +157,8 @@
     "pages": 430,
     "isbn13": "978-1733501224",
     "isbn10": "1733501223",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/449Dlbe"
   },
   {
     "slug": "second-communion",
@@ -171,7 +169,6 @@
     "position": 2,
     "year": 2018,
     "featured": false,
-    "epigraph": null,
     "blurb": "Thought-provoking meditations collected from Brian's personal life as well as his own spiritual work. Each daily poem contains a story, feeling or an idea which you will be able to relate to from your own experience or that of someone close to you.",
     "quote": "Very encouraging and at times enlightening daily readings book.",
     "quoteBy": "Parnelli Purdy",
@@ -183,7 +180,8 @@
     "pages": 436,
     "isbn13": "978-1733501231",
     "isbn10": "1733501231",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4bqtGAO"
   },
   {
     "slug": "jonah",
@@ -194,7 +192,6 @@
     "position": 3,
     "year": 2019,
     "featured": false,
-    "epigraph": null,
     "blurb": "An accessible and compelling collection of thought-provoking meditations for every day of the year. Each day's poem contains a different theme and perspective about life, love, family, friends, work and happiness, enhanced with subtitles and relevant quotes.",
     "quote": "Brian's poems are a daily dose of thoughtfulness that I always find meaningful.",
     "quoteBy": "Robert L. Sprengard",
@@ -206,7 +203,8 @@
     "pages": 478,
     "isbn13": "978-1733501200",
     "isbn10": "1733501207",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/4gUAfPJ"
   },
   {
     "slug": "the-invitation",
@@ -217,7 +215,6 @@
     "position": 4,
     "year": 2020,
     "featured": false,
-    "epigraph": null,
     "blurb": "Thought-provoking meditations for each day of the year. Every poem contains a different theme and perspective about life, love, family, friends, work and happiness — poems that often reference familiar life experiences.",
     "quote": "Brian's poems are fresh, honest and insightful.",
     "quoteBy": "James Helmuth",
@@ -229,7 +226,8 @@
     "pages": 466,
     "isbn13": "978-1733501248",
     "isbn10": "173350124X",
-    "publisher": "Digital Alphabet Books"
+    "publisher": "Digital Alphabet Books",
+    "buy": "https://amzn.to/3RihLyf"
   },
   {
     "slug": "men-writing-for-change-vol-1",
@@ -240,20 +238,19 @@
     "position": 1,
     "year": 2017,
     "featured": false,
-    "epigraph": null,
     "blurb": "Poetry is not some esoteric art, practiced by cloistered academics. Rather it is the language of nature in which we are all fluent. These poems are the product of time spent together, where we summoned our own inner poet to help us make sense of our life experiences.",
-    "quote": null,
-    "quoteBy": null,
     "cover": {
       "src": "/covers/men-writing-for-change-vol-1",
       "w": 640,
       "h": 960
     },
     "pages": 52,
-    "isbn13": "978-1717351692",
-    "isbn10": "1717351697",
+    "isbn13": "978-1979552424",
+    "isbn10": "1979552428",
     "publisher": "Digital Alphabet Books",
-    "occasion": "Poems by men from Indiana, Michigan and Ohio, written at the retreat of May 19–20, 2017."
+    "occasion": "Poems by men from Indiana, Michigan and Ohio, written at the retreat of May 19–20, 2017.",
+    "buy": "https://amzn.to/3QBoIu9",
+    "isbnNote": "A second printing exists under ISBN 978-1717351692."
   },
   {
     "slug": "men-writing-for-change-vol-2",
@@ -264,10 +261,7 @@
     "position": 2,
     "year": 2018,
     "featured": false,
-    "epigraph": null,
     "blurb": "In January 2018, we gathered in a council circle of twenty-five men from Ohio and Kentucky to journey on a creative exploration of our experiences and interiors. The weather was unusually frigid that winter weekend, but we found great warmth and companionship. Sitting together, listening to the wisdom of others, and then sharing our own stories in song or verse resulted in the poems published within this collection.",
-    "quote": null,
-    "quoteBy": null,
     "cover": {
       "src": "/covers/men-writing-for-change-vol-2",
       "w": 640,
@@ -277,6 +271,7 @@
     "isbn13": "978-1986895415",
     "isbn10": "1986895416",
     "publisher": "Digital Alphabet Books",
-    "occasion": "Poems by men from Ohio and Kentucky, written at the retreat of January 5–6, 2018, at the Jesuit Spiritual Center in Milford, Ohio."
+    "occasion": "Poems by men from Ohio and Kentucky, written at the retreat of January 5–6, 2018, at the Jesuit Spiritual Center in Milford, Ohio.",
+    "buy": "https://amzn.to/4gfvmR5"
   }
 ]

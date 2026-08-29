@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
+---
+<Base title="Writing — Brian J. Mueller" description="Notes, new books, and the occasional poem.">
+  <section class="wrap stack stack-l">
+    <div class="stack stack-m prose">
+      <div class="eyebrow">Writing</div>
+      <h1>Notes</h1>
+      <hr class="rule-short" />
+      <p class="lede">New books, and the occasional poem or thought worth setting down.</p>
+    </div>
+
+    {posts.length === 0 && <p class="prose">Nothing here yet.</p>}
+
+    <div class="post-list">
+      {posts.map(p => (
+        <a class="post-card" href={`/blog/${p.id}`}>
+          <div class="m"><time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time></div>
+          <div class="t">{p.data.title}</div>
+          <div class="s">{p.data.summary}</div>
+        </a>
+      ))}
+    </div>
+
+    <div class="archive-note">
+      <p>Looking for the old daily poems? The complete searchable archive lives at
+         <a href="https://brianspoems.com">brianspoems.com</a>.</p>
+    </div>
+  </section>
+</Base>

@@ -1,20 +1,50 @@
 ---
 import Base from '../layouts/Base.astro';
+import poems from '../data/poems.json';
+import books from '../data/books.json';
+const byBook = Object.fromEntries(books.map(b => [b.slug, b]));
+const BSP = "https://brianspoems.com";
 ---
-<Base title="Poems — Brian J. Mueller">
+<Base title="Poems — Brian J. Mueller"
+      description="Eleven poems, one from each collection. The complete searchable archive lives at brianspoems.com.">
   <section class="wrap stack stack-l">
     <div class="stack stack-m prose">
-      <div class="eyebrow">Eight years, 777 poems</div>
-      <h1>The poems live at Brian's Poems.</h1>
+      <div class="eyebrow">A few poems</div>
+      <h1>Poems</h1>
       <hr class="rule-short" />
-      <p class="lede">Every poem from <em>Brian's Poem of the Day</em>, the Living Workshop, and
-         the collections — searchable by title, first line, or a phrase you half remember.</p>
-      <div class="btn-row"><a class="btn" href="https://brianspoems.com">Go to brianspoems.com</a></div>
-      <div class="notice">
-        <b>Placeholder.</b> A curated selection will sit here — a few dozen poems as a way in,
-        with the full archive one click away. The 778 existing <code>/living-workshop/</code>
-        URLs will redirect rather than break.
-      </div>
+      <p class="lede">Eleven poems, one from each collection, arranged in the order they were
+         written. A small door into twenty-four years of work.</p>
+    </div>
+
+    <div class="archive-note">
+      <p><b>The whole archive is at <a href={BSP}>brianspoems.com</a>.</b> That site holds every
+         published poem — 1,832 of them — and it is searchable. It is the definitive source for
+         my work. What follows here is only a handful, chosen to give you a sense of each book.</p>
+      <div class="btn-row"><a class="btn" href={BSP}>Search all the poems</a></div>
+    </div>
+
+    <div class="poem-list">
+      {poems.map(p => {
+        const b = byBook[p.slug];
+        return (
+          <article class="poem-entry">
+            <header class="stack stack-s">
+              <h2>{p.title}</h2>
+              {p.subtitle && <p class="poem-sub">{p.subtitle}</p>}
+            </header>
+            <div class="poem poem-left">{p.text}</div>
+            <footer class="poem-source">
+              from <a href={`/books/${p.slug}`}>{b.title}</a>{b.year ? `, ${b.year}` : ""}
+            </footer>
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="archive-note">
+      <p>If one of these caught you, there are a great many more.
+         <a href={BSP}>Brian's Poems</a> is where they all live — searchable, by title, by first
+         line, by book. The <a href="/books">printed collections</a> are on Amazon.</p>
     </div>
   </section>
 </Base>

@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import books from '../../data/books.json';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map(p => ({ params: { slug: p.id }, props: { post: p } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const book = post.data.book ? books.find(b => b.slug === post.data.book) : null;
+const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
+---
+<Base title={`${post.data.title} — Brian J. Mueller`} description={post.data.summary}>
+  <section class="wrap stack stack-l">
+    <article class="post">
+      <header class="stack stack-m">
+        <div class="eyebrow">
+          <a href="/blog" style="color:inherit">Writing</a> ·
+          <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+        </div>
+        <h1>{post.data.title}</h1>
+        <hr class="rule-short" />
+      </header>
+      <div class="post-body"><Content /></div>
+    </article>
+
+    {book && (
+      <aside class="book-plug">
+        <a class="cover" href={`/books/${book.slug}`}>
+          <img src={`${book.cover.src}-320.webp`}
+               srcset={`${book.cover.src}-200.webp 200w, ${book.cover.src}-320.webp 320w`}
+               sizes="140px" width={book.cover.w} height={book.cover.h}
+               loading="lazy" alt={`Front cover of ${book.title}`} />
+        </a>
+        <div class="stack stack-s">
+          <div class="eyebrow">The book</div>
+          <div class="bp-title"><a href={`/books/${book.slug}`}>{book.title}</a></div>
+          <p class="s">{book.subtitle}</p>
+          <div class="btn-row">
+            <a class="btn" href={book.buy} rel="sponsored nofollow">Buy on Amazon</a>
+            <a class="btn btn-ghost" href={`/books/${book.slug}`}>More about it</a>
+          </div>
+        </div>
+      </aside>
+    )}
+  </section>
+</Base>
