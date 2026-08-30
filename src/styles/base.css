@@ -121,12 +121,12 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- book card ---------- */
 .book-grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
 @media (min-width:44rem){.book-grid{grid-template-columns:1fr 1fr}}
-.book-card{background:var(--surface);padding:1.5rem 1.6rem;display:flex;gap:1.25rem;
+.book-card{background:var(--surface);padding:1.6rem 1.7rem;display:flex;gap:1.6rem;
            align-items:flex-start;text-decoration:none;color:inherit}
 .book-card:hover{background:var(--paper-2)}
 .book-card.is-here{background:var(--paper-2)}
-.book-card .bc-text{display:flex;flex-direction:column;gap:.55rem;min-width:0}
-.book-card .cover{flex:0 0 84px}
+.book-card .bc-text{display:flex;flex-direction:column;gap:.5rem;min-width:0;padding-top:.15rem}
+.book-card .cover{flex:0 0 76px}
 .book-card .t{font-size:1.4rem;line-height:1.15;color:var(--ink)}
 .book-card .s{font-size:.98rem;color:var(--ink-2);font-style:italic;line-height:1.4}
 .book-card .m{font-family:"Archivo",sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:.2rem}
@@ -185,18 +185,18 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 .cover img{display:block;width:100%;height:auto;border-radius:2px;
            box-shadow:0 1px 2px rgba(23,19,15,.10), 0 8px 22px -10px rgba(23,19,15,.35)}
 
-.cover-lg{max-width:22rem;margin-inline:auto}
+.cover-lg{max-width:17.5rem;margin-inline:auto}
 @media (min-width:52rem){.cover-lg{margin-inline:0}}
 
 /* book detail: cover beside the copy */
 .book-lead{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
 @media (min-width:52rem){
-  .book-lead{grid-template-columns:22rem minmax(0,34rem);align-items:start}
+  .book-lead{grid-template-columns:17.5rem minmax(0,34rem);align-items:start;gap:3.5rem}
   .book-lead > .stack{max-width:34rem}
 }
 .book-lead .cover-lg{position:sticky;top:5.5rem}
 @media (max-width:52rem){
-  .book-lead .cover-lg{position:static;max-width:15rem}
+  .book-lead .cover-lg{position:static;max-width:12rem}
 }
 .poem-left{margin-inline:0}
 
@@ -213,10 +213,10 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- about ---------- */
 .about-lead{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
 @media (min-width:52rem){
-  .about-lead{grid-template-columns:18rem minmax(0,34rem);align-items:start}
+  .about-lead{grid-template-columns:15rem minmax(0,34rem);align-items:start;gap:3.5rem}
   .about-lead > .stack{max-width:34rem}
 }
-.portrait{margin:0;max-width:18rem}
+.portrait{margin:0;max-width:15rem}
 @media (max-width:52rem){.portrait{max-width:12rem}}
 .portrait img{display:block;width:100%;height:auto;border-radius:50%}
 
@@ -278,9 +278,9 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
                         font-family:"Archivo",system-ui,sans-serif;font-size:.78rem;
                         letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
 
-.book-plug{display:flex;gap:1.5rem;align-items:flex-start;max-width:34rem;
+.book-plug{display:flex;gap:1.9rem;align-items:flex-start;max-width:34rem;
            border-top:1px solid var(--rule);padding-top:1.8rem}
-.book-plug .cover{flex:0 0 140px}
+.book-plug .cover{flex:0 0 112px}
 .book-plug .bp-title{font-size:1.3rem;line-height:1.2}
 .book-plug .bp-title a{color:var(--ink);text-decoration:none}
 .book-plug .bp-title a:hover{color:var(--ember-deep)}
@@ -291,10 +291,10 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- home feature ---------- */
 .feature{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
 @media (min-width:52rem){
-  .feature{grid-template-columns:18rem minmax(0,34rem);align-items:center}
+  .feature{grid-template-columns:14.5rem minmax(0,34rem);align-items:center;gap:3.5rem}
 }
-.feature .cover{display:block;max-width:18rem}
-@media (max-width:52rem){.feature .cover{max-width:13rem}}
+.feature .cover{display:block;max-width:14.5rem}
+@media (max-width:52rem){.feature .cover{max-width:11rem}}
 .feature .cover img{display:block;width:100%;height:auto;border-radius:2px;
   box-shadow:0 1px 2px rgba(23,19,15,.10), 0 8px 22px -10px rgba(23,19,15,.35)}
 
@@ -348,19 +348,19 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- the shelf ---------- */
 .shelf{display:flex;gap:clamp(.9rem,2.5vw,1.8rem);align-items:flex-end;flex-wrap:wrap;
        margin-block:clamp(1.8rem,4vw,2.6rem)}
-.shelf-item{flex:0 1 132px;text-decoration:none;color:inherit;display:block;
+.shelf-item{flex:0 1 108px;text-decoration:none;color:inherit;display:block;
             transition:transform .18s ease}
 .shelf-item img{border-radius:2px;
   box-shadow:0 1px 2px rgba(23,19,15,.12), 0 14px 28px -14px rgba(23,19,15,.5)}
 .shelf-item:nth-child(even){margin-bottom:1.4rem}
 .shelf-item:hover{transform:translateY(-6px)}
-.shelf-title{display:block;margin-top:.7rem;font-family:"Archivo",system-ui,sans-serif;
+.shelf-title{display:block;margin-top:1.15rem;font-family:"Archivo",system-ui,sans-serif;
              font-size:.74rem;letter-spacing:.05em;color:var(--ink-3);line-height:1.35}
 .shelf-item:hover .shelf-title{color:var(--ink-2)}
 
 /* ---------- retreat strip ---------- */
 .retreat-strip{display:grid;gap:clamp(1.75rem,4vw,3rem);align-items:center}
-@media (min-width:52rem){.retreat-strip{grid-template-columns:26rem minmax(0,32rem)}}
+@media (min-width:52rem){.retreat-strip{grid-template-columns:24rem minmax(0,32rem);gap:3.5rem}}
 .retreat-strip img{border-radius:3px;width:100%;height:auto;
   box-shadow:0 18px 40px -22px rgba(0,0,0,.8)}
 
@@ -410,3 +410,30 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* The retreat photograph is bright and warm, so it needs a heavier veil than
    the bull photograph for text to hold its contrast. */
 .hero-veil-strong{background:linear-gradient(180deg,rgba(12,9,7,.55) 0%,rgba(12,9,7,.66) 45%,rgba(12,9,7,.9) 100%)}
+
+.arrival{margin-top:1.4rem;max-width:34rem;font-size:.98rem;line-height:1.6;color:var(--ink-2);
+         background:var(--ember-soft);border-radius:4px;padding:.9rem 1.1rem}
+.arrival b{color:var(--ink)}
+
+
+/* ============================================================
+   Vertical rhythm corrections, 30 Aug.
+   An image and the text under it were sitting too close together
+   everywhere on the site. These set one consistent gap.
+   ============================================================ */
+figure.cover + *, .cover + .bc-text{margin-top:0}
+.poem-entry .poem-source{margin-top:1.5rem}
+.book-lead .poem{margin-block:.4rem 1rem}
+.feature .poem{margin-block:.5rem}
+.retreat-strip img + *{margin-top:1.2rem}
+.hero-inner .btn-row{margin-top:.4rem}
+
+/* headings sit closer to their eyebrow and further from the text they open */
+.stack-m > .eyebrow + h1, .stack-m > .eyebrow + h2{margin-top:-.25rem}
+h2 + .lede, h1 + .lede{margin-top:.15rem}
+
+/* sections were all the same height; give the page a longer breath between
+   major bands than between blocks inside one */
+section{padding-block:clamp(3.4rem,7.5vw,6rem)}
+.band-poem > .wrap{padding-block:clamp(3.4rem,7.5vw,6rem)}
+.post-card h2.t{font-size:1.4rem;line-height:1.2;color:var(--ink);margin:0}

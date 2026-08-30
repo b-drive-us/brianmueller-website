@@ -11,5 +11,9 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-/styles/*
-  Cache-Control: public, max-age=3600
+# Astro emits bundled CSS under /_astro/ with a content hash in the filename,
+# so a changed stylesheet gets a new URL and can never be served stale.
+# Do not add a long cache to any un-hashed asset path — that bug shipped once
+# already and left a browser rendering new HTML against an old stylesheet.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

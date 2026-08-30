@@ -20,7 +20,7 @@ const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long',
       {posts.map(p => (
         <a class="post-card" href={`/blog/${p.id}`}>
           <div class="m"><time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time></div>
-          <div class="t">{p.data.title}</div>
+          <h2 class="t">{p.data.title}</h2>
           <div class="s">{p.data.summary}</div>
         </a>
       ))}

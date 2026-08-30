@@ -1,4 +1,6 @@
 ---
+import '../styles/fonts.css';
+import '../styles/base.css';
 const { title = "Brian J. Mueller", description = "Poet. Twelve collections of poetry, and a men's writing retreat each January." } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const nav = [
@@ -32,8 +34,7 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
     </script>
     <link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/styles/fonts.css" />
-    <link rel="stylesheet" href="/styles/base.css" />
+
   </head>
   <body>
     <header class="site-head">
