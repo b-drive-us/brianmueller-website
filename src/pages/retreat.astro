@@ -1,20 +1,147 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const sessions = [
+  { n: "1", t: "Friday evening", d: "We arrive, we eat, and we begin. An opening circle, the first Berry poem, and the first prompt — short, so no one has to be brilliant on a Friday night." },
+  { n: "2", t: "Saturday morning", d: "The longest stretch of writing in the weekend, with the day still ahead of it. Optional morning prayer beforehand for those who want it." },
+  { n: "3", t: "Saturday midday", d: "Paired writing. One other man, one conversation, one prompt that goes somewhere you would not have gone alone." },
+  { n: "4", t: "Saturday afternoon", d: "Free time first — 150 acres of forest, field and pond to wander, or a quiet room and a nap. Then we write again." },
+  { n: "5", t: "Saturday evening", d: "Council circle in small groups, then social time. Sharing is optional, and it is where the weekend usually turns." },
+  { n: "6", t: "Sunday morning", d: "The last prompt, then an open mic. Whatever you have written, read aloud if you want to. We close, we eat lunch, and you drive home different." },
+];
 ---
-<Base title="Rooted in the Land — a men's writing retreat">
-  <section class="wrap stack stack-l">
-    <div class="stack stack-m prose">
-      <div class="eyebrow">January 15–17, 2027 · Bergamo Center, Dayton, Ohio</div>
+<Base title="Rooted in the Land — a men's writing retreat, January 2027"
+      description="A men's writing retreat inspired by Wendell Berry. January 15–17, 2027, at the Bergamo Center in Ohio. Co-led by Brian Mueller and Tom Sparough.">
+
+  <section class="hero hero-retreat">
+    <img class="hero-img" src="/img/retreat-hero-1456.webp"
+         srcset="/img/retreat-hero-700.webp 700w, /img/retreat-hero-1000.webp 1000w, /img/retreat-hero-1456.webp 1456w"
+         sizes="100vw" width="1456" height="816" alt="" fetchpriority="high" />
+    <div class="hero-veil"></div>
+    <div class="wrap hero-inner">
+      <div class="eyebrow hero-eyebrow">January 15–17, 2027 · Bergamo Center, Ohio</div>
       <h1>Rooted in the Land</h1>
-      <p class="lede serif-italic">A men's writing retreat inspired by Wendell Berry.</p>
-      <hr class="rule-short" />
-      <p>A weekend of reflection, fraternity, and renewal — writing our way toward deeper
-         belonging. Open to men of every writing experience, from the complete novice to the
-         published author.</p>
-      <div class="notice">
-        <b>Registration goes here.</b> The page and the Stripe checkout are built and scheduled
-        for late September. Until then this is a placeholder.
+      <p class="hero-lede">A men's writing retreat inspired by Wendell Berry. Join us for a
+         weekend of reflection, fraternity and renewal, as we write our way toward a deeper
+         belonging.</p>
+      <div class="btn-row">
+        <a class="btn btn-light" href="#register">Registration</a>
+        <a class="btn btn-ondark" href="#is-it-for-me">Is this for me?</a>
       </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="stack stack-m" style="max-width:34rem">
+      <div class="eyebrow">The weekend</div>
+      <h2>Writing our way toward belonging</h2>
+      <p>This year our circle of brotherhood draws its inspiration from the poetry and agrarian
+         wisdom of Wendell Berry. Together we explore stillness, nature, and the sacredness of
+         everyday life, and we reflect on our relationship with the land we live upon.</p>
+      <p>The quest is to use writing as a vehicle to rediscover the divine presence in our own
+         stories.</p>
+    </div>
+  </section>
+
+  <section class="band-poem" id="is-it-for-me">
+    <div class="wrap stack stack-m" style="max-width:34rem">
+      <div class="eyebrow">Before you talk yourself out of it</div>
+      <h2>Is this retreat for me?</h2>
+      <p><b>You don't have to think of yourself as a poet or a writer to get a great deal from
+         this weekend.</b> It is open to men of every level of experience — complete novice to
+         published author. You can write poetry, a series of journal entries, or some combination
+         of the two. The focus is the spiritual journey, not the craft.</p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="stack stack-m" style="max-width:34rem">
+      <div class="eyebrow">The shape of it</div>
+      <h2>Six writing experiences</h2>
+      <p>Each session opens with poetic inspiration from Wendell Berry and leads into a writing
+         prompt. We gather as a large group, spend one-on-one time with another participant, and
+         meet in small council circles where sharing your work is optional but deeply encouraged.</p>
+    </div>
+    <ol class="sessions">
+      {sessions.map(s => (
+        <li>
+          <span class="s-n">{s.n}</span>
+          <div>
+            <div class="s-t">{s.t}</div>
+            <p class="s-d">{s.d}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <p class="small" style="max-width:34rem">Around the sessions: evening social time, optional
+       morning prayer, an outdoor wandering or an indoor rest, and an open mic on Sunday.</p>
+  </section>
+
+  <section class="band-dark">
+    <div class="wrap">
+      <div class="stack stack-m" style="max-width:34rem">
+        <div class="eyebrow">Where you'll stay</div>
+        <h2>The Bergamo Center</h2>
+        <p>Four hundred and fifty acres of quiet, forty minutes from downtown Dayton — a hundred
+           and fifty of them forest, field and pond, and yours to wander.</p>
+      </div>
+      <div class="facts">
+        <div><dt>Your room</dt><dd>Single occupancy, private bathroom. No roommates, no negotiating.</dd></div>
+        <div><dt>Meals</dt><dd>Every meal, from Friday dinner through Sunday lunch. Dietary needs accommodated.</dd></div>
+        <div><dt>The grounds</dt><dd>150 acres of forest, fields and a pond, made for quiet walking.</dd></div>
+        <div><dt>Getting there</dt><dd>4400 Shakertown Road, Dayton, OH 45430 — close to Dayton airport. If you fly, we'll try to arrange a volunteer to collect you.</dd></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="stack stack-m" style="max-width:34rem">
+      <div class="eyebrow">Your guides</div>
+      <h2>Who is carrying the content</h2>
+    </div>
+    <div class="guides">
+      <article class="guide">
+        <h3>Brian Mueller</h3>
+        <p>Graphic designer, presence guide, and poet with ten self-published volumes of poetry.
+           He has co-led this retreat for a decade.</p>
+        <p class="small"><a href="/about">About Brian</a> · <a href="https://brianspoems.com">brianspoems.com</a></p>
+      </article>
+      <article class="guide">
+        <h3>Tom Sparough</h3>
+        <p>Author of seven of his own eclectic books and one full-length play, and a freelance
+           content editor.</p>
+        <p class="small"><a href="https://spacepainter.com">spacepainter.com</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band-poem" id="register">
+    <div class="wrap stack stack-m" style="max-width:34rem">
+      <div class="eyebrow">Registration</div>
+      <h2>Opening soon</h2>
+      <p>Fifty places. Registration opens on this page before Awaken in November, and we will
+         announce it by email and through Illuman.</p>
+      <div class="facts facts-tight">
+        <div><dt>Dates</dt><dd>Friday, January 15 – Sunday, January 17, 2027. Arrival from 4:00 p.m. Friday, rooms ready at 5:00, dinner after. We close after lunch at 1:00 p.m. Sunday.</dd></div>
+        <div><dt>Cost</dt><dd>$350 through December 1, 2026. $400 after that. Your room and every meal are included.</dd></div>
+        <div><dt>If the fee is a barrier</dt><dd>Assistance is available, quietly and without explanation. Write to us before you register.</dd></div>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="mailto:brian@b-drive.us?subject=Rooted%20in%20the%20Land%202027">Tell me when it opens</a>
+      </div>
+      <p class="small">Questions in the meantime: Brian Mueller —
+         <a href="mailto:brian@b-drive.us">brian@b-drive.us</a> · Tom Sparough —
+         <a href="mailto:tsparough@gmail.com">tsparough@gmail.com</a></p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="colophon-note">
+      <p>This writing retreat is inspired by and celebrates the work of Wendell Berry. Permission
+         to use excerpts from his work has been graciously granted by his publisher, Counterpoint
+         Press. Please note that Mr. Berry has not endorsed or sponsored this event.</p>
+      <p><em>Rooted in the Land</em> is an event of Ohio Illuman, a chapter of
+         <a href="https://illuman.org">Illuman</a>.</p>
     </div>
   </section>
 </Base>

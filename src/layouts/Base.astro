@@ -20,6 +20,16 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
     <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      // Runs before first paint so a chosen theme never flashes the wrong one.
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/styles/fonts.css" />
@@ -33,6 +43,10 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
           {nav.map((n) => (
             <a href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>{n.label}</a>
           ))}
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+            <span class="tt-icon" aria-hidden="true"></span>
+            <span class="tt-label">Dark</span>
+          </button>
         </nav>
       </div>
     </header>
@@ -68,5 +82,39 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
            no cost to you.</p>
       </div>
     </footer>
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var btn = document.getElementById("theme-toggle");
+        if (!btn) return;
+        var label = btn.querySelector(".tt-label");
+        var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function current() {
+          var set = root.getAttribute("data-theme");
+          return set === "light" || set === "dark" ? set : (media.matches ? "dark" : "light");
+        }
+        function paint() {
+          var now = current();
+          // The button says what it will switch you TO, which is what people read it as.
+          var next = now === "dark" ? "light" : "dark";
+          label.textContent = next === "dark" ? "Dark" : "Light";
+          btn.setAttribute("aria-pressed", now === "dark" ? "true" : "false");
+          btn.setAttribute("aria-label", "Switch to " + next + " mode");
+          btn.dataset.mode = now;
+        }
+        btn.addEventListener("click", function () {
+          var next = current() === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem("theme", next); } catch (e) {}
+          paint();
+        });
+        // Follow the system only while no explicit choice has been stored.
+        media.addEventListener("change", function () {
+          if (!root.hasAttribute("data-theme")) paint();
+        });
+        paint();
+      })();
+    </script>
   </body>
 </html>

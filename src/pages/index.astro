@@ -7,7 +7,8 @@ import poems from '../data/poems.json';
 import { getCollection } from 'astro:content';
 
 const newest = books.find(b => b.slug === 'trust-stillness');
-const alsoNew = books.filter(b => b.featured && b.slug !== 'trust-stillness');
+const shelf = ['bull-head','tomorrow-could-be-wonderful','jonah','cock-a-doodle-doo','trust-stillness']
+  .map(s => books.find(b => b.slug === s));
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const latest = posts[0];
@@ -15,34 +16,74 @@ const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long',
 const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
 ---
 <Base title="Brian J. Mueller — Poet">
-  <section class="wrap">
-    <div class="stack stack-m prose">
-      <div class="eyebrow">Poet</div>
+
+  <!-- ===== hero ===== -->
+  <section class="hero">
+    <img class="hero-img" src="/img/hero-bull-1800.webp"
+         srcset="/img/hero-bull-800.webp 800w, /img/hero-bull-1200.webp 1200w, /img/hero-bull-1800.webp 1800w"
+         sizes="100vw" width="1800" height="1198" alt="" fetchpriority="high" />
+    <div class="hero-veil"></div>
+    <div class="wrap hero-inner">
+      <div class="eyebrow hero-eyebrow">Poet · Southwestern Ohio</div>
       <h1>Trust the first line.</h1>
-      <hr class="rule-short" />
-      <p class="lede">I write poems for everyone.</p>
-      <p>My journey with poetry began between college lectures, but it truly took flight through
-         the rhythm of my favourite songs and the landscapes of my travels. In 2002 I published my
-         debut collection, <em>Bull Head</em>. Eleven volumes have followed.</p>
-      <p>I believe poetry is the language of the soul. It offers the depth and meaning we often
-         crave, stirring our passions while anchoring us in the intuitive truth that there is
-         always more to life than meets the eye.</p>
-      <div class="btn-row" style="padding-top:.6rem">
-        <a class="btn" href="/poems">Read a few poems</a>
-        <a class="btn btn-ghost" href="/books">See the books</a>
+      <p class="hero-lede">Twelve books of poetry, a writing retreat for men each January,
+         and the belief that everyone carries the voice of a poet.</p>
+      <div class="btn-row">
+        <a class="btn btn-light" href="/poems">Read a few poems</a>
+        <a class="btn btn-ondark" href="/books">See the books</a>
       </div>
     </div>
   </section>
 
+  <!-- ===== the shelf ===== -->
+  <section class="wrap band-quiet">
+    <div class="stack stack-m" style="max-width:34rem">
+      <div class="eyebrow">Twelve volumes · 2002–2026</div>
+      <h2>Twenty-four years of writing.</h2>
+      <p class="lede">Each book stands on its own. Ten of them belong to three series, which you
+         can read in order or dip into anywhere.</p>
+    </div>
+    <div class="shelf">
+      {shelf.map(b => (
+        <a class="shelf-item" href={`/books/${b.slug}`}>
+          <img src={`${b.cover.src}-320.webp`}
+               srcset={`${b.cover.src}-200.webp 200w, ${b.cover.src}-320.webp 320w`}
+               sizes="(max-width:40rem) 30vw, 160px"
+               width={b.cover.w} height={b.cover.h} loading="lazy"
+               alt={`Front cover of ${b.title}`} />
+          <span class="shelf-title">{b.title}</span>
+        </a>
+      ))}
+    </div>
+    <div class="btn-row"><a class="btn btn-ghost" href="/books">All twelve books</a></div>
+  </section>
+
+  <!-- ===== a poem, given room ===== -->
+  {taste && (
+    <section class="band-poem">
+      <div class="wrap stack stack-m" style="max-width:34rem">
+        <div class="eyebrow">A poem</div>
+        <h2>{taste.title}</h2>
+        <Poem text={taste.text} class="poem-left" />
+        <p class="poem-source">from <a href={`/books/${taste.slug}`}>{books.find(b=>b.slug===taste.slug).title}</a>, {books.find(b=>b.slug===taste.slug).year}</p>
+        <div class="btn-row">
+          <a class="btn btn-ghost" href="/poems">Ten more like it</a>
+          <a class="btn btn-ghost" href="https://brianspoems.com">All 1,832 at Brian's Poems</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ===== the new book ===== -->
   {newest && (
-    <section class="wrap" style="border-top:1px solid var(--rule)">
+    <section class="wrap">
       <div class="feature">
         <a class="cover" href={`/books/${newest.slug}`}>
           <img src={`${newest.cover.src}-640.webp`}
                srcset={`${newest.cover.src}-320.webp 320w, ${newest.cover.src}-640.webp 640w`}
                sizes="(max-width: 800px) 55vw, 18rem"
                width={newest.cover.w} height={newest.cover.h}
-               alt={`Front cover of ${newest.title}`} />
+               loading="lazy" alt={`Front cover of ${newest.title}`} />
         </a>
         <div class="stack stack-m">
           <div class="eyebrow">The new book · {newest.year}</div>
@@ -58,73 +99,55 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
     </section>
   )}
 
-  {taste && (
-    <section class="wrap" style="border-top:1px solid var(--rule)">
-      <div class="stack stack-m" style="max-width:34rem">
-        <div class="eyebrow">A poem</div>
-        <h2>{taste.title}</h2>
-        <Poem text={taste.text} class="poem-left" />
-        <p class="poem-source">from <a href={`/books/${taste.slug}`}>{books.find(b=>b.slug===taste.slug).title}</a></p>
-        <div class="btn-row">
-          <a class="btn btn-ghost" href="/poems">Ten more like it</a>
-          <a class="btn btn-ghost" href="https://brianspoems.com">All 1,832 at Brian's Poems</a>
-        </div>
+  <!-- ===== the retreat ===== -->
+  <section class="band-dark">
+    <div class="wrap retreat-strip">
+      <img src="/img/retreat-hero-1000.webp"
+           srcset="/img/retreat-hero-700.webp 700w, /img/retreat-hero-1000.webp 1000w"
+           sizes="(max-width:52rem) 92vw, 26rem"
+           width="1456" height="816" loading="lazy"
+           alt="Rooted in the Land — a farmhouse among bare winter trees at sunrise" />
+      <div class="stack stack-m">
+        <div class="eyebrow">Each January · Bergamo Center, Ohio</div>
+        <h2>Rooted in the Land</h2>
+        <p>A men's writing retreat inspired by Wendell Berry. A weekend of reflection,
+           fraternity and renewal — writing our way toward a deeper belonging. You do not have to
+           think of yourself as a writer to come.</p>
+        <p class="small">January 15–17, 2027 · co-led with Tom Sparough · fifty places</p>
+        <div class="btn-row"><a class="btn btn-onlight" href="/retreat">About the retreat</a></div>
       </div>
-    </section>
-  )}
-
-  <section class="wrap stack stack-l" style="border-top:1px solid var(--rule)">
-    <div class="stack stack-s">
-      <div class="eyebrow">Series</div>
-      <h2>Three bodies of work</h2>
-      <p class="lede prose">Every book stands on its own. These are the threads that run between them.</p>
-    </div>
-    <div class="book-grid">
-      {series.map(s => (
-        <a class="book-card" href={`/series/${s.slug}`}>
-          <div class="bc-text">
-            <div class="t">{s.name}</div>
-            <div class="s">{s.tagline}</div>
-            <div class="m">{books.filter(b => b.series === s.slug).length} volumes →</div>
-          </div>
-        </a>
-      ))}
-      {alsoNew.map(b => (
-        <a class="book-card" href={`/books/${b.slug}`}>
-          <figure class="cover">
-            <img src={`${b.cover.src}-200.webp`} width={b.cover.w} height={b.cover.h}
-                 loading="lazy" alt="" />
-          </figure>
-          <div class="bc-text">
-            <div class="m">Standalone{b.year ? ` · ${b.year}` : ""}</div>
-            <div class="t">{b.title}</div>
-            <div class="s">{b.subtitle}</div>
-          </div>
-        </a>
-      ))}
     </div>
   </section>
 
-  {latest && (
-    <section class="wrap" style="border-top:1px solid var(--rule)">
-      <div class="stack stack-m prose">
-        <div class="eyebrow">Latest note · {fmt(latest.data.date)}</div>
-        <h2><a href={`/blog/${latest.id}`} style="color:inherit;text-decoration:none">{latest.data.title}</a></h2>
-        <p>{latest.data.summary}</p>
-        <div class="btn-row"><a class="btn btn-ghost" href={`/blog/${latest.id}`}>Read it</a></div>
+  <!-- ===== series + latest note ===== -->
+  <section class="wrap stack stack-l">
+    <div class="cols-2">
+      <div class="stack stack-m">
+        <div class="eyebrow">Series</div>
+        <h2>Three bodies of work</h2>
+        <ul class="link-list">
+          {series.map(s => (
+            <li>
+              <a href={`/series/${s.slug}`}>
+                <span class="ll-title">{s.name}</span>
+                <span class="ll-sub">{s.tagline}</span>
+                <span class="ll-n">{books.filter(b => b.series === s.slug).length} volumes</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
-    </section>
-  )}
-
-  <section class="wrap" style="border-top:1px solid var(--rule)">
-    <div class="stack stack-m prose">
-      <div class="eyebrow">Each January</div>
-      <h2>A men's writing retreat</h2>
-      <p>For five years I shared my work daily through <em>Brian's Poem of the Day</em>. That
-         project blossomed into a deeper calling: a request to design a writing retreat focused on
-         healing and spiritual growth for men. I have now had the privilege of co-leading this
-         annual retreat for a decade.</p>
-      <div class="btn-row"><a class="btn btn-ghost" href="/retreat">Rooted in the Land, January 2027</a></div>
+      {latest && (
+        <div class="stack stack-m">
+          <div class="eyebrow">Latest note · {fmt(latest.data.date)}</div>
+          <h2><a href={`/blog/${latest.id}`} style="color:inherit;text-decoration:none">{latest.data.title}</a></h2>
+          <p>{latest.data.summary}</p>
+          <div class="btn-row">
+            <a class="btn btn-ghost" href={`/blog/${latest.id}`}>Read it</a>
+            <a class="btn btn-ghost" href="/blog">All notes</a>
+          </div>
+        </div>
+      )}
     </div>
   </section>
 </Base>
