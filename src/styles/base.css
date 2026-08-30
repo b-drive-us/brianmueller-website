@@ -91,6 +91,10 @@ p{margin:0}
 /* ---------- layout ---------- */
 .wrap{width:min(72rem,100% - 2.5rem);margin-inline:auto}
 .prose{max-width:var(--measure)}
+/* Constrain an element INSIDE .wrap, never .wrap itself — .wrap centres itself with
+   auto margins, so a max-width on it drags the whole block to the middle of the page
+   while every other section stays left-aligned. */
+.measure{max-width:var(--measure)}
 .stack{display:flex;flex-direction:column}
 .stack-s{gap:.6rem}.stack-m{gap:1.1rem}.stack-l{gap:2rem}.stack-xl{gap:3.4rem}
 section{padding-block:clamp(3rem,7vw,5.5rem)}
@@ -318,7 +322,7 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
    instead of one long column of hairlines.
    ============================================================ */
 .band-quiet{background:transparent}
-.band-quiet, .band-poem > .wrap{padding-block:clamp(3rem,7vw,5.5rem)}
+.band-quiet{padding-block:clamp(3.4rem,7.5vw,6rem)}
 .band-poem{background:var(--paper-2);border-block:1px solid var(--rule)}
 .band-dark{background:#191512;color:#F4EFE7;padding-block:clamp(3.2rem,7vw,5.5rem)}
 .band-dark h2{color:#F4EFE7}
@@ -346,15 +350,18 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 .btn-onlight:hover{background:#E0C089;border-color:#E0C089;color:#1B1714}
 
 /* ---------- the shelf ---------- */
-.shelf{display:flex;gap:clamp(.9rem,2.5vw,1.8rem);align-items:flex-end;flex-wrap:wrap;
-       margin-block:clamp(1.8rem,4vw,2.6rem)}
-.shelf-item{flex:0 1 108px;text-decoration:none;color:inherit;display:block;
-            transition:transform .18s ease}
+/* A real shelf: every cover sits on one baseline and every caption starts at the
+   same height. An earlier version staggered alternate covers, which just made
+   the captions look misaligned. */
+.shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+       gap:clamp(1.4rem,3vw,2.4rem);align-items:end;
+       margin-block:clamp(2.2rem,4.5vw,3rem);max-width:52rem}
+.shelf-item{text-decoration:none;color:inherit;display:flex;flex-direction:column;
+            justify-content:flex-end;transition:transform .18s ease}
 .shelf-item img{border-radius:2px;
   box-shadow:0 1px 2px rgba(23,19,15,.12), 0 14px 28px -14px rgba(23,19,15,.5)}
-.shelf-item:nth-child(even){margin-bottom:1.4rem}
 .shelf-item:hover{transform:translateY(-6px)}
-.shelf-title{display:block;margin-top:1.15rem;font-family:"Archivo",system-ui,sans-serif;
+.shelf-title{display:block;margin-top:1.15rem;min-height:2.6em;font-family:"Archivo",system-ui,sans-serif;
              font-size:.74rem;letter-spacing:.05em;color:var(--ink-3);line-height:1.35}
 .shelf-item:hover .shelf-title{color:var(--ink-2)}
 
@@ -435,5 +442,5 @@ h2 + .lede, h1 + .lede{margin-top:.15rem}
 /* sections were all the same height; give the page a longer breath between
    major bands than between blocks inside one */
 section{padding-block:clamp(3.4rem,7.5vw,6rem)}
-.band-poem > .wrap{padding-block:clamp(3.4rem,7.5vw,6rem)}
+
 .post-card h2.t{font-size:1.4rem;line-height:1.2;color:var(--ink);margin:0}

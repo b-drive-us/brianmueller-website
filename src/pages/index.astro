@@ -37,7 +37,7 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
 
   <!-- ===== the shelf ===== -->
   <section class="wrap band-quiet">
-    <div class="stack stack-m" style="max-width:34rem">
+    <div class="stack stack-m measure">
       <div class="eyebrow">Twelve volumes · 2002–2026</div>
       <h2>Twenty-four years of writing.</h2>
       <p class="lede">Each book stands on its own. Ten of them belong to three series, which you
@@ -61,7 +61,7 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
   <!-- ===== a poem, given room ===== -->
   {taste && (
     <section class="band-poem">
-      <div class="wrap stack stack-m" style="max-width:34rem">
+      <div class="wrap"><div class="stack stack-m measure">
         <div class="eyebrow">A poem</div>
         <h2>{taste.title}</h2>
         <Poem text={taste.text} class="poem-left" />
@@ -70,7 +70,7 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
           <a class="btn btn-ghost" href="/poems">Ten more like it</a>
           <a class="btn btn-ghost" href="https://brianspoems.com">All 1,832 at Brian's Poems</a>
         </div>
-      </div>
+      </div></div>
     </section>
   )}
 
