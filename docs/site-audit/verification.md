@@ -43,3 +43,52 @@ as passing.
 - A headless Chromium with Playwright is available in the cloud container for viewport work, but it
   cannot reach `fonts.googleapis.com` or `brianmueller.org` through the egress proxy. Local
   rendering must be served from a locally built `dist/`.
+
+## Prompt 01 — 2026-09-12 — independent verification
+
+Method: BFS crawl of the live beta from `/` over internal links; every anchor, `src` and `srcset`
+destination checked with redirect chains followed; contrast computed from the deployed stylesheet;
+poem bodies compared line-by-line against brianspoems.com; the .com sitemap fetched and decomposed.
+
+| Check | Environment | Result |
+|---|---|---|
+| Page discovery | live beta | **28 pages**, all 200 — exactly Appendix B, nothing added or missing |
+| Link/asset check | live beta + external | **102 distinct destinations, 911 occurrences**; every internal and external destination resolves |
+| spacepainter.com | external | returns **202** to an automated client (audit saw 403); browser loads it. Verification-method artefact, not a broken link — audit's conclusion upheld |
+| Internal fragments | live beta | `#register`, `#is-it-for-me` both present in `/retreat` |
+| mailto encoding | live beta | all three well-formed; subject correctly percent-encoded |
+| F10.1 | deployed CSS | white `#FFFFFF` on `--ember` dark `#E09A66` = **2.34:1** — matches the audit exactly |
+| F10.2 | deployed CSS | white on `--ember-deep` dark `#F0B183` = **1.85:1** — matches exactly |
+| F10.3 | deployed CSS | `--ink-3` `#7C7065` on `--paper` `#F7F4EF` = **4.39:1** — matches exactly |
+| **F10.5 (new)** | deployed CSS | `--ink-3` on `--paper-2` `#EFEAE1` = **4.02:1** — worse, and not in the audit |
+| Light-theme button | deployed CSS | white on light `--ember` `#8C4A22` = **6.74:1 PASS** — the failure is dark-theme only |
+| F08 | brianspoems.com | archive heading is **"Behold"**, subtitle **"…the truth in her smile."**; site says "Truth" / "Behold her smile!" — reproduced |
+| F08 body | archive vs site | **11 of 11 lines identical** — same poem, title dispute only |
+| Sample bodies | archive vs site | all twelve match; near-misses are typographic apostrophes and stanza blanks |
+| F07 | brianspoems.com | the archive's own page states **"all 1,834 pieces … 1,675 poems, 38 prose pieces"** — reproduced from the source |
+| F02.1 | beta vs .com | all **8 legacy routes 404 on the beta and 200 on .com** — real breakage at cutover |
+| F02 inventory | .com sitemap | **1,646 URLs, no nested sitemaps** — count confirmed |
+| F01 | live beta | `/contact` still publishes "The form needs rebuilding… Cloudflare Worker" — reproduced |
+| F05.1/F05.2 | live beta | Privacy names Squarespace and Google Analytics — reproduced |
+| F05.4 | live beta | "configuration.Third-Party Cookies" run together — reproduced |
+| F12.1/F12.2/F12.3 | build output | 12 descriptions at exactly 150 chars; 3 shared titles; `/` and `/books` share one — reproduced |
+
+### The legacy inventory decomposed — this changes the shape of F02
+
+The audit reported 1,646 legacy URLs without breaking them down. They are:
+
+| Segment | Count | Treatment |
+|---|---:|---|
+| `/living-workshop/…` | **1,611** | Blog posts. Brian decided 2026-08-29 to archive, not migrate. One blanket rule. |
+| `/store/…` | 15 | Book and series pages. Individually mapped to `/books/…` and `/series/…`. |
+| `/archive-N` | ~14 | The disabled pages, already mined into the new site's content. |
+| Policies and other | ~6 | `/refund-policy`, `/terms-conditions`, `/disclaimer`, … |
+
+**98% of the inventory is one decision Brian has already made.** The bespoke mapping work is about
+35 URLs, not 1,646. That is a materially smaller and more tractable job than the headline figure
+implies, and it should be said plainly rather than left as an intimidating number.
+
+## Still not verified — do not describe as passing
+
+Mobile viewports and real devices, screen readers, email delivery, registration, payment, lab or
+field performance, penetration testing, and the content of the 1,611 archived blog URLs.

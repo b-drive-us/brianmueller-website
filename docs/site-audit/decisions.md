@@ -8,7 +8,22 @@ Blocking = cannot reach production without an answer.
 
 ---
 
-## D-01 — Is retreat registration open at launch, or is it an interest list? · **BLOCKING**
+## D-01 — Registration: sequencing · **ANSWERED 2026-09-12**
+
+**Brian's decision.** Do not add the payment service yet. Fix everything else first. Stripe *is*
+coming, on Brian's own Stripe account, and he has Illuman's authorisation to take payment for the
+retreat. Registration will be finished — after the rest of the audit work lands.
+
+**What this means for the staged work.** Prompt 03 completes the retreat page as an honest,
+clearly-labelled interest list, and states that registration opens later. No mailto is dressed up as
+a signup. The Stripe build becomes its own stage after Prompt 10, before or alongside Prompt 11.
+Nothing in Prompts 01–10 should be shaped around a payment flow that is not being built yet.
+
+**Still needed before the Stripe stage starts:** D-04 (email sending) and an opening date (F14.2).
+
+---
+
+## D-01a — original framing, superseded
 
 **Evidence.** The retreat page says "Opening soon" and offers a mailto. The project plan commits to
 registration being live and promotable before Awaken (5–8 November). No payment path, roster or
@@ -81,7 +96,33 @@ historical page.
 
 ---
 
-## D-06 — What licence covers each collection, and who may grant it? · **BLOCKING**
+## D-06 — Poem licensing · **ANSWERED 2026-09-12, with two questions back**
+
+**Brian's decision.** All poems are licensed under Creative Commons, including those in the Men
+Writing for Change volumes. The men who contributed poems to those books released them into the
+public domain.
+
+**That resolves the hardest part of F04** — the site-wide footer grant is legitimate, and the
+collaborative volumes are not an exception to it.
+
+**Two things still need Brian before the wording is published:**
+
+1. **Cock-A-Doodle-Doo.** Brian's own FAQ — carried over verbatim from his Squarespace site — says
+   its haiku are under traditional copyright and "cannot be used, adapted, copied, or published
+   without Brian's permission." That is the opposite of a Creative Commons grant. "All poems are
+   Creative Commons" would overwrite a restriction Brian himself published. Which is current?
+2. **Public domain and CC BY-NC-ND are different grants.** A public-domain dedication reserves
+   nothing — commercial use and derivatives included. CC BY-NC-ND forbids both. So the contributors'
+   poems cannot accurately be described as CC BY-NC-ND on the strength of a public-domain release.
+   The honest form is probably: the volumes are compilations Brian licenses CC BY-NC-ND, and the
+   individual contributed poems were released by their authors into the public domain. That is a
+   sentence worth getting right once.
+
+Independent policy work continues meanwhile; only the final licence sentences wait.
+
+---
+
+## D-06a — original framing, superseded
 
 **Evidence.** The footer grants CC BY-NC-ND 4.0 over "poems" site-wide. The FAQ limits it to two
 series and excludes Cock-A-Doodle-Doo. Trust Stillness is unclassified. **The Men Writing for

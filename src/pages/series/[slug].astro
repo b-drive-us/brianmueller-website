@@ -9,7 +9,7 @@ export function getStaticPaths() {
 const { s } = Astro.props;
 const vols = books.filter(b => b.series === s.slug).sort((a,b) => a.position - b.position);
 ---
-<Base title={`${s.name} — Brian J. Mueller`} description={s.tagline}>
+<Base title={`${s.pageTitle} — Brian J. Mueller`} description={s.tagline}>
   <section class="wrap stack stack-l">
     <div class="stack stack-m prose">
       <div class="eyebrow">Series · {vols.length} volumes</div>

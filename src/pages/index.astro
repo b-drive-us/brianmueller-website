@@ -15,7 +15,8 @@ const latest = posts[0];
 const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
 const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
 ---
-<Base title="Brian J. Mueller — Poet">
+<Base title="Brian J. Mueller — Poet"
+      description="Poet in southwestern Ohio. Twelve collections of poetry since 2002, a curated selection to read, and Rooted in the Land — a men's writing retreat each January.">
 
   <!-- ===== hero ===== -->
   <section class="hero">
@@ -39,8 +40,9 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
   <section class="wrap band-quiet">
     <div class="stack stack-m measure">
       <div class="eyebrow">Twelve volumes · 2002–2026</div>
-      <h2>Twenty-four years of writing.</h2>
-      <p class="lede">Each book stands on its own. Ten of them belong to three series, which you
+      <h2>Twenty-four years in print.</h2>
+      <p class="lede">Twelve books between 2002 and 2026 — though the earliest of them gathers
+         writing going back to 1991. Each stands on its own; ten belong to three series, which you
          can read in order or dip into anywhere.</p>
     </div>
     <div class="shelf">
@@ -68,7 +70,7 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
         <p class="poem-source">from <a href={`/books/${taste.slug}`}>{books.find(b=>b.slug===taste.slug).title}</a>, {books.find(b=>b.slug===taste.slug).year}</p>
         <div class="btn-row">
           <a class="btn btn-ghost" href="/poems">Ten more like it</a>
-          <a class="btn btn-ghost" href="https://brianspoems.com">All 1,832 at Brian's Poems</a>
+          <a class="btn btn-ghost" href="https://brianspoems.com">Search the whole collection</a>
         </div>
       </div></div>
     </section>

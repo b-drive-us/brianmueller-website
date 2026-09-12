@@ -16,7 +16,7 @@ const collects = (book.collects || []).map(sl => books.find(b => b.slug === sl))
 const kindLabel = { collection: null, anthology: "Anthology", "multi-author": "Many voices" }[book.kind];
 const c = book.cover;
 ---
-<Base title={`${book.title} — Brian J. Mueller`} description={book.blurb.slice(0,150)}>
+<Base title={`${book.titleFull ?? book.title} — Brian J. Mueller`} description={book.description}>
   <section class="wrap">
     <div class="book-lead">
       <figure class="cover cover-lg">
@@ -56,13 +56,15 @@ const c = book.cover;
         {book.occasion && <p class="small occasion">{book.occasion}</p>}
 
         <dl class="colophon">
-          {book.year && <div><dt>Published</dt><dd>{book.year}</dd></div>}
+          {book.year && <div><dt>First published</dt><dd>{book.year}</dd></div>}
           {book.pages && <div><dt>Pages</dt><dd>{book.pages}</dd></div>}
           <div><dt>Publisher</dt><dd>{book.publisher}</dd></div>
           {book.isbn13 && <div><dt>ISBN</dt><dd>{book.isbn13}</dd></div>}
         </dl>
         {book.published && <p class="small">Published {book.published}.</p>}
         {book.isbnNote && <p class="small">{book.isbnNote}</p>}
+        <p class="small edition-note">These details describe the first edition. The Amazon link
+           above may sell a later printing with a different date or page count.</p>
 
         {book.kind === "multi-author" && (
           <div class="notice">
