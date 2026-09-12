@@ -5,3 +5,6 @@ dist/
 *.log
 .env
 .env.*
+
+# Files Claude could not delete (device delete permission was off). Safe to remove.
+_to_delete/
