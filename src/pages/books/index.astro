@@ -20,7 +20,7 @@ const standalone = books.filter(b => !b.series);
       return (
         <div class="stack stack-m">
           <div class="stack stack-s">
-            <h2><a href={`/series/${s.slug}`} style="text-decoration:none;color:inherit">{s.name}</a></h2>
+            <h2><a href={`/series/${s.slug}`} class="u-plain">{s.name}</a></h2>
             <p class="small">{s.tagline}</p>
           </div>
           <div class="book-grid">
@@ -36,7 +36,7 @@ const standalone = books.filter(b => !b.series);
                   <div class="t">{b.title}</div>
                   <div class="s">{b.subtitle}</div>
                   {b.kind !== "collection" && (
-                    <div style="padding-top:.45rem"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
+                    <div class="u-pad-badge"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
                   )}
                 </div>
               </a>

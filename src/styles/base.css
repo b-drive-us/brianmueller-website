@@ -516,3 +516,17 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
    otherwise-identical "Buy on Amazon" links apart in a link list. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
          clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* ---------- small utilities ---------- */
+/* These replace inline style="" attributes. They exist so the Content Security
+   Policy can forbid inline styles outright (style-src 'self', no
+   'unsafe-inline') rather than leaving a hole open for nine trivial
+   declarations. Keep it that way: a new inline style re-opens it. */
+.u-measure-22{max-width:22rem}
+.u-measure-34{max-width:34rem}
+.u-col{flex-direction:column}
+.u-inherit{color:inherit}
+.u-plain{color:inherit;text-decoration:none}
+.u-pad-badge{padding-top:.45rem}
+.u-section-gap{margin-top:clamp(3rem,6vw,4.5rem)}
+.poem-epigraph{font-size:1.05rem}

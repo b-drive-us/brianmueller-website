@@ -280,3 +280,206 @@ Revisit if field data after cutover shows real users hitting it.
 environment and cannot be installed here. Every result above is Chromium. Safari and Firefox are
 unverified, which matters for this site specifically because Safari is where most iPhone readers
 will arrive from an email link. See `docs/site-audit/device-checklist.md`.
+
+---
+
+## Prompt 07 — security and delivery
+
+**Scope, stated plainly: this was a configuration and code review, not a penetration test, and
+nothing here is a guarantee that the website is secure.** It covers the repository, the built
+output, the dependency tree, the response headers of the running staging site, and the behaviour of
+a real browser under the enforced policy. It does not cover Cloudflare's own infrastructure,
+Brian's account credentials, his email provider, or anything that is added later.
+
+### The attack surface, as measured
+
+| | Found |
+|---|---|
+| Server endpoints | **none** — static assets on a Cloudflare Worker, no `main`, no functions |
+| Forms | **none** — no `<form>` in any of the 29 built pages |
+| `fetch` / `XMLHttpRequest` | **none** |
+| JavaScript files in `dist` | **zero** |
+| Inline scripts | 2, identical on every page: pre-paint theme read, theme toggle |
+| Inline event handlers (`onclick=` etc.) | **none** |
+| Third-party subresources | **none** — every stylesheet, font and image is same-origin |
+| `data:` URIs | **none** |
+| `<iframe>` / `<object>` / `<embed>` / `<base>` | **none** |
+| `target="_blank"` | **none**, so no reverse-tabnabbing surface |
+| Client storage | `localStorage["theme"]`, written only if the visitor presses the toggle |
+| Cookies set | **none** — confirmed against the live site, no `Set-Cookie` on any response |
+| Secrets in the repository | none. Only `.gitignore` matches the dotfile scan; no `.env`, key or credential file is tracked |
+| Source maps / docs leaked into `dist` | none |
+| Deployment credential | held by Cloudflare Workers Builds, never in the repo |
+
+There is no user-controlled input path anywhere on this site, so the injection, recipient-selection,
+header-injection, unbounded-body, open-redirect and duplicate-processing questions in the prompt
+have no surface to land on. That is a finding, not an omission — and it is why the CSP can be as
+tight as it is.
+
+### Dependencies
+
+| Package | Was | Now | Action |
+|---|---|---|---|
+| wrangler | 4.127.1 (high) | **4.131.1** | updated — holds the deploy credential |
+| miniflare | (high, via wrangler) | cleared | resolved by the above |
+| astro | 5.18.2 (critical ×10) | 5.18.2 | **not upgraded** — see N10 and D-11 |
+| sharp | (high, via astro) | unchanged | libvips/libheif CVEs; `astro:assets` is never used so sharp never runs |
+| esbuild | (low, via astro) | unchanged | dev server on Windows only; not applicable |
+
+The astro decision is the substantial one and it is written up in full in findings N10 and
+decision D-11. Short version: all ten advisories were checked individually and none is reachable in
+a static build with no user input; the upgrade to 7.3.2 was then actually attempted and **rejected
+because it silently corrupts rendered prose in fourteen places across eight pages**. Reverted and
+verified byte-identical to the Prompt 06 build.
+
+`tools/compare-build-text.py` came out of that and stays in the repo. It compares the rendered text
+of two builds and exits non-zero on exactly this class of regression — a space lost next to an
+inline element, which no build log, link check or responsive sweep will show you. Self-tested
+against the Astro 7 build: it reports all fourteen.
+
+### Transport — F11 confirmed live
+
+```
+$ curl -sSI http://brianmueller.org/                      -> HTTP/1.1 200 OK
+$ curl -sSI "http://brianmueller.org/books/jonah?utm=x"   -> HTTP/1.1 200 OK
+$ curl -sSI http://www.cloudflare.com/                    -> HTTP/1.1 301 + location:
+```
+
+The third line is the calibration: redirects pass through this client intact, so the 200s are real
+and not an artifact. The site answers on port 80 with no upgrade.
+
+The fix is a Cloudflare zone setting and therefore Brian's to make — D-12, which also sets out why
+HSTS is deliberately **not** enabled yet and the order to enable it in afterwards.
+
+### Headers, and what they were before
+
+The live site returned exactly one security-relevant header: `x-robots-tag`. No CSP, no `nosniff`,
+no referrer policy, no permissions policy, no framing protection, no HSTS.
+
+The policy now in `public/_headers`:
+
+```
+default-src 'none';
+script-src 'sha256-ReSDczqo…' 'sha256-QglPjucd…';
+style-src 'self'; img-src 'self'; font-src 'self';
+base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+upgrade-insecure-requests
+```
+
+plus `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, a
+`Permissions-Policy` denying seventeen features the site never uses, and
+`Cross-Origin-Opener-Policy: same-origin`.
+
+Two things about it are worth stating because they were earned rather than assumed:
+
+- **`script-src` is two hashes and nothing else.** No `'unsafe-inline'`, no `'self'`, no nonce.
+  That is only possible because the site has exactly two scripts and they never change per page.
+- **`style-src` is `'self'` with no `'unsafe-inline'`.** That is only possible because the 91
+  inline `style` attributes were moved into utility classes first (N12).
+
+`Cross-Origin-Resource-Policy` is set per directory rather than globally, on purpose: `same-origin`
+on the stylesheet and fonts to stop other sites spending Brian's bandwidth, `cross-origin` on
+`/img/` and `/covers/` so Illuman, Choosing Presence or a reviewer can embed a book cover. A global
+`same-origin` would have quietly broken that, which is the kind of thing a copied header block
+does.
+
+### Enforcement test — not report-only
+
+The policy was tested **enforced**, by serving the real `dist/` through a server that applies the
+real `_headers` file, and driving a real browser against it.
+
+| Check | Result |
+|---|---|
+| Pages loaded under enforcement | **58** (29 pages × 2 themes) |
+| CSP violations | **0** |
+| Console errors | **0** |
+| Theme script ran and applied correctly | **58 / 58** |
+| Webfonts loaded | **58 / 58** |
+| 406-check responsive sweep, under the policy | **0 problems** |
+
+Because it survives enforcement on every page in both themes, it ships **enforced**, not
+report-only. Report-only would not be enforcement and would not be worth claiming as protection.
+
+### Negative tests
+
+Harmless probes against the enforced policy, each asserting the browser refuses:
+
+| Probe | Result |
+|---|---|
+| Inline `<script>` injected into the page | **blocked** |
+| External script from another origin (jsDelivr) | **blocked** |
+| `style` attribute set from script | **blocked** |
+| Off-origin image | **blocked** |
+| `fetch()` to another origin | **blocked** |
+| Form injected and submitted to `example.com` | **blocked** — navigation did not occur |
+| `<base href="https://evil.example/">` injected | **blocked** — relative links unaffected |
+
+Positive control on the same page: theme toggle present and working, 3 font faces loaded.
+
+### Header coverage — pages, assets, and errors
+
+| Path | Core security headers | CORP |
+|---|---|---|
+| `/index.html` | 6 / 6 | — |
+| `/nope-404` (the 404 page) | 6 / 6 | — |
+| `/robots.txt` | 6 / 6 | — |
+| `/fonts/…woff2` | 6 / 6 | same-origin |
+| `/img/…webp` | 6 / 6 | cross-origin |
+| `/covers/…webp` | 6 / 6 | cross-origin |
+
+Confirmed at the live edge as well, for the header that matters most right now: `x-robots-tag` is
+present on the running site's pages, on `robots.txt`, **and on 404 responses**. Cloudflare applies
+`/*` rules to error responses. The CSP itself cannot be confirmed at the edge until this branch is
+deployed at Prompt 11; that check belongs there.
+
+### Indexing guard — the reason it works is not the reason we wrote down
+
+`https://brianmueller.org/robots.txt` is 66 lines, not the 6 in this repo: Cloudflare **prepends** a
+managed block containing `User-agent: * / Allow: /`, ahead of our `Disallow: /`. The repository's
+robots.txt is therefore not reliably keeping this site out of search results. `X-Robots-Tag:
+noindex, nofollow` is, and it is verified present everywhere. The guard holds; the documented
+reason for it was wrong and is now corrected in `public/_headers`.
+
+The same managed block declares `ai-train=no` and blocks nine AI crawlers — a rights decision about
+Brian's poetry, arriving as a hosting default. Raised as D-13 rather than accepted silently.
+
+### Data practices rechecked against Prompt 04 — and a correction
+
+Prompt 04 recorded F05 as implemented. **It was not, and that was my error.** The privacy policy had
+been rewritten correctly; the cookie policy had not. It still listed Google Analytics cookies
+(`_ga`, `_gid`, `_gat`) and Squarespace Analytics cookies (`ss_cid`, `ss_cpvisit`, …) as cookies the
+site uses, and offered a cookie preference tool that does not exist — so the two policies flatly
+contradicted each other.
+
+Rechecked against behaviour, not source: the live site sends **no `Set-Cookie` on any response**,
+injects no Cloudflare beacon, and carries two inline scripts and nothing else.
+
+- **Cookie policy rewritten.** It now opens by saying the site sets no cookies, describes the single
+  `localStorage` theme value and how to clear it, and keeps a short honest note that earlier
+  versions of the site did run Squarespace and Google Analytics.
+- **Privacy policy corrected.** "Cloudflare Web Analytics" named a product that requires a beacon
+  script the site does not load; it now describes Cloudflare's edge traffic figures and server logs.
+  The Workers delivery diagnostics are disclosed (D-14). The "(if enabled) cookie preference tools"
+  hedge is gone.
+- Revision dates on both moved to September 12, 2026, because these were real edits.
+
+No diagnostics on this site touch message content or personal details, because no message or
+personal detail ever reaches it: contact is a `mailto:` link and the retreat is an email interest
+list. Delivery logs are request lines at Cloudflare.
+
+### Remaining risks, explicitly
+
+1. **HTTP still answers on port 80** until Brian turns on Always Use HTTPS (D-12). Until then a
+   visitor on a hostile network can be served a modified page over plain HTTP, and
+   `upgrade-insecure-requests` in the CSP does not help with the initial navigation.
+2. **Astro stays on an end-of-life major** (D-11). No advisory is reachable today; the moment the
+   site gains a form, an endpoint or SSR, that changes and the upgrade becomes urgent.
+3. **sharp ships with libvips/libheif CVEs** in the dependency tree. It is never invoked, because
+   `astro:assets` is never used. If image optimization is ever turned on, revisit first.
+4. **The CSP is brittle by design.** Editing either theme script by one byte breaks it silently —
+   the build passes, the page looks right, the toggle is dead. `tools/csp-hashes.py` regenerates
+   the hashes; the `_headers` comment says so at the point of use.
+5. **The CSP has not been confirmed at the Cloudflare edge**, only under an identical local
+   enforcement of the same `_headers` file. That confirmation belongs to Prompt 11.
+6. **Account security is out of scope and unreviewed**: Cloudflare and GitHub credentials, two-factor
+   enrolment, and who else can deploy. Worth Brian's own look before cutover.

@@ -27,7 +27,7 @@ const c = book.cover;
 
       <div class="stack stack-l">
         <div class="stack stack-m">
-          {s && <div class="eyebrow"><a href={`/series/${s.slug}`} style="color:inherit">{s.name}</a> · {book.position} of {siblings.length}</div>}
+          {s && <div class="eyebrow"><a href={`/series/${s.slug}`} class="u-inherit">{s.name}</a> · {book.position} of {siblings.length}</div>}
           {!s && <div class="eyebrow">Standalone</div>}
           <h1>{book.title}</h1>
           <p class="lede serif-italic">{book.subtitle}</p>
@@ -77,7 +77,7 @@ const c = book.cover;
     </div>
 
     {siblings.length > 1 && (
-      <div class="stack stack-m" style="margin-top:clamp(3rem,6vw,4.5rem)">
+      <div class="stack stack-m u-section-gap">
         <h2>{s.name}</h2>
         <div class="book-grid">
           {siblings.map(b => (

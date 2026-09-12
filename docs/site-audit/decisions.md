@@ -177,3 +177,86 @@ copy. **Recommendation:** US throughout. No decision needed unless Brian disagre
 Whether Cloudflare builds non-`main` branches is unconfirmed. Until it is, nothing gets pushed.
 **Recommendation:** confirm in the Cloudflare dashboard during Prompt 01; if preview deployments
 are off, branch pushes are safe and make review easier.
+
+---
+
+## D-11 — Stay on Astro 5.18.2 through cutover; upgrade after, on its own branch
+
+**Decided by:** Claude, on evidence, during Prompt 07. **Brian can overrule.**
+
+Astro 5 is end-of-life and `npm audit` calls it critical. Every one of the ten advisories was
+checked against this build and none is reachable: no SSR, no islands, no image optimization, no
+`define:vars`, no `base`, and now no spread props. The deployed artifact is static files with no
+JavaScript, no forms and no user input.
+
+The upgrade to 7.3.2 was attempted and rejected because it silently corrupts rendered prose in
+fourteen places across eight pages (N10), and will keep doing it to new writing. Taking a two-major
+framework jump whose failure mode is invisible text corruption, three weeks before a go/no-go, to
+clear advisories that cannot be triggered, is the wrong trade.
+
+**The plan, after cutover:** a branch of its own, `npm install astro@latest`, then
+`python3 tools/compare-build-text.py <old dist> <new dist>` until it reports zero, then the
+406-check sweep, then a pixel comparison. Rewriting the affected paragraphs so the inline element
+sits on the same line as the text before it is a stable fix in every Astro version.
+
+**Review this if** any of these becomes true: the site gains a form, an endpoint, SSR, an adapter,
+`astro:assets`, or any handling of visitor input. Any one of them turns "unreachable" into
+"reachable" and the upgrade becomes urgent.
+
+## D-12 — Turn on Always Use HTTPS; hold HSTS until after cutover — **needs Brian**
+
+`http://brianmueller.org/` answers `200` on plain HTTP today (F11, reproduced live).
+
+**What is needed, in the Cloudflare dashboard for the zone:**
+SSL/TLS → Edge Certificates → **Always Use HTTPS: On**. It 301s to the identical URL, preserving
+path and query. Not a DNS change, reversible in one click. It is an account settings change, so it
+is not being made without Brian's say-so. It should be set on **brianmueller.com** as well as
+**brianmueller.org** at cutover.
+
+**HSTS is deliberately NOT enabled and no `Strict-Transport-Security` header is set.** HSTS tells
+a browser to refuse plain HTTP for a host for months. Enabling it before every hostname that will
+serve this site can answer over TLS locks people out, and `includeSubDomains` extends that to
+subdomains that may not be ready. `preload` is close to irreversible.
+
+**Order, once Brian approves:**
+1. Always Use HTTPS on, on both hostnames. Confirm `curl -sSI http://<host>/` returns 301.
+2. Cutover completes and production is stable on brianmueller.com.
+3. Then `Strict-Transport-Security: max-age=300` for a few days, watching for anything that breaks.
+4. Then raise to `max-age=31536000`.
+5. `includeSubDomains` only after checking every subdomain of brianmueller.com — and note that
+   brianspoems.com is a separate domain, so it is unaffected either way.
+6. `preload` only if Brian actively wants it. It is very hard to undo.
+
+## D-13 — Cloudflare's managed robots.txt makes an AI-training decision for Brian — **needs Brian**
+
+Cloudflare prepends a managed block to robots.txt (see F03 follow-up). Beyond weakening the staging
+`Disallow` — which the `X-Robots-Tag` header covers — it declares on Brian's behalf:
+
+```
+Content-Signal: search=yes,ai-train=no,use=reference
+```
+
+and disallows ClaudeBot, GPTBot, CCBot, Google-Extended, Applebot-Extended, Amazonbot, Bytespider
+and meta-externalagent.
+
+That is a rights position on Brian's poetry, set by a hosting default. It may well be the position
+he wants — his books are CC BY-NC-ND, which is a restrictive licence — but it should be his, and it
+interacts with how the poems are licensed and how `brianspoems.com` is configured.
+
+**Three options:**
+1. **Keep it.** Simplest. Search engines may index, AI training is refused.
+2. **Turn the managed robots.txt off** (Cloudflare → the zone → Settings) and write the whole file
+   in this repo. Brian controls every line and it is reviewable in git — which also removes the
+   conflicting `Allow: /` for good.
+3. **Keep the block but change the signals** in Cloudflare to whatever Brian actually wants.
+
+Recommendation: **option 2** at cutover. On a site whose entire content is the author's own
+copyrighted work, the file that tells crawlers what they may do should live in the repository and
+not change when a vendor updates a default.
+
+## D-14 — Workers delivery diagnostics stay on through launch
+
+`wrangler.jsonc` has `observability.enabled: true`, which records request-level logs at Cloudflare.
+Kept on: it is how a broken redirect or a 404 storm gets noticed in the days after cutover. It is
+now disclosed in the privacy policy rather than being an undocumented data flow. Worth revisiting a
+month after cutover, when the diagnostic value has largely been spent.

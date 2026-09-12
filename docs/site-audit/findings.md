@@ -381,3 +381,139 @@ kept bounded on purpose.
 (<0.1). `font-display: optional`, reserving two h1 lines, and a metric-matched `size-adjust`
 fallback were each considered and each costs more than 0.035 of CLS is worth. Revisit with field
 data after cutover.
+
+---
+
+## Prompt 07 — security and delivery
+
+### F11 — no HTTP-to-HTTPS redirect — **reproduced live, fix needs Brian**
+
+Confirmed against the running staging site, not inferred:
+
+```
+$ curl -sSI http://brianmueller.org/
+HTTP/1.1 200 OK          <- served over plain HTTP, no redirect
+$ curl -sSI "http://brianmueller.org/books/jonah?utm_source=test"
+HTTP/1.1 200 OK          <- same on a deep path with a query
+```
+
+Calibrated first, so this is not a proxy artifact: the same client against
+`http://www.cloudflare.com/` returns `301` with a `location:` header, so redirects
+are passed through and brianmueller.org genuinely answers on port 80.
+
+The fix is the **Always Use HTTPS** zone setting in Cloudflare, which issues a 301 to the
+identical URL and preserves path and query. It is not a DNS change and it is reversible, but it
+**is an account settings change**, so it is not being made without Brian saying so. See D-12.
+
+### F03 follow-up — robots.txt is not doing what it looks like it does
+
+`https://brianmueller.org/robots.txt` is **66 lines**, not the 6 in this repo. Cloudflare
+**prepends** a managed block, and that block contains:
+
+```
+User-agent: *
+Content-Signal: search=yes,ai-train=no,use=reference
+Allow: /
+```
+
+Our own `User-agent: * / Disallow: /` lands in a second group for the same user-agent token. A
+crawler resolving that conflict can take the `Allow`. **The repository's robots.txt is not what is
+keeping this site out of search results** — `X-Robots-Tag: noindex, nofollow` is, and that header
+is confirmed present on pages, on assets, and on 404s at the live edge. The guard holds, but the
+reason it holds was not the one written down.
+
+The managed block also makes a decision on Brian's behalf: it declares `ai-train=no` and disallows
+ClaudeBot, GPTBot, CCBot, Google-Extended, Applebot-Extended, Amazonbot, Bytespider and
+meta-externalagent. That is a rights posture on a poet's work, arriving as a platform default.
+Recorded as D-13 for a deliberate answer rather than silent acceptance.
+
+### N10 — Astro 5 is end-of-life with ten open advisories, and the upgrade breaks the prose
+
+**State: not upgraded, deliberately. Recorded as D-11.**
+
+`npm audit` reports astro ≤7.2.7 as critical across ten advisories. There is **no patched 5.x** —
+the line ends at 5.18.2, which is what is installed. The fix is 7.3.2, two majors up.
+
+Every advisory was checked for reachability against this build rather than counted:
+
+| Advisory | Reachable here? |
+|---|---|
+| XSS in `define:vars` | No — `define:vars` appears nowhere |
+| Server island parameter replay | No — static output, no adapter, no server islands |
+| XSS via spread attribute names (×2) | Was one spot, `Poem.astro`; **removed**, see below |
+| XSS via `transition:*` on hydrated islands | No — no view transitions, no islands, zero JS in `dist` |
+| Reflected XSS via View Transition properties | No — as above |
+| Host header SSRF in prerendered error page | No — no SSR runtime |
+| Reflected XSS via unescaped slot name | No — slot names are authored, never dynamic |
+| RCE via AVIF image optimization | No — no `astro:assets`, no `<Image>`, no `getImage`; sharp never runs |
+| Authorization bypass stripping `base` | No — no `base` configured |
+
+The deployed artifact is static files with **no JavaScript, no forms, no fetch and no user input of
+any kind**. The residual exposure is to the build machine processing content authored in this repo.
+
+The upgrade was then actually attempted, and rejected on evidence. Astro 7 builds cleanly, all 29
+pages render, the 406-check responsive sweep passes and the CSS is semantically identical — but
+**Astro 7 drops a newline before an inline element instead of collapsing it to a space**:
+
+```
+Astro 5:  ...a chapter of\n<a href="https://illuman.org">Illuman</a>.
+Astro 7:  ...a chapter of<a href="https://illuman.org">Illuman</a>.
+```
+
+which a reader sees as "a chapter ofIlluman". Minimal repro confirmed: a literal space survives, a
+newline plus indentation does not. **Fourteen occurrences across eight pages**, including the
+contact page's alternate email address ("write to Tom Sparough attsparough@gmail.com") and the
+retreat page. Nothing in a build log, a link check or a responsive sweep catches it.
+
+It is also not a one-off to patch fourteen times: it is a systematic rule change that will silently
+damage any future paragraph written across two lines, on a site that is mostly prose.
+
+Reverted to 5.18.2 and verified **byte-identical** to the Prompt 06 build. What came out of the
+attempt instead is `tools/compare-build-text.py`, which compares the rendered text of two builds
+and exits non-zero on exactly this class of regression. It is the acceptance test for the upgrade
+whenever it happens; self-tested against the Astro 7 build, it reports all fourteen.
+
+### N11 — spread props on the poem component — **fixed**
+
+`Poem.astro` gathered `{...rest}` from `Astro.props` and spread it onto its `<div>` — the pattern
+behind two of the advisories above. Not reachable (every call site is a page in this repo), and it
+existed to carry exactly one inline style. The style is now a class and the spread is gone.
+
+### N12 — ninety-one inline `style` attributes blocked a strict CSP — **fixed**
+
+Nine distinct declarations, 91 occurrences. They would have forced `style-src 'unsafe-inline'`.
+Moved into utility classes in `base.css`; `dist` now contains **zero** inline styles, so the policy
+can say `style-src 'self'`. Verified with a 64-image pixel comparison across 16 templates × 2
+widths × 2 themes: **64 of 64 pixel-identical**.
+
+### N13 — no security headers at all — **fixed**
+
+The live site returned only `x-robots-tag`. No CSP, no `nosniff`, no referrer policy, no
+permissions policy, no framing protection. All now set in `public/_headers` and verified under
+enforcement — see `verification.md`.
+
+### N14 — wrangler and miniflare advisories — **fixed**
+
+wrangler 4.127.1 (high) and its bundled miniflare (high). wrangler is a dev dependency, but it is
+the tool that holds the deploy credential, so it is worth keeping current. Updated to 4.131.1,
+which cleared both. Not a major bump and no build impact.
+
+### N15 — cookie policy described services that do not exist — **fixed**
+
+Marked "implemented" after Prompt 04. It was not. The privacy policy had been rewritten correctly,
+but the cookie policy still listed **Google Analytics cookies** (`_ga`, `_gid`, `_gat`) and
+**Squarespace Analytics cookies** (`ss_cid`, `ss_cpvisit`, …) as cookies "we use", and offered a
+"cookie preference tool on the Website" that does not exist. The two policies contradicted each
+other: Privacy said "No Google Analytics", Cookies listed its cookies.
+
+Checked against what actually runs rather than against the source: the live site sends **no
+`Set-Cookie` header at all**, injects no Cloudflare beacon, and carries two inline scripts and
+nothing else. The only client-side storage is `localStorage["theme"]`, written only if the visitor
+presses the theme button.
+
+The cookie policy is rewritten to say that plainly, including a short note that earlier versions of
+the site did run Squarespace and Google Analytics, so the change is visible rather than quietly
+erased. The privacy policy's "Cloudflare Web Analytics" — a product that needs a beacon script that
+is not present — is corrected to describe Cloudflare's edge traffic figures and server logs, and
+the Workers delivery diagnostics that are switched on for launch are now disclosed. Revision dates
+updated, because these are real edits.

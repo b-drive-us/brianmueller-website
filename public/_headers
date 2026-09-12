@@ -1,30 +1,97 @@
-# STAGING GUARD — brianmueller.org
-# Cloudflare injects a managed robots.txt that begins with "User-agent: * / Allow: /",
-# which can override the Disallow in our own robots.txt. This header cannot be overridden
-# and is the guard that actually keeps the staging site out of search results.
-# REMOVE THIS FILE AT CUTOVER, and not before.
+# ===========================================================================
+# brianmueller.org / brianmueller.com — response headers
+#
+# One block per path, because Cloudflare merges repeated blocks silently and a
+# duplicated path is how a rule ends up quietly overridden. Keep it that way.
+#
+# Order below: the staging guard first, then security, then caching.
+# ===========================================================================
+
+
+# --- STAGING GUARD ---------------------------------------------------------
+# Cloudflare injects a managed robots.txt that is PREPENDED to ours and begins
+# with "User-agent: * / Allow: /". Our own "Disallow: /" lands in a second
+# group for the same user-agent, and a crawler resolving the conflict can take
+# the Allow. So robots.txt is NOT the thing keeping this site out of search
+# results — this header is. It cannot be overridden and it is confirmed present
+# on pages, on assets and on 404s.
+#
+# REMOVE THE X-Robots-Tag LINE AT CUTOVER, and not before. Verify with:
+#   curl -sSI https://brianmueller.com/ | grep -i x-robots
+# --- SECURITY --------------------------------------------------------------
+# The policy below is written from an inventory of what this site actually
+# loads, not copied from a template. It is static files with no server
+# endpoints, no forms, no fetch or XHR, and no third-party subresources: every
+# stylesheet, font and image is same-origin. That is why it can start at
+# default-src 'none' and name only what really loads.
+#
+# script-src is two SHA-256 hashes and nothing else — the pre-paint theme read
+# and the theme toggle, the site's only two scripts. There is no
+# 'unsafe-inline'. CHANGING EITHER SCRIPT BY ONE BYTE CHANGES ITS HASH AND THE
+# BROWSER WILL SILENTLY REFUSE TO RUN IT. The build still succeeds and the page
+# still looks right; the only symptom is a dead theme button. Regenerate with:
+#   npm run build && python3 tools/csp-hashes.py
+#
+# style-src is 'self' with no 'unsafe-inline'. That is only possible because
+# the site's nine inline style="" attributes were moved into utility classes in
+# base.css. Adding one back re-opens the hole AND breaks that element.
+#
+# form-action 'none' and base-uri 'none' are real controls here, not padding:
+# there is no form on this site and no <base> tag, so either one appearing is
+# by definition an injection.
+#
+# Verified under enforcement: 29 pages x 2 themes, zero violations, zero
+# console errors, theme script ran and webfonts loaded on all 58 loads. Seven
+# negative probes (injected inline script, off-origin script, style attribute
+# set from script, off-origin image, cross-origin fetch, off-site form submit,
+# injected <base>) were all blocked.
+#
+# NOT SET, deliberately: Strict-Transport-Security. HSTS must wait until
+# HTTP-to-HTTPS is actually on and every hostname that will serve this site is
+# covered, or it locks visitors out of a host that cannot answer over TLS.
+# See docs/site-audit/decisions.md D-12.
 /*
   X-Robots-Tag: noindex, nofollow
+  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-QglPjucdT69dXpFwbNOprT5n5t8LJheqSET5IZoqT6U='; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()
+  Cross-Origin-Opener-Policy: same-origin
 
-# Fonts are self-hosted and their filenames are stable, so they are renamed
-# (not overwritten) if they are ever regenerated. Safe to cache hard.
-/fonts/*
-  Cache-Control: public, max-age=31536000, immutable
 
-# Astro emits bundled CSS under /_astro/ with a content hash in the filename,
-# so a changed stylesheet gets a new URL and can never be served stale.
-# Do not add a long cache to any un-hashed asset path — that bug shipped once
-# already and left a browser rendering new HTML against an old stylesheet.
+# --- CACHING AND CROSS-ORIGIN USE ------------------------------------------
+# Astro emits the bundled CSS under /_astro/ with a content hash in the
+# filename, so a changed stylesheet gets a new URL and can never be served
+# stale. Fonts carry a -vN suffix for the same reason and are renamed, never
+# overwritten, when regenerated.
+#
+# A long cache belongs ONLY on a path whose filename changes with its content.
+# That bug shipped once already on this project and left a browser rendering
+# new HTML against an old stylesheet.
+#
+# Cross-Origin-Resource-Policy means two different things here. On the
+# stylesheet and the fonts, same-origin stops another website spending Brian's
+# bandwidth to render its own pages. On the artwork the same setting would also
+# stop Illuman, Choosing Presence or a reviewer from embedding a book cover,
+# which is the opposite of what a publishing site wants — so those are
+# cross-origin on purpose.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+  Cross-Origin-Resource-Policy: same-origin
 
-# Artwork. Filenames encode the rendered width and the art itself does not
-# change without a new file, so a week of browser cache is safe. It is NOT
-# marked immutable and the window is deliberately short, because these paths
-# carry no content hash: replacing a picture in place means some visitors see
-# the old one for up to seven days. Rename instead of overwriting.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Cross-Origin-Resource-Policy: same-origin
+
+# Artwork filenames encode the rendered width and the art does not change
+# without a new file, so a week of browser cache is safe. Deliberately NOT
+# immutable and deliberately short, because these paths carry no content hash:
+# replacing a picture in place means some visitors see the old one for up to
+# seven days. Rename instead of overwriting.
 /img/*
   Cache-Control: public, max-age=604800
+  Cross-Origin-Resource-Policy: cross-origin
 
 /covers/*
   Cache-Control: public, max-age=604800
+  Cross-Origin-Resource-Policy: cross-origin

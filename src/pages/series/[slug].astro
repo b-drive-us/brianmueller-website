@@ -31,7 +31,7 @@ const vols = books.filter(b => b.series === s.slug).sort((a,b) => a.position - b
             <div class="t">{b.title}</div>
             <div class="s">{b.subtitle}</div>
             {b.kind !== "collection" && (
-              <div style="padding-top:.45rem"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
+              <div class="u-pad-badge"><span class="badge">{b.kind === "anthology" ? "Anthology" : "Many voices"}</span></div>
             )}
           </div>
         </a>
