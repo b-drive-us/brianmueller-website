@@ -207,6 +207,9 @@ sits on the same line as the text before it is a stable fix in every Astro versi
 
 `http://brianmueller.org/` answers `200` on plain HTTP today (F11, reproduced live).
 
+**Brian's answer, 12 September 2026: walk him through it in his own browser.** Doing it together
+rather than unattended, so he sees the setting and confirms before it changes.
+
 **What is needed, in the Cloudflare dashboard for the zone:**
 SSL/TLS → Edge Certificates → **Always Use HTTPS: On**. It 301s to the identical URL, preserving
 path and query. Not a DNS change, reversible in one click. It is an account settings change, so it
@@ -218,8 +221,31 @@ a browser to refuse plain HTTP for a host for months. Enabling it before every h
 serve this site can answer over TLS locks people out, and `includeSubDomains` extends that to
 subdomains that may not be ready. `preload` is close to irreversible.
 
+### Done, 12 September 2026 — verified
+
+Turned on with Brian watching, in his own browser. Confirmed from outside Cloudflare:
+
+```
+http://brianmueller.org/                       -> 301  location: https://brianmueller.org/
+http://brianmueller.org/books/jonah?utm=x&x=1  -> 301  location: .../books/jonah?utm=x&x=1
+http://brianmueller.org/no-such-page           -> 301  (redirect precedes the 404, correct)
+curl -L http://brianmueller.org/                -> hops=1, final https, 200. No loop.
+```
+
+Query strings survive intact and the chain is a single hop. Cloudflare's own warning about redirect
+loops does not apply here: it is about an origin that also forces HTTPS, and this origin is Workers
+static assets, which serves whatever scheme it is asked on.
+
+One thing worth writing down for next time: the first click, made against the toggle's accessibility
+reference, reported success and the page even said "this setting was last changed a few seconds
+ago" — but it had not saved. `curl` still returned 200, and a reload showed the toggle off. Clicking
+the toggle by screen coordinate worked. **The dashboard's own confirmation was wrong; the external
+check was right.** Verify Cloudflare settings from outside Cloudflare.
+
+**Still to do at cutover:** the same setting on **brianmueller.com**.
+
 **Order, once Brian approves:**
-1. Always Use HTTPS on, on both hostnames. Confirm `curl -sSI http://<host>/` returns 301.
+1. ~~Always Use HTTPS on, on both hostnames.~~ Done on brianmueller.org. brianmueller.com at cutover.
 2. Cutover completes and production is stable on brianmueller.com.
 3. Then `Strict-Transport-Security: max-age=300` for a few days, watching for anything that breaks.
 4. Then raise to `max-age=31536000`.
@@ -253,6 +279,26 @@ interacts with how the poems are licensed and how `brianspoems.com` is configure
 Recommendation: **option 2** at cutover. On a site whose entire content is the author's own
 copyrighted work, the file that tells crawlers what they may do should live in the repository and
 not change when a vendor updates a default.
+
+**Brian's answer, 12 September 2026: option 2 — turn the managed robots.txt off and own the file.**
+
+Doing it **now** rather than at cutover, because it strictly strengthens the staging guard: with the
+managed block gone, the repository's `Disallow: /` is the only group for `User-agent: *` and the
+conflicting `Allow: /` disappears. There is no downside to being early here.
+
+Two pieces of work follow:
+
+1. **Cloudflare** — ~~turn the managed robots.txt off for the zone.~~ **Done, 12 September 2026**,
+   in AI Crawl Control → Signals. Verified: `https://brianmueller.org/robots.txt` is now **5 lines**,
+   exactly the file in this repository, down from 66. The prepended `User-agent: * / Allow: /` is
+   gone, so the staging `Disallow: /` is now the only group for `*` and no longer competes with a
+   contradictory rule. The `X-Robots-Tag` header remains the primary guard regardless.
+2. **The repository** — author the production robots.txt, including whatever AI-crawler position
+   Brian wants stated in his own words rather than Cloudflare's defaults. That belongs to
+   **Prompt 08**, which is where robots directives, canonical URLs and the sitemap are set per
+   environment; `public/robots.txt` stays `Disallow: /` until cutover. Open question for Prompt 08:
+   whether Brian wants to keep the substance of what Cloudflare was asserting (search yes, AI
+   training no) or take a different line — and whether brianspoems.com should say the same thing.
 
 ## D-14 — Workers delivery diagnostics stay on through launch
 

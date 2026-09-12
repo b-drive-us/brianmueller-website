@@ -105,12 +105,20 @@ text/ground pairs across both themes pass WCAG 2.2 AA. Details in `verification.
   Analytics and Squarespace cookies and contradicted the privacy policy. Both rewritten against
   measured behaviour: the live site sets **no cookies at all**.
 
-## Waiting on Brian
+## Done with Brian, 12 September 2026 — both verified from outside Cloudflare
 
-| | What | Where |
+| | What | Evidence |
 |---|---|---|
-| D-12 | Turn on Always Use HTTPS in Cloudflare (fixes F11) | one dashboard toggle |
-| D-13 | Keep, replace or edit Cloudflare's managed robots.txt and its AI-crawler signals | one setting, plus a repo file if replaced |
+| D-12 | **Always Use HTTPS on** for brianmueller.org. **F11 is closed.** | `http://…/` → 301, deep path + query preserved exactly, single hop, no loop. Same setting still needed on brianmueller.com at cutover. |
+| D-13 | **Cloudflare's managed robots.txt turned off.** Brian owns the file. | `robots.txt` is now 5 lines — exactly the repo file — down from 66. The contradictory `Allow: /` is gone. |
+
+A note for later: on the HTTPS toggle, the Cloudflare dashboard reported a successful change that
+had **not** saved — the page said "last changed a few seconds ago" while `curl` still returned 200
+and a reload showed it off. A second click by screen position took. **Verify Cloudflare settings
+from outside Cloudflare**, not from its own UI.
+
+Still open from D-13: the production robots.txt needs writing, including Brian's own position on AI
+training rather than Cloudflare's default. That belongs to **Prompt 08**.
 
 ## Next step
 

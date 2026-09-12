@@ -32,3 +32,29 @@ Prompt 11 does not authorise production. Nothing in this pack authorises product
 5. Publish a sitemap (N02 — does not exist yet).
 6. Activate the legacy redirect map (F02 — does not exist yet).
 7. Keep Squarespace paid for 30 days past cutover.
+
+## Cutover additions from Prompt 07
+
+Two Cloudflare settings were changed on **brianmueller.org** on 12 September 2026 and verified from
+outside Cloudflare. Neither carries over to brianmueller.com automatically — both must be repeated
+on that zone at cutover, in this order:
+
+1. **Always Use HTTPS: On** (SSL/TLS → Edge Certificates). Verify with
+   `curl -sSI http://brianmueller.com/` and expect a `301` with a `location:` on https, and again on
+   a deep path with a query string. Do this **before** pointing traffic at the hostname.
+2. **Managed robots.txt: Off** (AI Crawl Control → Signals), then confirm
+   `curl -sS https://brianmueller.com/robots.txt` returns exactly the file in this repository and
+   nothing prepended.
+3. **Remove the `X-Robots-Tag: noindex, nofollow` line** from `public/_headers` — and not before.
+   Confirm with `curl -sSI https://brianmueller.com/ | grep -i x-robots` returning nothing.
+4. **Confirm the CSP survives the edge.** It has only ever been tested against a local server
+   applying the same `_headers` file. After the first production deploy, check
+   `curl -sSI https://brianmueller.com/ | grep -i content-security-policy`, then load the site in a
+   real browser and confirm the theme toggle works and the console is clean. A stale script hash
+   fails silently — the page looks right and the toggle is simply dead.
+5. **Then, and only then**, begin the HSTS ramp in D-12: `max-age=300` first, watch for a few days,
+   raise to a year, and treat `includeSubDomains` and `preload` as separate decisions.
+
+**Do not trust the Cloudflare dashboard's own confirmation for any of these.** During Prompt 07 it
+reported a setting change that had not saved. Every one of these steps has a `curl` check next to it
+for that reason.

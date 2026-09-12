@@ -402,8 +402,26 @@ Calibrated first, so this is not a proxy artifact: the same client against
 are passed through and brianmueller.org genuinely answers on port 80.
 
 The fix is the **Always Use HTTPS** zone setting in Cloudflare, which issues a 301 to the
-identical URL and preserves path and query. It is not a DNS change and it is reversible, but it
-**is an account settings change**, so it is not being made without Brian saying so. See D-12.
+identical URL and preserves path and query.
+
+**Fixed and verified the same day**, with Brian, in his own browser:
+
+```
+$ curl -sSI http://brianmueller.org/
+HTTP/1.1 301 Moved Permanently
+location: https://brianmueller.org/
+
+$ curl -sSI "http://brianmueller.org/books/jonah?utm_source=test&x=1"
+HTTP/1.1 301 Moved Permanently
+location: https://brianmueller.org/books/jonah?utm_source=test&x=1
+
+$ curl -sSL -o /dev/null -w "hops=%{num_redirects} final=%{url_effective}" http://brianmueller.org/
+hops=1 final=https://brianmueller.org/
+```
+
+Path and query survive byte for byte, a 404 path redirects before it 404s, and the chain is one
+hop with no loop. **F11 closed for brianmueller.org.** The same setting is still needed on
+brianmueller.com at cutover — see D-12.
 
 ### F03 follow-up — robots.txt is not doing what it looks like it does
 
@@ -426,6 +444,12 @@ The managed block also makes a decision on Brian's behalf: it declares `ai-train
 ClaudeBot, GPTBot, CCBot, Google-Extended, Applebot-Extended, Amazonbot, Bytespider and
 meta-externalagent. That is a rights posture on a poet's work, arriving as a platform default.
 Recorded as D-13 for a deliberate answer rather than silent acceptance.
+
+**Brian's answer: turn it off and own the file. Done and verified the same day** —
+`https://brianmueller.org/robots.txt` is now **5 lines**, exactly the file in this repository, down
+from 66. The contradictory `Allow: /` is gone and the staging `Disallow: /` is the only group for
+`User-agent: *`. Writing the production robots.txt, with Brian's own wording on AI training, is
+Prompt 08's work; `public/robots.txt` stays `Disallow: /` until cutover.
 
 ### N10 — Astro 5 is end-of-life with ten open advisories, and the upgrade breaks the prose
 

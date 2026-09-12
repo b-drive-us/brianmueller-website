@@ -348,8 +348,24 @@ $ curl -sSI http://www.cloudflare.com/                    -> HTTP/1.1 301 + loca
 The third line is the calibration: redirects pass through this client intact, so the 200s are real
 and not an artifact. The site answers on port 80 with no upgrade.
 
-The fix is a Cloudflare zone setting and therefore Brian's to make — D-12, which also sets out why
-HSTS is deliberately **not** enabled yet and the order to enable it in afterwards.
+**Fixed the same day**, with Brian, and re-verified from outside Cloudflare:
+
+```
+$ curl -sSI http://brianmueller.org/                              -> 301 -> https://brianmueller.org/
+$ curl -sSI "http://brianmueller.org/books/jonah?utm_source=test" -> 301, query preserved exactly
+$ curl -sSI http://brianmueller.org/no-such-page                  -> 301 (redirect precedes the 404)
+$ curl -sSL ... http://brianmueller.org/                          -> hops=1, final https, 200
+```
+
+One hop, no loop, query strings intact. **F11 closed for brianmueller.org**; the same setting is
+needed on brianmueller.com at cutover. HSTS remains deliberately unset — D-12 records why and the
+order to enable it in later.
+
+Worth recording because it nearly produced a false pass: the **first click reported success and did
+not save**. The dashboard displayed "this setting was last changed a few seconds ago" while `curl`
+still returned 200, and a reload showed the toggle off. A second click landed and the external check
+then confirmed the 301. **Verify Cloudflare settings from outside Cloudflare** — its own UI said the
+change had happened when it had not.
 
 ### Headers, and what they were before
 
@@ -443,6 +459,13 @@ reason for it was wrong and is now corrected in `public/_headers`.
 The same managed block declares `ai-train=no` and blocks nine AI crawlers — a rights decision about
 Brian's poetry, arriving as a hosting default. Raised as D-13 rather than accepted silently.
 
+**Brian chose to turn it off and own the file, and it is done**: AI Crawl Control → Signals →
+Managed robots.txt, off. `https://brianmueller.org/robots.txt` went from **66 lines to 5** — exactly
+the repository's file. The contradictory `Allow: /` is gone, so the staging `Disallow: /` now stands
+alone for `User-agent: *`, and the `X-Robots-Tag` header continues to be the primary guard. The
+production robots.txt, stating Brian's own position on AI training rather than a vendor's default,
+is Prompt 08's work.
+
 ### Data practices rechecked against Prompt 04 — and a correction
 
 Prompt 04 recorded F05 as implemented. **It was not, and that was my error.** The privacy policy had
@@ -469,9 +492,9 @@ list. Delivery logs are request lines at Cloudflare.
 
 ### Remaining risks, explicitly
 
-1. **HTTP still answers on port 80** until Brian turns on Always Use HTTPS (D-12). Until then a
-   visitor on a hostile network can be served a modified page over plain HTTP, and
-   `upgrade-insecure-requests` in the CSP does not help with the initial navigation.
+1. ~~HTTP still answers on port 80.~~ **Closed** — Always Use HTTPS is on for brianmueller.org and
+   verified. The residual piece is **brianmueller.com**, which has no such redirect yet and must get
+   one at cutover, before any traffic is pointed at it.
 2. **Astro stays on an end-of-life major** (D-11). No advisory is reachable today; the moment the
    site gains a form, an endpoint or SSR, that changes and the upgrade becomes urgent.
 3. **sharp ships with libvips/libheif CVEs** in the dependency tree. It is never invoked, because
