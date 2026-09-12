@@ -92,3 +92,41 @@ implies, and it should be said plainly rather than left as an intimidating numbe
 
 Mobile viewports and real devices, screen readers, email delivery, registration, payment, lab or
 field performance, penetration testing, and the content of the 1,611 archived blog URLs.
+
+## Prompt 05 — 2026-09-12 — design, navigation, accessibility
+
+| Check | Environment | Result |
+|---|---|---|
+| **Contrast, every text/ground pair** | built stylesheet, computed | **34 combinations across both themes — all PASS at 4.5:1**, focus ring checked at 3:1 |
+| F10.1 dark button | computed | was 2.34:1 → **7.90:1** |
+| F10.2 dark button hover | computed | was 1.85:1 → **9.96:1** |
+| F10.3 light secondary text | computed | was 4.39:1 → **5.02:1** on paper, **4.60:1** on paper-2, **4.52:1** on ember-soft |
+| F10.5 (new, audit missed it) | computed | `--ink-3` on `--paper-2` was 4.02:1 → 4.60:1 |
+| Skip link | Chromium, 10 templates | present and **first focusable element** on every page |
+| Focus visibility | Chromium | 3px `--ember` outline with offset on every interactive element; lighter variants over the hero photograph and the dark band |
+| Focus not hidden by sticky header | Chromium | `scroll-margin-top: 5.5rem` on headings and every `[id]` |
+| Landmarks / `h1` / `lang` | 29 built pages | one `<main>`, exactly one `<h1>`, `lang` present on all |
+| Images without `alt` | 29 built pages | **none** |
+| Ambiguous link names | 29 built pages | 14 identical "Buy on Amazon" links now carry the book title in a visually-hidden span |
+| Generic link text | home | "More about it" / "Read it" / "All notes" replaced with specific labels |
+| Target size ≥24×24 | 10 templates × 2 themes | no control under 24 px |
+| Horizontal overflow | 10 templates × 2 themes @1280 | **zero** |
+| Narrow reflow | 320 / 375 / 390 / 430 / 768 / 1024 px, 6 templates | **zero page overflow, zero poem overflow** |
+
+### Refinement direction taken
+
+Not a redesign — the literary identity stays. Three things changed:
+
+1. **`--ember` was doing two jobs with opposite contrast needs**: a link colour on the page ground
+   (7.62:1, fine) and a button background under white text (2.34:1, failing). One token cannot
+   satisfy both. Buttons now have their own `--btn-bg` / `--btn-bg-hover` / `--btn-fg` triple, so
+   the dark theme puts dark ink on the ember rather than white.
+2. **Secondary ink was too light on two of four grounds.** Darkened once, at token level, so every
+   usage is fixed at once.
+3. **Two-column blocks were left-aligned in a 72 rem wrap**, leaving about 20 rem of dead space on
+   the right of every book, about and feature block. They now centre.
+
+### Still not verified
+
+Real devices, screen readers, 400% browser zoom in a real browser (320 px reflow is covered),
+`prefers-reduced-motion` behaviour beyond the existing global rule, and field performance.

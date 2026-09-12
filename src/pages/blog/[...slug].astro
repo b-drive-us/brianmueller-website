@@ -39,7 +39,7 @@ const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long',
           <div class="bp-title"><a href={`/books/${book.slug}`}>{book.title}</a></div>
           <p class="s">{book.subtitle}</p>
           <div class="btn-row">
-            <a class="btn" href={book.buy} rel="sponsored nofollow">Buy on Amazon</a>
+            <a class="btn" href={book.buy} rel="sponsored nofollow">Buy <span class="sr-only">{book.title} </span>on Amazon</a>
             <a class="btn btn-ghost" href={`/books/${book.slug}`}>More about it</a>
           </div>
         </div>

@@ -42,7 +42,7 @@ const c = book.cover;
           {book.quote && (
             <blockquote class="pull">{book.quote}<cite>— {book.quoteBy}</cite></blockquote>
           )}
-          <div class="btn-row"><a class="btn" href={book.buy} rel="sponsored nofollow">Buy on Amazon</a></div>
+          <div class="btn-row"><a class="btn" href={book.buy} rel="sponsored nofollow">Buy <span class="sr-only">{book.title} </span>on Amazon</a></div>
         </div>
 
         {collects.length > 0 && (

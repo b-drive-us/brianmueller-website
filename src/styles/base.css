@@ -12,13 +12,16 @@
   --surface:#FFFFFF;
   --ink:#17130F;
   --ink-2:#544A40;
-  --ink-3:#7C7065;
+  --ink-3:#72675D;
   --rule:#E0D8CC;
   --rule-2:#C9BDAC;
   --ember:#8C4A22;
   --ember-deep:#6F3915;
   --ember-soft:#F3E7DA;
   --wheat:#C9A063;
+  --btn-bg:#8C4A22;
+  --btn-bg-hover:#6F3915;
+  --btn-fg:#FFFFFF;
   --measure:34rem;
 }
 /* Dark tokens live in one place and are applied twice: once for people whose
@@ -31,7 +34,10 @@
     --surface:#241F1A;
     --ink:#F4EFE7;
     --ink-2:#C0B4A7;
-    --ink-3:#95897C;
+    --ink-3:#998C7F;
+    --btn-bg:#E09A66;
+    --btn-bg-hover:#F0B183;
+    --btn-fg:#17130F;
     --rule:#372F28;
     --rule-2:#4E443A;
     --ember:#E09A66;
@@ -46,7 +52,10 @@
     --surface:#241F1A;
     --ink:#F4EFE7;
     --ink-2:#C0B4A7;
-    --ink-3:#95897C;
+    --ink-3:#998C7F;
+    --btn-bg:#E09A66;
+    --btn-bg-hover:#F0B183;
+    --btn-fg:#17130F;
     --rule:#372F28;
     --rule-2:#4E443A;
     --ember:#E09A66;
@@ -162,8 +171,8 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- buttons ---------- */
 .btn{display:inline-block;font-family:"Archivo",sans-serif;font-size:.85rem;font-weight:600;
   letter-spacing:.04em;padding:.7rem 1.3rem;border-radius:3px;text-decoration:none;
-  background:var(--ember);color:#fff;border:1px solid var(--ember)}
-.btn:hover{background:var(--ember-deep);border-color:var(--ember-deep)}
+  background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--ember)}
+.btn:hover{background:var(--btn-bg-hover);border-color:var(--btn-bg-hover);color:var(--btn-fg)}
 .btn-ghost{background:transparent;color:var(--ember-deep);border-color:var(--rule-2)}
 .btn-ghost:hover{background:var(--ember-soft);color:var(--ember-deep);border-color:var(--ember)}
 .btn-row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
@@ -195,7 +204,7 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* book detail: cover beside the copy */
 .book-lead{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
 @media (min-width:52rem){
-  .book-lead{grid-template-columns:17.5rem minmax(0,34rem);align-items:start;gap:3.5rem}
+  .book-lead{grid-template-columns:17.5rem minmax(0,34rem);justify-content:center;align-items:start;gap:3.5rem}
   .book-lead > .stack{max-width:34rem}
 }
 .book-lead .cover-lg{position:sticky;top:5.5rem}
@@ -217,7 +226,7 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- about ---------- */
 .about-lead{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
 @media (min-width:52rem){
-  .about-lead{grid-template-columns:15rem minmax(0,34rem);align-items:start;gap:3.5rem}
+  .about-lead{grid-template-columns:15rem minmax(0,34rem);justify-content:center;align-items:start;gap:3.5rem}
   .about-lead > .stack{max-width:34rem}
 }
 .portrait{margin:0;max-width:15rem}
@@ -295,7 +304,7 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 /* ---------- home feature ---------- */
 .feature{display:grid;gap:clamp(1.75rem,4vw,3.5rem)}
 @media (min-width:52rem){
-  .feature{grid-template-columns:14.5rem minmax(0,34rem);align-items:center;gap:3.5rem}
+  .feature{grid-template-columns:14.5rem minmax(0,34rem);justify-content:center;align-items:center;gap:3.5rem}
 }
 .feature .cover{display:block;max-width:14.5rem}
 @media (max-width:52rem){.feature .cover{max-width:11rem}}
@@ -367,7 +376,7 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 
 /* ---------- retreat strip ---------- */
 .retreat-strip{display:grid;gap:clamp(1.75rem,4vw,3rem);align-items:center}
-@media (min-width:52rem){.retreat-strip{grid-template-columns:24rem minmax(0,32rem);gap:3.5rem}}
+@media (min-width:52rem){.retreat-strip{grid-template-columns:24rem minmax(0,32rem);gap:3.5rem;justify-content:center}}
 .retreat-strip img{border-radius:3px;width:100%;height:auto;
   box-shadow:0 18px 40px -22px rgba(0,0,0,.8)}
 
@@ -456,3 +465,25 @@ section{padding-block:clamp(3.4rem,7.5vw,6rem)}
 .contact-list li{border-bottom:1px solid var(--rule);padding:.85rem 0;font-size:.98rem;
                  line-height:1.6;color:var(--ink-2)}
 .contact-list b{color:var(--ink)}
+
+/* ---------- skip link ---------- */
+.skip-link{position:absolute;left:.75rem;top:-4rem;z-index:60;
+  background:var(--surface);color:var(--ink);border:1px solid var(--ember);
+  border-radius:4px;padding:.65rem 1rem;text-decoration:none;
+  font-family:"Archivo",system-ui,sans-serif;font-size:.85rem;font-weight:600;
+  transition:top .15s ease}
+.skip-link:focus{top:.75rem;outline:2px solid var(--ember);outline-offset:2px}
+main:focus{outline:none}
+
+/* Focus must stay visible on every control, including the ones that sit on
+   photographs, and must not be hidden behind the sticky header. */
+a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid var(--ember);outline-offset:3px;border-radius:2px}
+.hero a:focus-visible{outline-color:#FBF7F1}
+.band-dark a:focus-visible{outline-color:var(--wheat)}
+:where(h1,h2,h3,[id]){scroll-margin-top:5.5rem}
+
+/* Visible to assistive technology, not to the eye — used to tell fourteen
+   otherwise-identical "Buy on Amazon" links apart in a link list. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+         clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}

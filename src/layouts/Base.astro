@@ -6,7 +6,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const nav = [
   { href: "/books",   label: "Books" },
   { href: "/poems",   label: "Poems" },
-  { href: "/blog",    label: "Writing" },
+  { href: "/blog",    label: "Notes" },
   { href: "/retreat", label: "Retreat" },
   { href: "/about",   label: "About" },
   { href: "/contact", label: "Contact" },
@@ -37,6 +37,7 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
 
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-head">
       <div class="wrap bar">
         <a class="wordmark" href="/">Brian<span>Mueller</span></a>
@@ -52,7 +53,7 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
       </div>
     </header>
 
-    <main id="main"><slot /></main>
+    <main id="main" tabindex="-1"><slot /></main>
 
     <footer class="site-foot">
       <div class="wrap stack stack-l">

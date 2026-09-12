@@ -93,8 +93,8 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
           <p class="lede serif-italic">{newest.subtitle}</p>
           {newest.epigraph && <Poem text={newest.epigraph} class="poem-left" style="font-size:1.05rem" />}
           <div class="btn-row">
-            <a class="btn" href={newest.buy} rel="sponsored nofollow">Buy on Amazon</a>
-            <a class="btn btn-ghost" href={`/books/${newest.slug}`}>More about it</a>
+            <a class="btn" href={newest.buy} rel="sponsored nofollow">Buy <span class="sr-only">{newest.title} </span>on Amazon</a>
+            <a class="btn btn-ghost" href={`/books/${newest.slug}`}>More about {newest.title}</a>
           </div>
         </div>
       </div>
@@ -145,8 +145,8 @@ const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
           <h2><a href={`/blog/${latest.id}`} style="color:inherit;text-decoration:none">{latest.data.title}</a></h2>
           <p>{latest.data.summary}</p>
           <div class="btn-row">
-            <a class="btn btn-ghost" href={`/blog/${latest.id}`}>Read it</a>
-            <a class="btn btn-ghost" href="/blog">All notes</a>
+            <a class="btn btn-ghost" href={`/blog/${latest.id}`}>Read this note</a>
+            <a class="btn btn-ghost" href="/blog">Every note</a>
           </div>
         </div>
       )}

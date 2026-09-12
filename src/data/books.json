@@ -18,7 +18,7 @@
     "published": "May 23, 2026",
     "isbn13": "979-8195992392",
     "pages": 113,
-    "pagesSource": "linked Amazon listing — confirm against the printed book",
+    "pagesSource": "Amazon listing",
     "description": "For decades I kept moving — too afraid to slow down, certain that in stillness, I would slip below the waves of life."
   },
   {
@@ -85,12 +85,13 @@
       "w": 640,
       "h": 960
     },
-    "pages": 118,
+    "pages": 86,
     "isbn13": "978-0996812023",
     "isbn10": "0996812024",
     "publisher": "Digital Alphabet Books",
     "buy": "https://amzn.to/4aCcuYN",
-    "description": "A collection of poems chronicling more than a year spent processing and recovering from divorce."
+    "description": "A collection of poems chronicling more than a year spent processing and recovering from divorce.",
+    "pagesSource": "counted from the printed book"
   },
   {
     "slug": "more-bull",
@@ -210,12 +211,13 @@
       "w": 640,
       "h": 960
     },
-    "pages": 478,
+    "pages": 450,
     "isbn13": "978-1733501200",
     "isbn10": "1733501207",
     "publisher": "Digital Alphabet Books",
     "buy": "https://amzn.to/4gUAfPJ",
-    "description": "An accessible and compelling collection of thought-provoking meditations for every day of the year."
+    "description": "An accessible and compelling collection of thought-provoking meditations for every day of the year.",
+    "pagesSource": "counted from the printed book"
   },
   {
     "slug": "the-invitation",
@@ -256,7 +258,7 @@
       "w": 640,
       "h": 960
     },
-    "pages": 52,
+    "pages": 50,
     "isbn13": "978-1979552424",
     "isbn10": "1979552428",
     "publisher": "Digital Alphabet Books",
@@ -264,7 +266,8 @@
     "buy": "https://amzn.to/3QBoIu9",
     "isbnNote": "A second printing exists under ISBN 978-1717351692.",
     "description": "Poetry is not some esoteric art, practiced by cloistered academics. Rather it is the language of nature in which we are all fluent.",
-    "titleFull": "Men Writing for Change, Vol. 1"
+    "titleFull": "Men Writing for Change, Vol. 1",
+    "pagesSource": "counted from the printed book"
   },
   {
     "slug": "men-writing-for-change-vol-2",
