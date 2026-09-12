@@ -22,6 +22,7 @@
   --btn-bg:#8C4A22;
   --btn-bg-hover:#6F3915;
   --btn-fg:#FFFFFF;
+  --head-h:65px;
   --measure:34rem;
 }
 /* Dark tokens live in one place and are applied twice: once for people whose
@@ -111,17 +112,41 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 
 /* ---------- header ---------- */
 .site-head{border-bottom:1px solid var(--rule);background:var(--paper);position:sticky;top:0;z-index:20}
-.site-head .bar{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1rem}
+.site-head .bar{display:flex;align-items:center;gap:1.5rem;padding-block:1rem}
 .wordmark{font-size:1.25rem;font-weight:500;letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
 .wordmark span{color:var(--ember)}
-.nav{display:flex;gap:1.4rem;flex-wrap:wrap;font-family:"Archivo",system-ui,sans-serif;
+.nav{display:flex;gap:1.4rem;flex-wrap:wrap;margin-left:auto;font-family:"Archivo",system-ui,sans-serif;
      font-size:.82rem;font-weight:500;letter-spacing:.03em}
 .nav a{color:var(--ink-2);text-decoration:none;padding-block:.2rem;border-bottom:2px solid transparent}
 .nav a:hover{color:var(--ink);border-bottom-color:var(--wheat)}
 .nav a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ember)}
 @media (max-width:640px){
-  .site-head .bar{flex-direction:column;align-items:flex-start;gap:.7rem}
-  .nav{gap:1rem}
+  /* Was three stacked rows held on screen by position:sticky — wordmark, then
+     the links, then the theme button on a line of its own — about a fifth of a
+     phone. Two changes: the theme button is a sibling of .nav in the markup so
+     it can share row one with the wordmark, and the header scrolls away instead
+     of sticking. With nothing pinned, anchors need no offset and land exactly. */
+  :root{--head-h:0px}
+  .site-head{position:static}
+  .site-head .bar{display:grid;grid-template-columns:1fr auto;gap:.5rem .75rem;
+                  padding-block:.6rem}
+  .wordmark{grid-column:1;grid-row:1;align-self:center}
+  .theme-toggle{grid-column:2;grid-row:1;justify-self:end}
+  /* nowrap matters: the base rule wraps, which on a 320px screen put the links
+     on two lines and pushed the header back up past 170px. One scrolling row. */
+  .nav{grid-column:1 / -1;grid-row:2;margin-left:0;flex-wrap:nowrap;gap:1.05rem;overflow-x:auto;
+       scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:.1rem}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{white-space:nowrap}
+}
+@media (max-width:360px){
+  /* The six links do not fit on one line at this width, so the row scrolls and
+     Contact starts off-screen. A scrolling row with no visible edge looks like a
+     row that simply ends, so the last link is faded to show there is more. It is
+     applied only below 360px, where the overflow is certain - above it the row
+     fits and a permanent fade would be a lie. (Contact is also in the footer.) */
+  .nav{-webkit-mask-image:linear-gradient(to right,#000 86%,rgba(0,0,0,.15));
+             mask-image:linear-gradient(to right,#000 86%,rgba(0,0,0,.15))}
 }
 
 /* ---------- footer ---------- */
@@ -322,6 +347,10 @@ section{padding-block:clamp(3rem,7vw,5.5rem)}
 }
 .theme-toggle:hover{color:var(--ink);border-color:var(--ember);background:var(--ember-soft)}
 .theme-toggle:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+@media (pointer:coarse){
+  .theme-toggle{min-height:44px;padding-inline:.9rem}
+  .nav a{padding-block:.55rem}
+}
 .tt-icon{width:13px;height:13px;border-radius:50%;flex:0 0 13px;
          background:var(--wheat);box-shadow:inset -4px -1px 0 0 var(--paper)}
 .theme-toggle[data-mode="dark"] .tt-icon{background:var(--ember);box-shadow:none}
@@ -481,7 +510,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   outline:3px solid var(--ember);outline-offset:3px;border-radius:2px}
 .hero a:focus-visible{outline-color:#FBF7F1}
 .band-dark a:focus-visible{outline-color:var(--wheat)}
-:where(h1,h2,h3,[id]){scroll-margin-top:5.5rem}
+:where(h1,h2,h3,[id]){scroll-margin-top:calc(var(--head-h) + 1.25rem)}
 
 /* Visible to assistive technology, not to the eye — used to tell fourteen
    otherwise-identical "Buy on Amazon" links apart in a link list. */

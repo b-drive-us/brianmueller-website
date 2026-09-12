@@ -17,3 +17,14 @@
 # already and left a browser rendering new HTML against an old stylesheet.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Artwork. Filenames encode the rendered width and the art itself does not
+# change without a new file, so a week of browser cache is safe. It is NOT
+# marked immutable and the window is deliberately short, because these paths
+# carry no content hash: replacing a picture in place means some visitors see
+# the old one for up to seven days. Rename instead of overwriting.
+/img/*
+  Cache-Control: public, max-age=604800
+
+/covers/*
+  Cache-Control: public, max-age=604800

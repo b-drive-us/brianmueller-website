@@ -32,8 +32,8 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
         } catch (e) {}
       })();
     </script>
-    <link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/newsreader-normal-latin-v2.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo-normal-latin-v2.woff2" as="font" type="font/woff2" crossorigin />
 
   </head>
   <body>
@@ -45,11 +45,13 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
           {nav.map((n) => (
             <a href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>{n.label}</a>
           ))}
-          <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
-            <span class="tt-icon" aria-hidden="true"></span>
-            <span class="tt-label">Dark</span>
-          </button>
         </nav>
+        <!-- Outside <nav>: a theme control is not navigation, and as a direct child
+             of .bar it can be placed on the phone header's first row. -->
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+          <span class="tt-icon" aria-hidden="true"></span>
+          <span class="tt-label">Dark</span>
+        </button>
       </div>
     </header>
 

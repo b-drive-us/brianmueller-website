@@ -312,3 +312,72 @@ is no harness to put them in.
 
 Cloudflare Workers Builds deploys on push to `main`. There is no held-back deploy step. Prompts
 01–10 must therefore work on an unpushed branch. Recorded so it is not rediscovered mid-stage.
+
+---
+
+## New during Prompt 06
+
+### N05 — Theme button nested inside `<nav>`, so the phone header could never collapse
+
+**Severity:** medium (layout), low (semantics)
+**State:** fixed
+
+The mobile header rule placed `.theme-toggle` at grid row 1, column 2, beside the wordmark. It had
+no effect, because the button was a child of `<nav>` rather than of `.bar` — grid placement only
+applies to a grid container's own children. The header therefore stayed three stacked rows at
+164 px on a phone. Moving the button out of `<nav>` is also the more accurate markup: a theme
+control is not navigation, and it should not be announced as a navigation link.
+
+### N06 — `.nav` inherited `flex-wrap: wrap`, making the narrowest screens worst
+
+**Severity:** medium
+**State:** fixed
+
+The narrow-screen block set `overflow-x: auto` on `.nav` intending a single scrolling row, but did
+not override `flex-wrap: wrap` from the base rule. At 320 px the six links broke to a second line
+and the header grew to **172 px** — taller than at 390 px. A narrow-screen rule that makes the
+narrowest screen worse is the rule failing at exactly the width it exists for. With
+`flex-wrap: nowrap` the header is a flat 115 px from 320 px to 430 px. Below 360 px the row is
+masked at its right edge so the overflow reads as continuing rather than ending.
+
+### N07 — Variable fonts shipped their full axis ranges
+
+**Severity:** high (performance)
+**State:** fixed
+
+The six self-hosted faces were the Google originals, carrying Archivo wght 100-900 and Newsreader
+wght 200-800 plus an optical-size axis 6-72. `base.css` declares `font-weight: 400 600` on every
+`@font-face` and never asks for anything outside it, so roughly half of 528 KB was design space no
+visitor could reach. Two of these faces are `rel=preload`ed on the critical path of every page.
+
+Fixed by `tools/subset-fonts.py`, which instances the weight axis to 400-600 everywhere and pins
+optical size at 22 on the italic faces only (upright faces keep it — headings run to ~87 px and
+the display cut is visibly finer there). **528,560 -> 267,468 bytes**; the preloaded pair
+166,788 -> 116,216. This is what moved LCP on every template, including pages with no images.
+
+Originals retained in `tools/fonts-original/`. Output filenames carry `-v2` because
+`public/_headers` caches `/fonts/*` for a year as `immutable` — a regenerated face must never
+reuse a filename.
+
+### N08 — No cache policy on `/img/` or `/covers/`
+
+**Severity:** low
+**State:** fixed
+
+Artwork paths carried no `Cache-Control` at all, so repeat views revalidated every image. They now
+get `max-age=604800` — a week, deliberately **not** `immutable` and deliberately short, because
+these paths carry no content hash. The header file says so in place: replacing a picture in place
+means some visitors see the old one for up to seven days, so artwork must be renamed rather than
+overwritten. This is the same class of mistake as the stale-stylesheet bug earlier in the project,
+kept bounded on purpose.
+
+### N09 — Retreat hero CLS 0.0352 from a font-dependent line break
+
+**Severity:** low
+**State:** accepted, not fixed — reasoning recorded in `verification.md`
+
+"Rooted in the Land" fits on one line in the fallback serif and wraps to two in Newsreader between
+375 px and 430 px, so the hero grows 49 px when the webfont swaps. Inside the good CLS band
+(<0.1). `font-display: optional`, reserving two h1 lines, and a metric-matched `size-adjust`
+fallback were each considered and each costs more than 0.035 of CLS is worth. Revisit with field
+data after cutover.

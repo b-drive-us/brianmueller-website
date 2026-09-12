@@ -51,7 +51,32 @@ Therefore, for Prompts 01–10:
 | F13 Copy | **implemented** except F13.3 and F13.7, which are poem text and need Brian |
 | F14 Registration | **implemented** as an honest interest list; Stripe deferred by Brian |
 
+## Prompt 05 and 06
+
+**Prompt 05 — visual quality, navigation and accessibility: done.** F10 closed. All 34
+text/ground pairs across both themes pass WCAG 2.2 AA. Details in `verification.md`.
+
+**Prompt 06 — narrow screens and performance: done.**
+
+- 406 checks (29 pages x 7 widths x 2 themes) — 0 problems.
+- Phone header cut from 164 px sticky (172 px at 320 px) to **115 px at every phone width**, and
+  it now scrolls away. Two real faults fixed: the theme button was inside `<nav>` so it could
+  never be placed beside the wordmark, and `.nav` inherited `flex-wrap: wrap` so the narrowest
+  screens got the tallest header.
+- Fonts were shipping their full variable axis ranges while the stylesheet only ever asks for
+  weights 400-600. Subset via `tools/subset-fonts.py`: **528,560 -> 267,468 bytes**, of which
+  50,572 came off the critical path of every single page.
+- Every template now inside the good Core Web Vitals bands under a Slow 4G / 4x CPU lab profile.
+  Retreat LCP 3116 -> 2368 ms, home 2692 -> 2160 ms. Labelled as laboratory, not field — there is
+  no field dataset and cannot be before cutover.
+- Heroes and covers were measured and deliberately **not** changed; the reasoning is written down
+  in `verification.md` so it is not re-litigated later.
+- Known and accepted: retreat CLS 0.0352, caused by the hero `h1` wrapping differently in
+  Newsreader than in the fallback between 375 and 430 px. Inside the good band; every available
+  fix costs more than it buys. Reasoning recorded.
+- **Only Chromium was available.** Safari and Firefox are unverified. `device-checklist.md` is the
+  twenty-minute list for Brian to close that gap on real hardware.
+
 ## Next step
 
-Prompt 05 — visual quality, navigation and accessibility. F10 has exact measured figures ready to
-fix at token level.
+Prompt 07 — harden delivery: F11 HTTP to HTTPS, security headers, CSP.
