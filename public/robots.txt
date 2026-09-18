@@ -1,5 +1,8 @@
-# STAGING — brianmueller.org
-# This site is a work in progress and must not be indexed.
-# Remove this file only at cutover, when the site moves to brianmueller.com.
+# PLACEHOLDER — the real robots.txt is written by tools/generate-seo.mjs
+# after the build, from the environment named in SITE_ENV.
+#
+# This file is the fail-safe. If the generator is ever skipped, what ships is
+# this blanket disallow rather than an accidentally crawlable staging site.
+# Editing it has no effect on a normal build; edit tools/generate-seo.mjs.
 User-agent: *
 Disallow: /

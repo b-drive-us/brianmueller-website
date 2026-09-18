@@ -55,6 +55,13 @@ answer, and getting it wrong splits ranking signals across two hosts.
 **Recommendation.** Keep `www.brianmueller.com`. It is what is already indexed and linked; changing
 it adds a redirect hop and a migration risk for no benefit.
 
+**Brian's answer, 18 September 2026: `www.brianmueller.com`. RESOLVED — no longer blocking.**
+
+Re-confirmed live before asking: `brianmueller.com` 301s to `www.brianmueller.com` on both http and
+https today, so www is genuinely the incumbent. It is now the `production` origin in
+`src/site.config.mjs` and is the single place the value lives — canonical tags, `og:url`, the
+sitemap and Astro's `site` all derive from it.
+
 **Affects.** F03, F11, F12, Prompts 07, 08, 09, 12.
 
 ---
@@ -66,6 +73,17 @@ to the production host; or retire it.
 
 **Recommendation.** Keep it as staging, and add real protection — `noindex` asks politely, it does
 not prevent access. Cloudflare Access is the usual answer.
+
+**Decided in Prompt 08: keep it open, keep it unindexed.** Brian's brief calls this a *public*
+beta — people he sends the link to need to open it without an account, so Cloudflare Access would
+defeat its purpose. The exclusion strategy is therefore `X-Robots-Tag: noindex, nofollow` on every
+response (pages, assets and 404s) plus a blanket `Disallow` in robots.txt, both generated from
+`SITE_ENV` rather than hand-maintained.
+
+Be clear about what that does and does not buy: **the beta is publicly readable by anyone with the
+URL, and always was.** Nothing here is access control. It keeps the site out of search results; it
+does not keep anyone out. Nothing on the beta is confidential, so that is an acceptable trade — but
+it should be a known one, not an assumed one. See D-15.
 
 **Affects.** F03, F11, Prompt 08.
 
@@ -306,3 +324,52 @@ Two pieces of work follow:
 Kept on: it is how a broken redirect or a 404 storm gets noticed in the days after cutover. It is
 now disclosed in the privacy policy rather than being an undocumented data flow. Worth revisiting a
 month after cutover, when the diagnostic value has largely been spent.
+
+## D-15 — robots.txt is not access control, and Disallow is not noindex
+
+**Recorded in Prompt 08** because both confusions are easy to make and expensive to discover late.
+
+**robots.txt is a request.** It is a public file asking well-behaved crawlers to stay out. It
+authenticates nobody, blocks nobody, and is itself readable by anyone — a `Disallow` line is a
+signpost to the thing it names. Nothing on this site is protected by it, and nothing confidential
+should ever rely on it.
+
+**Disallow and noindex do different jobs, and combining them badly does neither.** `Disallow` tells
+a crawler *not to fetch* the page. A page it never fetches is a page whose `noindex` it never sees —
+so a URL that is only disallowed can still end up listed, without a description, on the strength of
+links pointing at it from elsewhere. If the goal is "not in search results", the directive has to
+reach the crawler: `X-Robots-Tag` on the response, or a `robots` meta tag on a page the crawler is
+allowed to fetch.
+
+**What this site does, and why:**
+
+| | Beta (brianmueller.org) | Production (www.brianmueller.com) |
+|---|---|---|
+| `X-Robots-Tag` | `noindex, nofollow` on every response | absent |
+| robots meta | on every page | on `/404` only |
+| robots.txt | blanket `Disallow: /` | `Allow: /`, AI-training crawlers disallowed, sitemap declared |
+| sitemap.xml | generated, listing beta URLs | generated, listing production URLs |
+
+The header is the guard that actually works on the beta, and it is the one verified at the live
+edge. The robots.txt disallow is belt and braces, and is honest about being so in its own comments.
+
+A sitemap is generated in **both** environments on purpose. A sitemap is not an invitation to index —
+the `noindex` directives decide that — and having one on the beta is the only way to test that it is
+correct before the day it matters.
+
+## D-16 — No Event structured data on the retreat page yet
+
+The retreat's dates, venue and organiser are approved facts and could carry schema.org `Event`
+markup. It is deliberately not there.
+
+`Event` markup invites Google to present the retreat as something you can book, and registration is
+currently an honest email interest list, not a booking (F14). Marking it up as an event while the
+only action is "send an email" sets an expectation the page does not meet — and the prompt pack is
+explicit about never inventing offers, availability or event status for rich results.
+
+`Person` and `Book` markup **is** emitted, because every field in it is already visible on the page
+and verified in `src/data/books.json`: title, author, ISBN-13, page count, year, publisher. No
+offers, no prices, no availability, no ratings, no reviews.
+
+**Revisit** when the Stripe registration flow is live. At that point `Event` with real `offers`
+becomes accurate rather than aspirational.

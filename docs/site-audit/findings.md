@@ -541,3 +541,81 @@ erased. The privacy policy's "Cloudflare Web Analytics" — a product that needs
 is not present — is corrected to describe Cloudflare's edge traffic figures and server logs, and
 the Workers delivery diagnostics that are switched on for launch are now disclosed. Revision dates
 updated, because these are real edits.
+
+---
+
+## Prompt 08 — page identity and per-environment indexing
+
+### F12 — rechecked, and mostly already fixed
+
+The audit's claims were made against commit `8ea45e5`. Measured against the current build, three of
+the six sub-issues had already been closed by the Prompt 04–05 work and the audit's description of
+them is now out of date. Stating that plainly rather than re-reporting them as open:
+
+| Sub-issue | Claim | Measured now | State |
+|---|---|---|---|
+| F12.1 | All twelve book descriptions exactly 150 chars, several cut mid-word | **One** survived: MWFC Vol. 2, a 151-char slice ending "…our experiences and…" | **fixed** |
+| F12.2 | Three pages share one title | **0** duplicate titles across 29 pages | already fixed |
+| F12.3 | Home and Books share a description | **0** duplicate descriptions across 29 pages | already fixed |
+| F12.4 | No canonical link | 0 of 29 pages had one | **fixed** |
+| F12.5 | No Open Graph / Twitter card | 0 of 29 pages had either | **fixed** |
+| F12.6 | No structured data | 0 of 29 pages had any | **partly** — Person and Book only, see D-16 |
+
+Two descriptions were also near-duplicates in substance rather than in bytes, which no exact-match
+check catches: Jonah and The Invitation both reduced to "thought-provoking meditations for every day
+of the year". Jonah's now names its volume and what is distinctive about the poems in it. Both
+rewrites use only sentences already present in the book's own blurb — nothing invented.
+
+### N16 — every canonical URL pointed at a URL that redirects — **fixed**
+
+The most consequential thing found in this prompt, and it was introduced by the canonical work
+itself rather than inherited.
+
+`build.format: 'file'` makes `Astro.url.pathname` carry the file extension, so the first
+implementation emitted:
+
+```
+<link rel="canonical" href="https://brianmueller.org/books.html">
+```
+
+But the site is served extensionless everywhere — every nav item, every internal link, and the whole
+legacy redirect map use `/books`. Checked against the running site rather than assumed:
+
+```
+https://brianmueller.org/books           -> 200
+https://brianmueller.org/books.html      -> 307  -> /books
+https://brianmueller.org/books/          -> 307  -> /books
+```
+
+So the canonical tag would have nominated a URL that redirects, on every page of the site. A
+canonical pointing away from the URL people actually link to is worse than having none: it is an
+explicit instruction to consolidate on the wrong address, applied sitewide, three weeks before
+cutover. The sitemap inherited the same defect and would have listed 29 redirecting URLs.
+
+Fixed by normalising the path (`/index.html` → `/`, strip `.html`, strip trailing slash) before
+building the canonical. `tools/check-build.mjs` now fails the build on any sitemap entry containing
+`.html`, so it cannot come back quietly.
+
+### N17 — the staging guard was a hand-maintained comment — **fixed**
+
+Three separate files carried "remove this at cutover, and not before" instructions: the `noindex`
+meta in `Base.astro`, the `X-Robots-Tag` line in `public/_headers`, and the whole of
+`public/robots.txt`. Each depended on a person remembering, on the day, in the right order — and
+each failure mode is silent. A production site that launches with `noindex` looks perfect and is
+invisible; a beta that loses it gets indexed and has to be un-indexed, which is much slower than
+never being indexed at all.
+
+All three are now derived from one named environment (`src/site.config.mjs`), which has **no
+default** — an unset or unknown `SITE_ENV` throws and the build fails rather than guessing. Cutover
+is one word in one build command.
+
+### N18 — `tools/csp-hashes.py` would have reported JSON-LD as needing hashes — **fixed**
+
+Adding `<script type="application/ld+json">` made the hash tool report **15** inline scripts instead
+of two, and pasting that into the CSP would have been wrong twice over: the hashes are unnecessary
+(a JSON-LD block is data, the browser never executes it, so `script-src` does not apply) and they
+would change every time a book's page count did.
+
+Not assumed — verified under an enforced policy: 58 page loads with JSON-LD present, **zero CSP
+violations**. The tool now skips any `<script>` whose `type` is not a JavaScript MIME type, and says
+why in its own docstring.

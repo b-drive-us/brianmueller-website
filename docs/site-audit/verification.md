@@ -506,3 +506,111 @@ list. Delivery logs are request lines at Cloudflare.
    enforcement of the same `_headers` file. That confirmation belongs to Prompt 11.
 6. **Account security is out of scope and unreviewed**: Cloudflare and GitHub credentials, two-factor
    enrolment, and who else can deploy. Worth Brian's own look before cutover.
+
+---
+
+## Prompt 08 — page identity and per-environment indexing
+
+### The three environments, built and checked independently
+
+`SITE_ENV` names the environment; everything else derives from it. There is no default — an unset or
+unknown value throws.
+
+| | `production` | `beta` | `preview` |
+|---|---|---|---|
+| origin | `https://www.brianmueller.com` | `https://brianmueller.org` | `http://localhost:4321` |
+| canonical on 29 pages | ✓ all on that origin | ✓ | ✓ |
+| `noindex` meta | **1 page** (`/404` only) | 29 | 29 |
+| `X-Robots-Tag` in `_headers` | absent | injected | injected |
+| robots.txt | `Allow: /`, AI-training crawlers disallowed, sitemap declared | blanket `Disallow: /` | blanket `Disallow: /` |
+| sitemap.xml | 28 URLs | 28 URLs | 28 URLs |
+| `check-build.mjs` | **ok** | **ok** | **ok** |
+
+28 URLs, not 29, because `/404` is excluded by name.
+
+### The guards actually fire
+
+Not "the checks exist" — they were run against deliberately mismatched artifacts:
+
+| Scenario | Result |
+|---|---|
+| A **beta** artifact shipped as production | **117 problems.** Wrong canonical host on every page, `noindex` on every page, hard-coded `brianmueller.org` throughout, `X-Robots-Tag` present, sitemap on the wrong origin. |
+| A **production** artifact shipped as beta | **115 problems.** Wrong canonical host, missing `noindex`, hard-coded `www.brianmueller.com`, no `X-Robots-Tag`. |
+| `SITE_ENV` unset | Build throws: "SITE_ENV is not set. This build has no idea which site it is." |
+| `SITE_ENV=nonsense` | Build throws, naming the three valid values. |
+
+### Metadata, measured
+
+| Check | Result |
+|---|---|
+| Pages | 29 |
+| Duplicate titles | **0** |
+| Duplicate descriptions | **0** |
+| Descriptions ending in an ellipsis | **0** |
+| Description length | min 21, median 101, max 161 |
+| Canonical link | 29 / 29 |
+| Open Graph + Twitter card | 29 / 29 |
+| `og:image` / `twitter:image` absolute | 29 / 29 |
+| Referenced social images that exist in `dist/` | **all**, none missing |
+| Social images at 1200 × 630 | both, confirmed by reading the files |
+
+The two social images are real crops of artwork already used on the site — the bull photograph from
+the home hero, and the Illuman event graphic for the retreat page, cropped so its own title text
+survives. Nothing generated, nothing with invented text on it.
+
+### Structured data — what it claims and what it refuses to
+
+14 JSON-LD blocks, all valid JSON. Automated check for `offers`, `price`, `priceCurrency`,
+`availability`, `aggregateRating`, `review`, `ratingValue`, `eventStatus`: **none present anywhere.**
+
+Sample (Jonah): `{"@type":"Book","name":"Jonah","isbn":"978-1733501200","numberOfPages":450,
+"datePublished":"2019"}` — every field of which is visible on the page and recorded in
+`src/data/books.json` with a source.
+
+No `Event` markup on the retreat page. Reasoning in D-16: registration is an email interest list,
+and `Event` markup invites Google to present it as bookable.
+
+### Sitemap
+
+Parsed with an XML parser, not a regex: root is `urlset` in the sitemap 0.9 namespace, 28 `<url>`
+entries each with a `<loc>`, **0 duplicates**, **0 entries containing `.html`**, all on the
+environment's own origin, no unescaped characters. One `<lastmod>` — the single blog post, taken
+from its own `<time datetime>`. Every other page omits `lastmod` rather than inventing one.
+
+### Regression — nothing earlier broke
+
+The layout's `<head>` changed, so the whole Prompt 05–07 suite was re-run against the new build:
+
+| | Result |
+|---|---|
+| Responsive sweep, 29 pages × 7 widths × 2 themes | **406 checks, 0 problems** |
+| Enforced CSP, 29 pages × 2 themes | **58 loads, 0 violations, 0 console errors** |
+| Theme script applied / webfonts loaded | 58 / 58 both |
+| Rendered-text comparison | **0 regressions** |
+| CSP hashes | still the same two; no change to either theme script |
+
+The CSP result matters more than it looks: JSON-LD introduced `<script>` elements to a site whose
+`script-src` is two hashes and nothing else. Zero violations confirms a data block is not subject to
+`script-src` — tested rather than taken from the spec.
+
+### Checks that passed on a production-configured PREVIEW, not on production
+
+Stated separately, as the prompt requires. Everything in the production column above was verified on
+a **locally built production artifact**. None of it has been served from `www.brianmueller.com`,
+because nothing has been deployed there. The following can only be confirmed after cutover and are
+listed in `release-plan.md`:
+
+1. That `https://www.brianmueller.com/robots.txt` is the generated file and not something a platform
+   prepends — Cloudflare did exactly that on the .org zone.
+2. That `X-Robots-Tag` is **absent** from live production responses, including 404s and assets.
+3. That `https://www.brianmueller.com/sitemap.xml` is fetchable and its URLs all return 200 rather
+   than redirecting.
+4. That the canonical on each live page matches the URL that actually served it.
+5. That Search Console accepts the sitemap without "Page with redirect" or "Alternate page with
+   proper canonical tag" warnings.
+
+### Still true, and worth repeating
+
+`robots.txt` is not access control, and `Disallow` is not `noindex`. The beta is readable by anyone
+with the link and always has been; what it is not is indexed. D-15 has the full reasoning and the
+per-environment table.

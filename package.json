@@ -4,9 +4,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
+    "dev": "SITE_ENV=preview astro dev",
+    "build": "SITE_ENV=beta astro build && node tools/check-build.mjs beta",
+    "build:beta": "SITE_ENV=beta astro build && node tools/check-build.mjs beta",
+    "build:production": "SITE_ENV=production astro build && node tools/check-build.mjs production",
+    "build:preview": "SITE_ENV=preview astro build && node tools/check-build.mjs preview",
+    "preview": "SITE_ENV=preview astro preview"
   },
   "dependencies": {
     "astro": "^5.18.2"

@@ -15,8 +15,10 @@ const siblings = book.series
 const collects = (book.collects || []).map(sl => books.find(b => b.slug === sl)).filter(Boolean);
 const kindLabel = { collection: null, anthology: "Anthology", "multi-author": "Many voices" }[book.kind];
 const c = book.cover;
+import StructuredData from '../../components/StructuredData.astro';
 ---
 <Base title={`${book.titleFull ?? book.title} — Brian J. Mueller`} description={book.description}>
+  <StructuredData type="book" book={book} />
   <section class="wrap">
     <div class="book-lead">
       <figure class="cover cover-lg">

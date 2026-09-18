@@ -1,8 +1,38 @@
 ---
 import '../styles/fonts.css';
 import '../styles/base.css';
-const { title = "Brian J. Mueller", description = "Poet. Twelve collections of poetry, and a men's writing retreat each January." } = Astro.props;
-const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+import { site, absolute, NON_INDEXABLE_PATHS } from '../site.config.mjs';
+
+const {
+  title = "Brian J. Mueller",
+  description = "Poet. Twelve collections of poetry, and a men's writing retreat each January.",
+  // Social preview. Defaults to the site card; a page passes its own when it has
+  // a better one. Every option must be a real 1200x630 file in public/img.
+  ogImage = "/img/og-default-1200x630.jpg",
+  ogImageAlt = "A bull in a shaft of sunlight in a darkened ring, facing a raised red cape.",
+  ogType = "website",
+} = Astro.props;
+
+// `build.format: "file"` makes Astro.url.pathname carry the .html extension
+// ("/books.html"), but Cloudflare 307s /books.html to /books, and every link,
+// nav item and legacy redirect on this site uses the extensionless form. A
+// canonical pointing at a URL that redirects is worse than no canonical at all,
+// so normalise to the URL the server actually serves.
+const path = Astro.url.pathname
+  .replace(/index\.html$/, "")
+  .replace(/\.html$/, "")
+  .replace(/\/$/, "") || "/";
+
+// Canonical is built from the environment's origin and this page's own path.
+// It is never derived from a request header - see src/site.config.mjs.
+const canonical = absolute(path);
+
+// Indexing is a property of the environment, not of the template. Beta and
+// preview are excluded; 404 is excluded everywhere because a soft-404 in the
+// index is worse than no result at all.
+const indexable = site.indexable && !NON_INDEXABLE_PATHS.has(path);
+
+const ogImageUrl = absolute(ogImage);
 const nav = [
   { href: "/books",   label: "Books" },
   { href: "/poems",   label: "Poems" },
@@ -18,11 +48,31 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- STAGING: remove this line at cutover, not before. -->
-    <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href={canonical} />
+
+    {/* Indexing follows the build environment. There is no hand-edited staging
+        line to remember to remove: `npm run build:production` turns this off and
+        tools/check-build.mjs fails the build if the artifact disagrees. */}
+    {!indexable && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Brian J. Mueller" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     <script is:inline>
       // Runs before first paint so a chosen theme never flashes the wrong one.
       (function () {

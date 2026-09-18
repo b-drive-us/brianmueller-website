@@ -120,7 +120,34 @@ from outside Cloudflare**, not from its own UI.
 Still open from D-13: the production robots.txt needs writing, including Brian's own position on AI
 training rather than Cloudflare's default. That belongs to **Prompt 08**.
 
+**Prompt 08 — page identity and per-environment indexing: done.**
+
+- **D-02 resolved: `www.brianmueller.com`.** Re-confirmed live first (`brianmueller.com` 301s to www
+  today), so www is genuinely the incumbent. It now lives in exactly one place.
+- **One environment configuration.** `SITE_ENV` names the site — `production`, `beta` or `preview` —
+  and the origin, canonical, robots meta, robots.txt, sitemap and `X-Robots-Tag` all derive from it.
+  **No default**: an unset or unknown value throws and the build fails rather than guessing.
+- **Cutover is now one word.** `npm run build` → beta; `npm run build:production` → production. The
+  three "remove this at cutover, and not before" comments are gone.
+- **The guards were negative-tested, not just written.** A beta artifact checked as production →
+  117 problems. A production artifact checked as beta → 115.
+- **Caught a bug I had just introduced.** Every canonical initially pointed at `/books.html`, which
+  Cloudflare 307-redirects to `/books`. A sitewide canonical nominating a redirecting URL is worse
+  than none. Verified against the live server, fixed, and the build now fails on any sitemap entry
+  containing `.html`. See N16.
+- **F12 rechecked honestly.** Three of six sub-issues were already fixed by earlier prompts; the
+  audit's description of them is out of date. One real truncation remained (MWFC Vol. 2) plus two
+  descriptions that were near-duplicates in substance. Canonical, Open Graph and Twitter card now on
+  29/29 pages.
+- **Structured data, narrowly.** Person and Book only, every field already visible on the page. No
+  offers, prices, availability or ratings anywhere — checked automatically. No `Event` markup while
+  registration is an email interest list (D-16).
+- **robots.txt now says what Brian wants**, in his own file: search engines welcome, AI-training
+  crawlers disallowed, with a note that the work is his and CC BY-NC-ND licensed.
+- **Regression clean**: 406 responsive checks, 58 enforced-CSP loads with zero violations, zero
+  rendered-text regressions.
+
 ## Next step
 
-Prompt 08 — page identity and per-environment indexing: F12 remainder, canonical URLs, social
-metadata, sitemap generation, and the environment configuration F03 needs.
+Prompt 09 — legacy migration. Scope is ~35 real mappings plus one blanket rule for the 1,611
+archived blog posts, not 1,646 individual redirects.

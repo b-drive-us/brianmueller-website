@@ -9,15 +9,16 @@
 
 
 # --- STAGING GUARD ---------------------------------------------------------
-# Cloudflare injects a managed robots.txt that is PREPENDED to ours and begins
-# with "User-agent: * / Allow: /". Our own "Disallow: /" lands in a second
-# group for the same user-agent, and a crawler resolving the conflict can take
-# the Allow. So robots.txt is NOT the thing keeping this site out of search
-# results — this header is. It cannot be overridden and it is confirmed present
-# on pages, on assets and on 404s.
+# There is no X-Robots-Tag line in this file, and there must not be one.
+# tools/generate-seo.mjs injects it after the build whenever SITE_ENV is not
+# production, and tools/check-build.mjs fails the build if the artifact and the
+# environment disagree. Nothing here has to be remembered or removed by hand at
+# cutover; `npm run build:production` is the whole switch.
 #
-# REMOVE THE X-Robots-Tag LINE AT CUTOVER, and not before. Verify with:
-#   curl -sSI https://brianmueller.com/ | grep -i x-robots
+# Why a header rather than robots.txt: a Disallow asks a crawler not to fetch a
+# page, which also means it never sees a noindex on that page, and a disallowed
+# URL can still be listed from an external link. The header is a directive that
+# travels with every response, including 404s and assets.
 # --- SECURITY --------------------------------------------------------------
 # The policy below is written from an inventory of what this site actually
 # loads, not copied from a template. It is static files with no server
@@ -51,7 +52,6 @@
 # covered, or it locks visitors out of a host that cannot answer over TLS.
 # See docs/site-audit/decisions.md D-12.
 /*
-  X-Robots-Tag: noindex, nofollow
   Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-QglPjucdT69dXpFwbNOprT5n5t8LJheqSET5IZoqT6U='; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

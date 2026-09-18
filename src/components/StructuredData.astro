@@ -1,0 +1,52 @@
+---
+/**
+ * JSON-LD, limited on purpose.
+ *
+ * Only two types are emitted, and only from facts that are already visible on
+ * the page and confirmed in src/data/books.json: a Person for Brian, and a Book
+ * on each book page.
+ *
+ * Deliberately NOT emitted:
+ *   - offers, price, availability, aggregateRating, review — the site sells
+ *     nothing directly and has no rating data. Inventing any of these to win a
+ *     rich result is exactly the kind of claim that gets a site penalised, and
+ *     it would be a lie about Brian's books.
+ *   - Event for the retreat. The dates and venue are approved and true, but
+ *     Event markup invites Google to present it as a bookable event, and
+ *     registration is currently an email interest list, not a booking. Revisit
+ *     when the Stripe flow is live — see docs/site-audit/decisions.md D-16.
+ */
+const { type = 'person', book = null } = Astro.props;
+import { absolute } from '../site.config.mjs';
+
+const person = {
+  '@type': 'Person',
+  '@id': absolute('/#brian'),
+  name: 'Brian J. Mueller',
+  url: absolute('/'),
+  jobTitle: 'Poet',
+  sameAs: ['https://brianspoems.com'],
+};
+
+let data = null;
+if (type === 'person') {
+  data = { '@context': 'https://schema.org', ...person };
+} else if (type === 'book' && book) {
+  data = {
+    '@context': 'https://schema.org',
+    '@type': 'Book',
+    name: book.titleFull ?? book.title,
+    author: person,
+    url: absolute(`/books/${book.slug}`),
+    image: absolute(`${book.cover.src}-640.webp`),
+    description: book.description,
+    inLanguage: 'en',
+    bookFormat: 'https://schema.org/Paperback',
+    ...(book.isbn13 ? { isbn: book.isbn13 } : {}),
+    ...(book.pages ? { numberOfPages: book.pages } : {}),
+    ...(book.year ? { datePublished: String(book.year) } : {}),
+    ...(book.publisher ? { publisher: { '@type': 'Organization', name: book.publisher } } : {}),
+  };
+}
+---
+{data && <script type="application/ld+json" set:html={JSON.stringify(data)} />}
