@@ -1,90 +1,195 @@
 # Release plan
 
-**Status: not started.** Written in Prompt 10. This file exists so Prompt 00's record set is
-complete and so the two gates below are visible from the outset.
+Rewritten at Prompt 10 to describe the candidate that actually exists.
 
-## Two distinct gates
+---
 
-| Gate | Meaning | Authorised by |
+## 1. The candidate
+
+| | |
+|---|---|
+| **Branch** | `audit/2026-09` |
+| **Commit** | *(the Prompt 10 commit — see `git log -1` on the branch)* |
+| **Base** | `main` at `8ea45e5`, which is what the 9 September audit examined |
+| **Build** | Astro 5.18.2, static output, zero JavaScript files emitted |
+| **Deploy** | Cloudflare Workers static assets, Worker `brianmueller-website`, via Workers Builds on push |
+| **Verified on** | a clean `npm ci` in a Linux container — i.e. a machine that behaves like the Cloudflare builder, not the sandboxed bridge |
+
+**Nothing has been deployed.** The beta at brianmueller.org is still serving `main`.
+
+---
+
+## 2. What is different between environments
+
+One file decides: `src/site.config.mjs`. `SITE_ENV` names the environment and everything else
+derives from it. **There is no default** — an unset or unknown value throws and the build fails.
+
+| | `production` | `beta` | `preview` |
+|---|---|---|---|
+| origin | `https://www.brianmueller.com` | `https://brianmueller.org` | `http://localhost:4321` |
+| canonical, `og:url`, sitemap | that origin | that origin | that origin |
+| `robots` meta | `/404` only | every page | every page |
+| `X-Robots-Tag` in `_headers` | absent | injected | injected |
+| robots.txt | allow, AI-training crawlers disallowed, sitemap declared | blanket disallow | blanket disallow |
+| build command | `npm run build:production` | `npm run build` | `npm run build:preview` |
+
+`tools/check-build.mjs` runs after every build and fails it if the artifact and the environment
+disagree. Proven by deliberate mismatch: a beta artifact checked as production produces 117
+problems; a production artifact checked as beta produces 115.
+
+---
+
+## 3. Secrets and bindings
+
+**Named only. No values appear in this repository, and none are needed at build time.**
+
+| Name | Where it lives | Used for |
 |---|---|---|
-| **Ready for beta review** | The candidate can be deployed to `brianmueller.org` for Brian to look at | Prompt 11 |
-| **Ready for production** | The candidate can replace the live `brianmueller.com` | Prompt 12, explicitly |
+| Cloudflare account + Workers Builds GitHub connection | Cloudflare dashboard | building and deploying on push |
+| GitHub repository `b-drive-us/brianmueller-website` | GitHub | source of truth |
+| *(none in the build)* | — | the build reads no secret, calls no API, and needs no environment variable other than `SITE_ENV` |
 
-Prompt 11 does not authorise production. Nothing in this pack authorises production except Prompt 12.
+A scan of the repository finds no `.env`, key, token or credential file tracked, and no secret
+pattern in any source file. The deploy credential is held by Cloudflare, never by the repo.
 
-## Known before Prompt 10
+**Not yet provisioned, and not needed until registration opens:** an authenticated sending domain
+(D-04). The site sends no email today; contact and retreat interest are both `mailto:` links.
 
-- Deploy mechanism: push to `main` → Cloudflare Workers Builds → `brianmueller-website`.
-  **There is no separate deploy command to withhold; the push is the deploy.**
-- Rollback: redeploy the previous commit, or roll back the Worker deployment in the Cloudflare
-  dashboard. `8ea45e5` is the current known-good beta.
-- Secrets: none in the repository. No secret store is in use yet, because nothing needs one. A
-  Stripe key or Resend key would be the first — by name only, entered by Brian in the Cloudflare
-  dashboard, never in this repository or in conversation.
-- Production DNS lives at Namecheap. Brian makes registrar changes himself.
+---
 
-## Cutover items already known
+## 4. Rollback
 
-1. Remove `public/_headers`' `X-Robots-Tag` staging guard.
-2. Remove the `robots` meta from `src/layouts/Base.astro`.
-3. Replace `public/robots.txt`'s staging `Disallow: /`.
-4. Point `astro.config.mjs`'s `site` at the production hostname (D-02).
-5. Publish a sitemap (N02 — does not exist yet).
-6. Activate the legacy redirect map (F02 — does not exist yet).
-7. Keep Squarespace paid for 30 days past cutover.
+The rollback artifact is **`main` itself**. It is unchanged, currently deployed, and every commit
+of this work is on `audit/2026-09`.
 
-## Cutover additions from Prompt 07
+- **To undo a beta deploy:** in Cloudflare, roll the Worker back to the previous deployment, or
+  push `main` again. Both restore exactly what is serving today.
+- **To undo a production cutover:** the DNS change is the reversible step. Until it is made,
+  `www.brianmueller.com` keeps serving Squarespace, untouched by anything here.
+- **Do not delete the Squarespace site** until production has been stable for a fortnight. It is the
+  only copy of anything that turns out to have been missed — including, as of today, one blog post
+  (see gate B3).
 
-Two Cloudflare settings were changed on **brianmueller.org** on 12 September 2026 and verified from
-outside Cloudflare. Neither carries over to brianmueller.com automatically — both must be repeated
-on that zone at cutover, in this order:
+---
 
-1. **Always Use HTTPS: On** (SSL/TLS → Edge Certificates). Verify with
-   `curl -sSI http://brianmueller.com/` and expect a `301` with a `location:` on https, and again on
-   a deep path with a query string. Do this **before** pointing traffic at the hostname.
-2. **Managed robots.txt: Off** (AI Crawl Control → Signals), then confirm
-   `curl -sS https://brianmueller.com/robots.txt` returns exactly the file in this repository and
-   nothing prepended.
-3. ~~Remove the `X-Robots-Tag` line from `public/_headers`.~~ **No longer a manual step.** Since
-   Prompt 08 the indexing directives are derived from `SITE_ENV`. Cutover is changing the Cloudflare
-   build command from `npm run build` to **`npm run build:production`** — that one word switches the
+## 5. Gate A — ready for beta review
+
+**Verdict: yes.** Everything below passes on the candidate.
+
+| | |
+|---|---|
+| Three builds, clean checkout | exit 0, each producing a correct and distinct artifact |
+| Environment guards | negative-tested; they fail loudly on a mismatched artifact |
+| Page routes | 29 / 29 return 200 |
+| Internal links / assets | 28 / 28 and 49 / 49 resolve |
+| Metadata | title, description, canonical, OG and Twitter on 29 / 29, no duplicates |
+| Responsive sweep | 406 checks, 0 problems |
+| Enforced CSP | 58 loads, 0 violations, 0 console errors |
+| Visitor journeys, 2 widths × 2 themes + keyboard | 76 checks, 0 failures |
+| Redirect map | 1,653 legacy URLs classified, 0 unresolved; 1,653 / 1,653 resolve as intended |
+| Contrast | all 34 text/ground pairs pass WCAG 2.2 AA in both themes |
+| Artifact hygiene | no build intermediates, source maps, docs or internal notes shipped |
+
+**Deploying to beta is Prompt 11 and needs Brian's go-ahead.** It publishes to brianmueller.org,
+which is public but unindexed.
+
+### Beta deploy steps
+
+1. Push `audit/2026-09`, or merge to `main` — confirm first which the Cloudflare project builds
+   (D-10 is still unconfirmed; treat any push as potentially publishing).
+2. Watch the Workers Build log. It must show `seo: beta` and `check: beta ok`. If `check-build`
+   fails, **the deploy should fail** — that is the design.
+3. Then run the live checks in section 7.
+
+---
+
+## 6. Gate B — ready for production
+
+**Verdict: not yet.** Four things are outstanding, and none of them is code.
+
+| | What is needed | From |
+|---|---|---|
+| **B1** | **D-08** — confirm the accommodation promises against the Bergamo premises agreement. The retreat page states "Single occupancy, private bathroom. No roommates, no negotiating" and "Every meal… Dietary needs accommodated" as fact, sourced from a promotional document. Airport pickup is correctly hedged; these are not. | Brian |
+| **B2** | **D-19** — produce the Counterpoint Press permission, or soften the sentence, or drop it. A public claim that a named publisher granted a licence should not rest on a flyer — the same flyer that produced the "450 acres" error. | Brian |
+| **B3** | **N20** — add the recovered post `/living-workshop/let-the-mystery-be` to `08 - Blog Archive/` and correct the README's count from 915 to 916. After the Squarespace site is gone there is no other copy. | Brian |
+| **B4** | **D-20** — decide whether registration opens before 1 December, or the price step moves. As it stands the $350 rate has 74 days to live and no opening date. | Brian |
+
+Not blocking, but worth an answer before launch: **D-07**, whether the printed book says "Truth" or
+"Behold". F08 is implemented against the archive and is reversible either way.
+
+### Cutover steps, in order
+
+1. **On the brianmueller.com zone in Cloudflare** — neither setting carries over from .org:
+   - SSL/TLS → Edge Certificates → **Always Use HTTPS: On**
+   - AI Crawl Control → Signals → **Managed robots.txt: Off**
+2. Change the Cloudflare build command to **`npm run build:production`**. That one word switches the
    canonical host, the robots meta, robots.txt, the sitemap origin and the `X-Robots-Tag` header
-   together, and `tools/check-build.mjs` fails the build if any of them disagree.
-   Confirm afterwards with `curl -sSI https://www.brianmueller.com/ | grep -i x-robots` returning
-   nothing.
-4. **Confirm the CSP survives the edge.** It has only ever been tested against a local server
-   applying the same `_headers` file. After the first production deploy, check
-   `curl -sSI https://brianmueller.com/ | grep -i content-security-policy`, then load the site in a
-   real browser and confirm the theme toggle works and the console is clean. A stale script hash
-   fails silently — the page looks right and the toggle is simply dead.
-5. **Then, and only then**, begin the HSTS ramp in D-12: `max-age=300` first, watch for a few days,
-   raise to a year, and treat `includeSubDomains` and `preload` as separate decisions.
+   together. There is nothing else to remember to remove.
+3. Deploy, and verify at the real hostname (section 7) **before** pointing DNS at it.
+4. Move DNS. This is the reversible step and the real moment of cutover.
+5. Submit the sitemap in Search Console. **Do not file a Change of Address** — the production
+   address is not changing, only the platform behind it (D-18).
+6. Only after production is stable, begin the HSTS ramp: `max-age=300` for a few days, then a year,
+   then treat `includeSubDomains` and `preload` as separate decisions (D-12).
 
 **Do not trust the Cloudflare dashboard's own confirmation for any of these.** During Prompt 07 it
-reported a setting change that had not saved. Every one of these steps has a `curl` check next to it
-for that reason.
+reported a setting change that had not saved. Every step below has a `curl` beside it for that reason.
 
-## Production checks that can only run after cutover
+---
 
-Everything about the production configuration has been verified on a locally built production
-artifact. These five need the real hostname and are not yet done:
+## 7. Validation that can only run against a live host
 
-1. `curl -sS https://www.brianmueller.com/robots.txt` — must be exactly the generated file. Watch for
-   a platform prepending its own block, which is what Cloudflare was doing on the .org zone until
-   12 September.
-2. `curl -sSI https://www.brianmueller.com/` and a 404 path and an asset — `X-Robots-Tag` must be
-   **absent** from all three.
-3. `curl -sS https://www.brianmueller.com/sitemap.xml` — fetchable, and every URL in it returns 200
-   rather than a redirect. A sitemap full of redirects is a Search Console warning on day one.
-4. For a sample of pages, the `<link rel="canonical">` must match the URL that actually served the
-   page — no `.html`, no trailing slash, right host.
-5. Submit the sitemap in Search Console and watch for "Page with redirect" or "Alternate page with
-   proper canonical tag". Either means one of the above is wrong.
+Nothing in section 5 was measured against a real deployment. These are the checks that need one.
 
-Also at cutover, on the **brianmueller.com** zone specifically:
+### On the beta, immediately after deploying
 
-- **Always Use HTTPS: On** (it is on for .org; it does not carry over).
-- **Managed robots.txt: Off** (same — the .org setting is not the .com setting).
+```
+curl -sSI https://brianmueller.org/            | grep -i x-robots     # must be present
+curl -sSI https://brianmueller.org/nope        | grep -i x-robots     # present on 404s too
+curl -sS  https://brianmueller.org/robots.txt                          # exactly the repo file
+curl -sSI https://brianmueller.org/ | grep -i content-security-policy  # the CSP survives the edge
+```
+Then in a browser: the theme toggle works (a stale script hash breaks it **silently**), and the
+console is clean.
 
-And do not trust the Cloudflare dashboard's own confirmation for either: during Prompt 07 it
-reported a change that had not saved. Every step above has a `curl` next to it for that reason.
+### The critical redirect smoke set
+
+```
+/home                                 -> 301 /
+/store                                -> 301 /books
+/store/p/jonah                        -> 301 /books/jonah
+/archive-1                            -> 301 /books/trust-stillness
+/archive-13                           -> 301 /series/the-bull-series
+/the-bull-series                      -> 301 /series/the-bull-series
+/refund-policy                        -> 301 /terms-conditions
+/privacy-policy                       -> 200   (retained — must NOT redirect)
+/living-workshop                      -> 301 /blog
+/living-workshop/in-the-mirror        -> 301 https://brianspoems.com/poem/in-the-mirror-2
+/living-workshop/2018/11/10/troubles  -> 301 https://brianspoems.com/poem/troubles
+/living-workshop/tag/love             -> 301 /blog
+```
+Plus, in a browser: `/#jonah` lands on `/books/jonah`, and `/retreat#register` still scrolls to the
+registration section.
+
+**Also settle here:** whether Cloudflare normalises a trailing slash before or after `_redirects` is
+evaluated. `/living-workshop/in-the-mirror/` currently falls through to `/blog` in the local model
+(N21). One request answers it.
+
+### On production, after cutover
+
+1. `robots.txt` is the generated file with nothing prepended.
+2. `X-Robots-Tag` is **absent** from pages, assets and 404s.
+3. `sitemap.xml` is fetchable and every URL in it returns 200, not a redirect.
+4. Each sampled page's canonical matches the URL that served it.
+5. Search Console Coverage shows no "Page with redirect" or "Alternate page with proper canonical".
+
+---
+
+## 8. Checks needing a person, not a machine
+
+| | Who |
+|---|---|
+| Real devices — iPhone Safari above all. Only Chromium was ever available here. `device-checklist.md` is a twenty-minute list. | Brian |
+| Click two or three Amazon links from a phone. They resolve to the right ASINs but return HTTP 500 to a datacentre IP, so neither "works" nor "broken" has been established. | Brian |
+| A screen reader. The structure is correct; correct structure is not the same as sounding right. | anyone with VoiceOver |
+| Account security — Cloudflare and GitHub credentials, two-factor, who else can deploy. Out of scope here and unreviewed. | Brian |

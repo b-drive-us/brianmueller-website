@@ -36,7 +36,7 @@ const BSP = "https://brianspoems.com";
             </header>
             <Poem text={p.text} class="poem-left" />
             <footer class="poem-source">
-              from <a href={`/books/${p.slug}`}>{b.title}</a>{b.year ? `, ${b.year}` : ""}
+              from <a href={`/books/${p.slug}`}>{b.titleFull ?? b.title}</a>{b.year ? `, ${b.year}` : ""}
               {p.archive && <> · <a href={p.archive}>read it in the archive</a></>}
             </footer>
           </article>

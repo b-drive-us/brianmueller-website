@@ -31,7 +31,10 @@ import StructuredData from '../../components/StructuredData.astro';
         <div class="stack stack-m">
           {s && <div class="eyebrow"><a href={`/series/${s.slug}`} class="u-inherit">{s.name}</a> · {book.position} of {siblings.length}</div>}
           {!s && <div class="eyebrow">Standalone</div>}
-          <h1>{book.title}</h1>
+          {/* titleFull, not title: the two Men Writing for Change volumes share
+              a title, and the heading is what a reader sees. The <title> tag has
+              said the volume since Prompt 04; the h1 did not. */}
+          <h1>{book.titleFull ?? book.title}</h1>
           <p class="lede serif-italic">{book.subtitle}</p>
           {kindLabel && <div><span class="badge">{kindLabel}</span></div>}
           <hr class="rule-short" />

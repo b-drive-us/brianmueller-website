@@ -729,3 +729,185 @@ immediately after cutover:
 
 Plus, in a browser: `/#jonah` lands on `/books/jonah`, and `/retreat#register` still scrolls to the
 registration section.
+
+---
+
+## Prompt 10 — the integrated release candidate
+
+### Defects found in this stage
+
+Prompt 10 is a verification pass, but it found five things worth fixing, which is the point of
+having one.
+
+| # | Found | Severity | State |
+|---|---|---|---|
+| N22 | **`npm run build` was broken.** The scripts ran `astro build && check-build` with no `generate-seo` between them, so robots.txt stayed a placeholder and no sitemap was written. `check-build` would have failed the Cloudflare build outright. It was invisible locally only because this device's sandbox makes Astro's own cleanup step exit non-zero, stopping the chain early. | **high** | fixed |
+| N23 | **The legal pages defined "the Website" as `https://brianmueller.com`** — the apex, which 301s to www. A Terms of Use pointing at a redirect. `check-build` could not see it, because it only looked for *other environment* origins. | medium | fixed, plus a new guard |
+| N24 | **`generate-seo.mjs` was not idempotent.** It read and rewrote `dist/_headers`, so a second run on the same output tripped its own guard. Cloudflare always builds clean, so it would never have failed there — which is exactly why it was worth fixing. | low | fixed |
+| N25 | **The two Men Writing for Change volumes were indistinguishable in two places.** The book page `<h1>` said "Men Writing for Change" while its `<title>` said "…, Vol. 1", and `/poems` attributed a Vol. 1 poem to the series with no volume. | medium | fixed |
+| N26 | **Home page LCP regressed** to ~2.5 s from 2160 ms at Prompt 06. | low | partly improved, honestly reported below |
+
+### Builds
+
+Run on a clean checkout of the candidate in a Linux container where file deletion works — that is,
+a machine that behaves like Cloudflare's builder, not like the sandboxed bridge:
+
+| Command | Result |
+|---|---|
+| `npm ci` | clean |
+| `npm run build` (beta) | **exit 0** — 29 pages, canonical on brianmueller.org, noindex on 29, X-Robots-Tag set |
+| `npm run build:production` | **exit 0** — canonical on www.brianmueller.com, noindex on 1, X-Robots-Tag absent |
+| `npm run build:preview` | **exit 0** |
+| `generate-seo` run twice on one build | idempotent — exactly one `X-Robots-Tag` line |
+
+### The built artifact contains nothing it should not
+
+91 files: 49 webp, 29 html, 6 woff2, 2 jpg, 1 css, 1 xml, 1 txt, `_headers`, `_redirects`.
+**Zero** build intermediates, **zero** source maps, **zero** dotfiles, **zero** files from `docs/`.
+No HTML comments survive the build. No `TODO`, `FIXME`, internal path or `SITE_ENV` reference
+appears in any shipped file. No runtime dependency was added across the whole branch — the only
+dependency changes are a wrangler patch bump and pinning Astro to the version already in use.
+
+**Nothing was deleted.** `git diff --diff-filter=D main..HEAD` is empty; the six font files show as
+renames into `tools/fonts-original/`, which is the subsetting archive, not a loss.
+
+### Crawl
+
+| Check | Result |
+|---|---|
+| Page routes returning 200 | **29 / 29** |
+| Distinct internal link targets resolving | **28 / 28**, none broken |
+| Distinct assets resolving | **49 / 49**, none missing |
+| `<title>` / description / canonical / `og:title` / `og:image` | present on 29/29, **no duplicates** except the shared default social card |
+| `<h1>` | present on 29/29 |
+| All twelve books: page, Amazon link, `rel="sponsored nofollow"`, ISBN and page count shown | **12 / 12** |
+| Curated poems naming their source book and linking to the archive | **11 / 11** |
+| Licence/permissions reachable from home, /poems and /faq | yes |
+| Four policy pages present and linked from the footer | yes |
+
+Five pages have an `<h1>` that is not a substring of the `<title>` — "Notes" titled "Writing",
+"The books" titled "Books", a home page headed with a line of poetry. These are editorial choices,
+not defects, and are recorded here so nobody re-reports them.
+
+### Before and after
+
+| Old site — 1,646 sitemap URLs | | Candidate — 29 pages | |
+|---|---:|---|---:|
+| blog posts and index | 917 | book pages | 12 |
+| blog tag/category listings | 694 | core pages | 9 |
+| storefront | 15 | policies | 4 |
+| `/archive-N` | 14 | series pages | 3 |
+| other pages | 6 | notes posts | 1 |
+
+The fall from 1,646 to 29 is almost entirely the blog: 916 posts, 691 tag listings, 3 category pages
+and the index, archived rather than migrated per Brian's decision of 29 August 2026, with 690 of them
+redirecting to their specific poem on brianspoems.com. The storefront goes because direct sales are
+retired; the `/archive-N` pages were Squarespace's leftovers from earlier layouts. **All 1,653
+legacy URLs have a row in `redirect-map.csv`** — nothing was dropped silently.
+
+### Visitor journeys — 76 checks, 0 failures
+
+Each journey run at 1280 px and 390 px, in light and dark, plus a keyboard-only pass:
+
+discover a book from the home page → open its page → find a correctly-attributed Amazon link ·
+understand what the anthology collects · read a poem and see which book it came from ·
+evaluate the retreat: dates, venue, price, capacity · express interest ·
+reach Brian · find the permissions · recover from a 404.
+
+Keyboard: first Tab reveals the skip link, Enter moves focus to `<main>`, all 60 sampled controls
+show a focus ring, and all six FAQ disclosures open with Enter.
+
+Two apparent failures in the first run were **my harness, not the site**, and are recorded because
+a test that lies is worse than no test: the local server was not serving `404.html` the way
+Cloudflare's `not_found_handling` does, and a date assertion was case-sensitive against an eyebrow
+that CSS renders in capitals. Both harness bugs fixed; the site was right both times.
+
+### Regression
+
+| | Result |
+|---|---|
+| Responsive sweep, 29 pages × 7 widths × 2 themes | **406 checks, 0 problems** |
+| Enforced CSP, 29 pages × 2 themes | **58 loads, 0 violations, 0 console errors** |
+| Theme script and webfonts | 58 / 58 both |
+| Redirect rules | 1,653 / 1,653 resolving as intended |
+| Environment separation | beta and production artifacts both verified distinct and correct |
+
+### Performance — an honest regression report
+
+Same lab profile as Prompt 06: Chromium, 390 × 740, DPR 3, 4× CPU, 1.6 Mbps / 150 ms.
+
+| Template | Prompt 06 | Candidate | |
+|---|---|---|---|
+| home | 371 KB · 2160 ms | 467 KB · **2536 ms** | over the 2.5 s line |
+| books | 334 KB · 852 ms | 425 KB · 932 ms | |
+| book | 202 KB · 908 ms | 204 KB · 1048 ms | |
+| poems | 192 KB · 856 ms | 194 KB · 932 ms | |
+| retreat | 420 KB · 2380 ms | 422 KB · **2436 ms** | just under |
+| contact | 141 KB · 812 ms | 142 KB · 900 ms | |
+
+Home is the regression. What was tried and what it bought:
+
+- `fetchpriority="low"` on the below-the-fold images: **no measurable change**. Chromium's preload
+  scanner still queues them.
+- Reducing the decorative retreat strip from the 1000 w file to the 700 w file on phones: **68 KB
+  saved, LCP unchanged**. Kept anyway — it is a real saving with no visual cost, and the strip still
+  renders at 2× density behind a dark band.
+
+That the second change saved 68 KB and moved LCP by nothing is the finding. **Home LCP is not
+bandwidth-bound on the lazy images; it is serialised behind the critical path** — 14 KB of HTML,
+22 KB of CSS, 113 KB of preloaded fonts, then the 130 KB hero. At 200 KB/s that is about 1.4 s of
+pure transfer before the hero can finish, and ~2.5 s with latency and a 4× CPU throttle is what that
+adds up to.
+
+Getting under 2.5 s from here means giving something up: not preloading the fonts (trading LCP for
+a font swap and the CLS that comes with it), or a visibly softer hero, which was measured and
+rejected in Prompt 06. **Neither trade is worth making on a laboratory number.** This is a 1.6 Mbps
+single-connection figure; production is HTTP/2 from a CDN edge. Recorded as a known measurement to
+settle with field data after cutover, not as a defect to paper over now.
+
+`poems` CLS was measured once at 0.0595 and twice at 0 in the same session — the italic font swap,
+same root cause as the retreat hero's 0.0352, and within the same accepted band (N09).
+
+### Content review against 18 September 2026
+
+Every date, deadline and time-sensitive claim on all 29 pages was checked against today.
+
+**Correct:** the retreat's dates (stated twice — the hero eyebrow and the Dates section), the venue
+and address, the 150-acre figure, the fifty-place capacity, the $350/$400 prices, the refund tiers,
+the airport pickup which is properly hedged as "we'll try to arrange", the single Notes post's date,
+and the policy revision dates. Three apparent stray years (2030, 2061, 2054) are ISBN digits.
+
+**Two things Brian must settle** — both raised here, neither fixed unilaterally:
+
+- **D-19: the Wendell Berry permission claim has no recorded source.** The page asserts that
+  Counterpoint Press granted permission to use excerpts. Nothing in this project records where that
+  came from. It most likely came from the same promotional event notice that produced the
+  "450 acres" error removed in F06. A public claim naming a publisher's licence should not stand on
+  a flyer.
+- **D-20: the early rate expires before registration is scheduled to open.** Registration is
+  "opening soon" with no fixed date, and the $350 rate ends on 1 December — 74 days out. Not a copy
+  defect; a timing decision.
+
+### Decisions still open, not converted into passes
+
+| | Status |
+|---|---|
+| **D-08** — are the retreat's accommodation promises confirmed against the Bergamo agreement? | **open and blocking F06.** The page still states "Single occupancy, private bathroom. No roommates, no negotiating" and "Every meal… Dietary needs accommodated" flatly, sourced from a promotional document. Airport pickup was correctly hedged; these were not. |
+| **D-07** — which text is authoritative for a poem? | **open.** F08 was implemented by aligning to the archive ("Truth" → "Behold"), and is reversible, but nobody has checked the printed book. |
+| **D-19** — the Berry permission claim | **open**, raised in this prompt |
+| **D-20** — early rate vs registration opening | **open**, raised in this prompt |
+| **D-04** — how site email actually sends | **open, but not blocking the beta.** The site sends no email today; contact and retreat interest are both `mailto:`. It becomes blocking when registration opens. |
+| **D-03** — .org after cutover | decided: stays as an open, unindexed beta (D-15) |
+
+### What is still unverified, and cannot be verified here
+
+1. Everything about production behaviour. No artifact has been served from `www.brianmueller.com`.
+2. The 734 redirect rules have been tested against a faithful local model of Cloudflare's documented
+   `_redirects` semantics — not against Cloudflare.
+3. Safari and Firefox. Only Chromium is available; `device-checklist.md` is the real-device list.
+4. Screen readers.
+5. Field performance. No Chrome UX Report data exists for a noindexed beta.
+6. The twelve Amazon affiliate links resolve to the correct product pages — the redirect chain
+   lands on the right ASIN every time — but return **HTTP 500 to this client**, which is Amazon
+   refusing a datacentre IP. That is not evidence the links are broken, and not evidence they work
+   for a visitor. Brian should click two or three from a phone.

@@ -174,6 +174,45 @@ training rather than Cloudflare's default. That belongs to **Prompt 08**.
 | D-05 | `/refund-policy` now 301s to `/terms-conditions`, which carries the same substance. Overrule if you would rather keep it as a standalone historical page. |
 | 225 posts | Redirect to `/blog` because no poem match could be confirmed. Listed in `redirect-map.csv` as `low - needs review`. Improvable any time; not a launch blocker. |
 
+**Prompt 10 — integrated release candidate verified: done. Verdict — ready for beta, not yet for production.**
+
+Five defects found and four fixed, which is what a verification pass is for:
+
+- **`npm run build` was broken.** The scripts never called `generate-seo`, so robots.txt would have
+  shipped as a placeholder with no sitemap and `check-build` would have failed the Cloudflare build.
+  Invisible locally only because this device's sandbox stops the chain earlier. **Fixed**, and all
+  three targets now verified end to end on a clean `npm ci` in a Linux container that behaves like
+  Cloudflare's builder.
+- **The legal pages defined "the Website" as the apex host**, which 301s to www — a Terms of Use
+  pointing at a redirect. **Fixed**, plus a guard so it cannot return.
+- **`generate-seo` was not idempotent.** **Fixed.**
+- **The two Men Writing for Change volumes were indistinguishable** in the book page heading and in
+  the poem attribution. **Fixed.**
+- **Home LCP regressed to ~2.5 s.** Partly improved and honestly reported — see below.
+
+Verified: 29/29 routes 200 · 28/28 internal links · 49/49 assets · metadata complete with no
+duplicates · 12/12 books with correct Amazon attribution · 406 responsive checks · 58 enforced-CSP
+loads, 0 violations · 76 journey checks across two widths, two themes and keyboard, 0 failures ·
+1,653/1,653 redirects resolving · nothing deleted, no new runtime dependency, no internal notes or
+build intermediates in the artifact.
+
+**Performance, stated plainly.** Home sits at ~2536 ms LCP on the 1.6 Mbps / 4x CPU lab profile,
+just over the 2.5 s line. Two fixes were tried: `fetchpriority="low"` bought nothing, and trimming
+the decorative retreat strip saved 68 KB and moved LCP by nothing. That is the finding — home is not
+bandwidth-bound on lazy images, it is serialised behind 113 KB of preloaded fonts and a 130 KB hero.
+Getting under the line means dropping the font preload or softening the hero, and neither trade is
+worth making for a laboratory number. To be settled with field data after cutover.
+
+## Needs Brian before production
+
+| | What |
+|---|---|
+| **D-08** | Confirm the retreat's room and meal promises against the Bergamo agreement. The page states them as fact from a promotional document. |
+| **D-19** | The Wendell Berry permission claim names Counterpoint Press and has **no recorded source** anywhere in this project. It likely came from the same flyer that produced the "450 acres" error. Produce it, soften it, or drop it. |
+| **N20** | Add the recovered post `let-the-mystery-be` to the blog archive and correct its count. After Squarespace goes, there is no other copy. |
+| **D-20** | The $350 rate ends 1 December; registration has no opening date and 74 days to run. |
+
 ## Next step
 
-Prompt 10 — verify the integrated release candidate.
+Prompt 11 — deploy the improved beta and verify it live. **Needs Brian's go-ahead; nothing has been
+deployed.**

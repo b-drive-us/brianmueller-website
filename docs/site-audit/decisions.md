@@ -46,7 +46,7 @@ payment infrastructure through a content-correction workflow.
 
 ---
 
-## D-02 — Which production hostname: `brianmueller.com` or `www.brianmueller.com`? · **BLOCKING**
+## D-02 — Which production hostname? · **ANSWERED 2026-09-18: `www.brianmueller.com`**
 
 **Evidence.** Today `brianmueller.com` 301s to `www.brianmueller.com`, so www is the incumbent
 canonical. Canonical tags, the sitemap, redirects and `astro.config.mjs`'s `site` all depend on the
@@ -89,7 +89,7 @@ it should be a known one, not an assumed one. See D-15.
 
 ---
 
-## D-04 — How does site email actually send? · **BLOCKING**
+## D-04 — How does site email actually send? · **open; blocks registration, not the beta**
 
 **Evidence.** Contact, any registration confirmation, and the December travel form all need to send
 mail from an authenticated domain. Nothing exists. This has been open since 2026-08-30.
@@ -419,3 +419,49 @@ fails the build if a production artifact contains the string.
 
 What *does* need Search Console at cutover is the new sitemap, and watching Coverage for redirect
 and canonical warnings. Both are in `release-plan.md`.
+
+## D-19 — The Wendell Berry permission claim has no recorded source — **needs Brian**
+
+Raised in Prompt 10. The retreat page states, as fact:
+
+> Permission to use excerpts from his work has been graciously granted by his publisher,
+> Counterpoint Press. Please note that Mr. Berry has not endorsed or sponsored this event.
+
+The disclaimer in the second sentence is careful and right. The first sentence is a **public claim
+that a named publisher granted a licence**, and there is no record of where it came from anywhere in
+this project's files — no email, no letter, no note in `content-sources.md`.
+
+It most likely came from the retreat's promotional event notice. That is the same document that
+produced "four hundred and fifty acres", which was wrong by a factor of three and had to be removed
+in F06. A promotional flyer is not a permissions file.
+
+**This is not a claim to leave standing on unverified provenance.** Three ways to settle it, in
+order of preference:
+
+1. **Brian produces the grant** — the email or letter from Counterpoint. Record it in
+   `content-sources.md` and the sentence stays exactly as it is.
+2. **Soften to what is certainly true**: "Excerpts from Wendell Berry's work are used with
+   permission." Still a claim, but a smaller one, and it drops the publisher's name from an
+   assertion they have not seen.
+3. **Remove the sentence.** The retreat is "inspired by and celebrates" Berry either way, and the
+   non-endorsement disclaimer can stand alone.
+
+Until Brian answers, this is an **open content risk on a live page**, and it is listed as a gate in
+`release-plan.md` rather than treated as settled.
+
+## D-20 — The early rate expires before registration is scheduled to open — **needs Brian**
+
+Not a defect in the page. A timing problem the page makes visible.
+
+Today is **18 September 2026**. The retreat page says registration is "opening soon" and that the
+opening date is not fixed. It also says **$350 through December 1, 2026, $400 after that**, and the
+refund tiers step on the same date.
+
+That leaves 74 days. If registration opens in, say, late November, almost nobody will have had a
+realistic chance at the lower rate, and the December 1 refund tier will have been live for only days
+before it changed. If it opens after December 1, the $350 rate never existed in practice.
+
+**Brian's call, and it is a business decision, not a copy edit.** The options are to open
+registration well before December 1, to move the price step, or to keep both and accept that the
+early rate is mostly a courtesy to people already on the interest list. Whichever he chooses, the
+page should then say it plainly.

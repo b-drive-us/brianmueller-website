@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "SITE_ENV=preview astro dev",
-    "build": "SITE_ENV=beta astro build && node tools/check-build.mjs beta",
-    "build:beta": "SITE_ENV=beta astro build && node tools/check-build.mjs beta",
-    "build:production": "SITE_ENV=production astro build && node tools/check-build.mjs production",
-    "build:preview": "SITE_ENV=preview astro build && node tools/check-build.mjs preview",
+    "build": "npm run build:beta",
+    "build:beta": "SITE_ENV=beta astro build && SITE_ENV=beta node tools/generate-seo.mjs && SITE_ENV=beta node tools/check-build.mjs",
+    "build:production": "SITE_ENV=production astro build && SITE_ENV=production node tools/generate-seo.mjs && SITE_ENV=production node tools/check-build.mjs",
+    "build:preview": "SITE_ENV=preview astro build && SITE_ENV=preview node tools/generate-seo.mjs && SITE_ENV=preview node tools/check-build.mjs",
     "preview": "SITE_ENV=preview astro preview"
   },
   "dependencies": {

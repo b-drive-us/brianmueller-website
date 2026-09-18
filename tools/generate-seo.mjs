@@ -109,8 +109,12 @@ Disallow: /
 writeFileSync(join(DIST, 'robots.txt'), robots);
 
 // ---- _headers --------------------------------------------------------------
+// Read the SOURCE file, not the copy in dist/. Reading dist/ made this script
+// non-idempotent: a second run on the same output saw the X-Robots-Tag it had
+// injected on the first and refused. Builds start clean on Cloudflare, so it
+// never failed there - which is exactly why it was worth fixing here.
 const headersPath = join(DIST, '_headers');
-let headers = readFileSync(headersPath, 'utf8');
+let headers = readFileSync('public/_headers', 'utf8');
 // A directive line, not the word in a comment: header lines are indented,
 // comment lines start with '#'.
 const DIRECTIVE = /^[ \t]+X-Robots-Tag:/m;

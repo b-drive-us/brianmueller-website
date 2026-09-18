@@ -31,9 +31,10 @@ function htmlFiles(dir) {
 const pages = htmlFiles(DIST);
 if (pages.length === 0) fail('dist/ contains no HTML at all.');
 
-const otherOrigins = Object.values(
-  await import('../src/site.config.mjs').then(m => m.ENVIRONMENTS)
-).map(e => e.origin).filter(o => o !== site.origin);
+const { ENVIRONMENTS } = await import('../src/site.config.mjs');
+const otherOrigins = Object.values(ENVIRONMENTS)
+  .map(e => e.origin)
+  .filter(o => o !== site.origin);
 
 let noindexCount = 0;
 for (const file of pages) {
@@ -53,9 +54,26 @@ for (const file of pages) {
 
   // An absolute URL anywhere in the markup pointing at a DIFFERENT environment
   // of this same site means a hard-coded host survived into the artifact.
+  //
+  // One deliberate exception: the three legal pages define "the Website" by its
+  // canonical production address. A Terms of Use that calls the site
+  // brianmueller.org, or localhost, would be wrong - so the PRODUCTION origin is
+  // allowed there, in prose, in any build. Everything machine-readable on those
+  // pages - canonical, og:url - is still checked against the build's own origin
+  // by the rules above, which is what actually decides indexing.
+  const LEGAL = /\/(disclaimer|privacy-policy|terms-conditions)\.html$/;
+  const PROD = ENVIRONMENTS.production.origin;
   for (const origin of otherOrigins) {
-    if (html.includes(origin)) fail(`${file}: contains a hard-coded "${origin}"`);
+    if (!html.includes(origin)) continue;
+    if (origin === PROD && LEGAL.test(file)) continue;
+    fail(`${file}: contains a hard-coded "${origin}"`);
   }
+
+  // The legal pages name the site by its canonical address. The bare apex
+  // 301s to www, so a document that defines "the Website" as the apex points
+  // at a redirect - and the legal pages did exactly that until Prompt 10.
+  const apex = html.match(/https:\/\/brianmueller\.com[^"'<\s]*/g);
+  if (apex) fail(`${file}: references the non-canonical apex host (${apex[0]}) - use www.brianmueller.com`);
 
   for (const prop of ['og:url', 'og:image', 'twitter:image']) {
     const v = html.match(new RegExp(`(?:property|name)="${prop}" content="([^"]+)"`))?.[1];
