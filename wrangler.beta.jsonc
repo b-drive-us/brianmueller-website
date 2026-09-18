@@ -1,18 +1,22 @@
 {
   // ==========================================================================
-  // BETA — brianmueller.org
+  // BETA — brianmueller-website-beta.brian-b89.workers.dev
+  //
+  // (This was brianmueller.org until 18 September 2026. Brian retired that
+  // domain and its Cloudflare zone was removed; the beta is reached at its
+  // Worker address now. See decisions.md D-24 and D-25.)
   //
   // A second Worker exists for one reason: this project's build artifact is
   // environment-specific. `npm run build:production` bakes the canonical host,
   // the robots meta, robots.txt, the sitemap origin and the X-Robots-Tag header
   // into the files themselves. One Worker serving both hostnames would
-  // therefore serve production-flavoured, INDEXABLE pages on brianmueller.org
-  // as well — a duplicate of the real site competing with it in search.
+  // therefore serve production-flavoured, INDEXABLE pages on the staging
+  // hostname as well — a duplicate of the real site competing with it in search.
   //
   // So: two Workers, one artifact each.
   //
   //   brianmueller-website        <- wrangler.jsonc       build:production   www.brianmueller.com
-  //   brianmueller-website-beta   <- this file            build:beta         brianmueller.org
+  //   brianmueller-website-beta   <- this file            build:beta         …-beta.…workers.dev
   //
   // Both are built from `main` by Workers Builds. The beta project's deploy
   // command MUST name this file:

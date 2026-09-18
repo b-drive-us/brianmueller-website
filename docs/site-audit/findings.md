@@ -831,3 +831,33 @@ Worked around with plumbing: a scratch index via `GIT_INDEX_FILE`, then `write-t
 `commit-tree`, then writing the ref file directly. The commits are ordinary and correct; only the
 route to them is unusual. **Brian should delete those three files** from Finder or a terminal on his
 own machine, after which normal git works again. Nothing else depends on it.
+
+
+### N24 — **closed 2026-09-18**
+
+Brian removed the stale lock files. Verified in the audit session: `git status` is clean,
+`git tag -d` works, ordinary commits and ref writes both succeed. No plumbing workaround
+needed any more.
+
+---
+
+## September 18 audit
+
+A full audit of the live production site was run on 2026-09-18, after the cutover. Its
+findings are numbered `M01`–`M18` and live in their own file rather than here, because
+they describe the **live site** rather than the migration:
+
+**`audit-2026-09-18.md`** — 18 findings (1 high, 5 medium, 12 low), 19 areas checked and
+found sound, and 5 things the audit flagged and then disproved. §4 of that document is
+the sequenced maintenance-release plan.
+
+Two entries there supersede decisions recorded above:
+
+- **`M05` supersedes N10 / D-11.** The Astro upgrade was rejected in Prompt 07 because
+  7.3.2 corrupted prose in fourteen places. On **7.3.3** the rendered text is
+  byte-identical on all 29 pages and all three CSP hashes are unchanged. The upgrade is
+  now recommended — conditional on adding `vite.build.cssTarget`, because Lightning CSS
+  otherwise rewrites every width media query to Level 4 range syntax that Safari below
+  16.4 ignores entirely.
+- **`M03` picks up D-12.** HSTS was deliberately deferred while the hostname was moving.
+  It has now been stable a fortnight and the ramp should start.

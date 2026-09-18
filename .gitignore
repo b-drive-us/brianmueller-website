@@ -6,5 +6,6 @@ dist/
 .env
 .env.*
 
-# Files Claude could not delete (device delete permission was off). Safe to remove.
+# Scratch that Claude could not delete from a session. Safe to remove on sight.
+# (The September 2026 batch lives in ../_to_delete/, outside this repository.)
 _to_delete/

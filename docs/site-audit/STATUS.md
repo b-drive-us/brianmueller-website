@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Stage** | Prompts 00–12 complete. **The site is live on `www.brianmueller.com`.** Prompt 13 (post-launch checks and maintenance handoff) is next. |
+| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com`. **Audited 2026-09-18** — `audit-2026-09-18.md`, 18 findings (`M01`–`M18`), 1 high. Next: merge with the parallel Codex audit, then the maintenance release, then Stripe. |
 | **Repository** | `github.com/b-drive-us/brianmueller-website`, working copy at `Publishing/brianmueller-website/06 - Site` |
 | **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
 | **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |
@@ -29,7 +29,7 @@ Read from the dashboard and then verified by doing it, rather than assumed:
 | Setting | Value |
 |---|---|
 | Git repository | `b-drive-us/brianmueller-website` |
-| Build command | `npm run build` — which now chains `astro build`, `generate-seo.mjs` and `check-build.mjs` |
+| Build command | `npm run build:production` — switched from `npm run build` at the cutover (see `cutover-2026-09-18.md`). It chains `astro build`, `generate-seo.mjs` and `check-build.mjs`. Bare `npm run build` still means **beta**; see finding `M16`. |
 | Deploy command | `npx wrangler deploy` |
 | Version command | `npx wrangler versions upload` |
 | Root directory | `/` — correct; the repository root is `06 - Site` |
@@ -38,11 +38,12 @@ Read from the dashboard and then verified by doing it, rather than assumed:
 
 What that means in practice, and it is the useful part:
 
-- **A push to `main` runs the deploy command and changes what `brianmueller.org` serves.** That
-  hostname is a Production custom domain on this Worker.
+- **A push to `main` runs the deploy command and changes what `www.brianmueller.com` serves.**
+  That hostname is a Production custom domain on this Worker. (Written before the cutover, when
+  the Worker's custom domain was `brianmueller.org`; the mechanism is unchanged.)
 - **A push to any other branch runs the *version* command instead.** It uploads a preview version,
   reachable at `<version-prefix>-brianmueller-website.brian-b89.workers.dev`, and does **not**
-  touch `brianmueller.org`. Confirmed by pushing `audit/2026-09` first and watching the active
+  touch the production hostname. Confirmed by pushing `audit/2026-09` first and watching the active
   deployment stay on `6b802270`.
 - That makes a branch push a genuinely safe rehearsal: it proves the build succeeds in Cloudflare's
   own environment, on a real URL, before production branch is touched. It was used that way here
