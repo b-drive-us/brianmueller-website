@@ -2,21 +2,46 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Cookie Policy — Brian J. Mueller"
-      description="This website sets no cookies. What it does store in your browser, why, and how to remove it.">
+      description="This website sets no cookies. The one third-party script it loads, what is stored in your browser, and how to remove it.">
   <section class="wrap stack stack-l">
     <div class="stack stack-m prose legal">
       <div class="eyebrow">Legal</div>
       <h1>Cookie Policy</h1>
       <hr class="rule-short" />
-      <p class="small">Last updated: September 12, 2026</p>
+      <p class="small">Last updated: September 18, 2026</p>
 
-      <p><b>This website sets no cookies.</b> Not for analytics, not for advertising, not for
+      <p><b>This website sets no cookies.</b> Not for advertising, not for analytics, not for
          anything else — and no third party sets one through it either. There is nothing to
          accept or refuse, which is why you were not shown a cookie banner.</p>
+
+      <p>It does count visitors, and it does so without a cookie. The next section says exactly
+         how, because &ldquo;no cookies&rdquo; and &ldquo;no analytics&rdquo; are different claims
+         and only the first one is true here.</p>
 
       <p>That has not always been true. Earlier versions of this site ran on Squarespace and used
          Google Analytics, and an earlier version of this page described their cookies. Neither is
          in use any more, and this page has been rewritten to describe what actually runs.</p>
+
+      <h2>The one script that is not ours</h2>
+      <p>Every page loads a small counting script from Cloudflare, our host, called Cloudflare Web
+         Analytics. It tells us how many people read a page, which page they came from, and how
+         quickly the page loaded. It is the only third-party file this site loads.</p>
+      <p>It is worth being exact about what it does and does not do, because the two are easy to
+         confuse:</p>
+      <ul>
+      <li>It sets <b>no cookie</b>, and stores nothing in your browser — not in local storage, not
+          in session storage, not anywhere else. We checked this on the live site rather than
+          taking it on trust.</li>
+      <li>It builds <b>no profile and no identifier</b> for you, and it is not shared across
+          websites, so it cannot follow you from here to anywhere else.</li>
+      <li>It does see your <b>IP address</b>, as any request to any website does, and the page you
+          are on. Cloudflare uses the address to work out a rough country and then discards it;
+          we never see it.</li>
+      <li>What reaches us is <b>a count</b>. We cannot pick you out of it, and there is no screen
+          anywhere that would let us try.</li>
+      </ul>
+      <p>If you would rather it did not run, any content blocker will stop it, and the site works
+         exactly the same without it. Nothing on this site is gated on it loading.</p>
 
       <h2>What is stored in your browser</h2>
       <p>One thing, and only if you ask for it:</p>
@@ -27,7 +52,8 @@ import Base from '../layouts/Base.astro';
       </ul>
       <p>Local storage is not a cookie: it is never attached to a request, so it is never sent to
          this website or to anyone else. It stays on the one device and in the one browser you set
-         it in. If you never touch the theme button, nothing is stored at all.</p>
+         it in. If you never touch the theme button, nothing is stored at all — the counting
+         script above adds nothing here.</p>
 
       <h3>Removing it</h3>
       <p>Clearing site data for this website in your browser removes it. So does switching the theme

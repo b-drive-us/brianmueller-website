@@ -36,8 +36,13 @@
 # button. Regenerate with:
 #   npm run build && python3 tools/csp-hashes.py
 #
-# The host is static.cloudflareinsights.com, and connect-src names
-# cloudflareinsights.com so the beacon can report. This is Cloudflare Web
+# The host is static.cloudflareinsights.com. The beacon does NOT report to
+# cloudflareinsights.com - measured on the live origin, it POSTs to
+# /cdn-cgi/rum on THIS site's own hostname, which Cloudflare answers at the
+# edge. That is why connect-src is 'self' and not a third-party host, and why
+# it must stay 'self' rather than a literal origin: this file is shared by beta
+# and production, which have different hostnames. 'self' is still tight here,
+# because the site itself makes no fetch or XHR of any kind. This is Cloudflare Web
 # Analytics, which the zone injects into every HTML response by itself — it is
 # not in this repository and it will reappear on any hostname where the zone
 # setting is on. It was blocked here until 2026-09-18, which is why nothing was
@@ -66,7 +71,7 @@
 # covered, or it locks visitors out of a host that cannot answer over TLS.
 # See docs/site-audit/decisions.md D-12.
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-QglPjucdT69dXpFwbNOprT5n5t8LJheqSET5IZoqT6U=' 'sha256-S49WUIOFMKIF0xKnDAB2hQ5zXvQOgW8dBNU7hV7Du+M=' https://static.cloudflareinsights.com; connect-src https://cloudflareinsights.com; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-QglPjucdT69dXpFwbNOprT5n5t8LJheqSET5IZoqT6U=' 'sha256-S49WUIOFMKIF0xKnDAB2hQ5zXvQOgW8dBNU7hV7Du+M=' https://static.cloudflareinsights.com; connect-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()
