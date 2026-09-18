@@ -1,5 +1,5 @@
 # ===========================================================================
-# brianmueller.org / brianmueller.com — response headers
+# response headers — shared by production (www.brianmueller.com) and the staging Worker
 #
 # One block per path, because Cloudflare merges repeated blocks silently and a
 # duplicated path is how a rule ends up quietly overridden. Keep it that way.

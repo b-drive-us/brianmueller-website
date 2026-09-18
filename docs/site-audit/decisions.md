@@ -575,3 +575,42 @@ Both build from `main`. **The beta project's deploy command must be
 `npx wrangler deploy -c wrangler.beta.jsonc`.** Without `-c` it reads `wrangler.jsonc`, whose name is
 `brianmueller-website`, and the beta project deploys over production. That is the single way to get
 this wrong, and it is called out at the top of `wrangler.beta.jsonc` as well as here.
+
+## D-24 — `brianmueller.org` retired; the staging Worker kept — **decided by Brian, 18 Sept 2026**
+
+Hours after launch Brian asked to delete brianmueller.org and point it at the live site. Two things
+were tangled in that request, and separating them mattered.
+
+**The hostname and the staging capability are not the same thing.** The Worker
+`brianmueller-website-beta` has its own address and works whether or not `.org` points at it. Given
+that three defects in this project surfaced *only* once something was deployed — the injected
+analytics beacon (N22), a canonical nominating a redirect (N16), and a `npm run build` that was
+silently broken (Prompt 10) — a place to deploy that is not production earns its keep. Brian chose
+to retire the hostname and keep the Worker.
+
+**What is live now:**
+
+| | |
+|---|---|
+| `brianmueller.org`, any path | **301 → `https://www.brianmueller.com/<same path>`**, query string preserved |
+| Staging | `https://brianmueller-website-beta.brian-b89.workers.dev`, still `noindex, nofollow` |
+| Production | unchanged |
+
+**The part that looks like clutter and is not.** `brianmueller.org` is still attached to the beta
+Worker as a custom domain, and that attachment is load-bearing: it *is* the proxied DNS record that
+brings requests to Cloudflare's edge, which is where the redirect rule runs. Redirect rules execute
+before the Worker, so the Worker never actually serves .org. **Remove that custom domain and the
+redirect stops working** — .org would resolve to nothing. If it is ever removed deliberately,
+replace it with a proxied placeholder record (the usual pattern is `AAAA @ 100::`, proxied) or the
+domain goes dark.
+
+**A consequence that had to be fixed in the same breath.** The beta build's canonical said
+`https://brianmueller.org/` — which now redirects. A canonical nominating a redirecting URL is worse
+than none, and it is precisely the bug N16 recorded. `site.config.mjs` now gives the beta its Worker
+address as its origin, so the beta's canonical, sitemap and `og:url` name the place it actually
+lives. `check-build.mjs` passes on all three environments; production is untouched and still asserts
+that no production artifact contains the string `brianmueller.org`.
+
+**Not done, and deliberately:** the `.org` domain registration was left alone. A retired domain that
+still redirects is only worth anything while it is registered, and letting it lapse would hand a
+live 301 into someone else's hands. Renew it, or decide separately to let the redirect die.

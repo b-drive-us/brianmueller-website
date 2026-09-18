@@ -13,7 +13,7 @@
  * There is deliberately NO DEFAULT. An unset or unknown SITE_ENV throws and
  * the build fails, rather than quietly guessing. Use the npm scripts:
  *
- *   npm run build              -> beta        (brianmueller.org, noindex)
+ *   npm run build              -> beta        (workers.dev, noindex)
  *   npm run build:production   -> production  (www.brianmueller.com, indexable)
  *   npm run build:preview      -> preview     (localhost, noindex)
  *
@@ -32,9 +32,14 @@ export const ENVIRONMENTS = {
   },
   beta: {
     name: 'beta',
-    origin: 'https://brianmueller.org',
+    // Was brianmueller.org until 18 Sept 2026. Brian retired that hostname:
+    // it now 301s to www.brianmueller.com at the Cloudflare edge, so pointing
+    // the beta's canonical at it would have nominated a URL that redirects
+    // away - exactly the bug caught in Prompt 08 (N16). The beta is reached at
+    // its Worker address now, so that is what it calls itself. See D-24.
+    origin: 'https://brianmueller-website-beta.brian-b89.workers.dev',
     indexable: false,
-    label: 'public beta — deliberately excluded from search',
+    label: 'staging — deliberately excluded from search',
   },
   preview: {
     name: 'preview',
