@@ -721,12 +721,16 @@ and `darlings-of-the-status-quo` (2023-03-04) — the gap the finding predicted.
 its row (now 916) and every count in both READMEs was corrected from 915 to 916, with the 2023 year
 total from 163 to 164.
 
-**One thing nearly went missing inside the fix.** The first extraction dropped the post’s Anne Frank
-epigraph, because the pass that removes Squarespace images strips `<figure>` elements — and a
-Squarespace quote block is a `<figure>`. Caught by reading the output against the source rather than
-trusting the converter. If the original 915-post extraction used the same rule, **other entries may
-be missing their quote blocks**; worth a spot-check on the 2,621 blockquotes now in the archive
-against the export, though it is not urgent and the words of the poems themselves are unaffected.
+**One thing nearly went missing inside the fix, and the scare that followed was unfounded.** The
+first pass at converting this one post dropped its Anne Frank epigraph, because the step that
+removes Squarespace images strips `<figure>` elements — and a Squarespace quote block is also a
+`<figure>`. Caught by reading the output against the source instead of trusting the converter.
+
+That raised an obvious worry: if the original 915-post extraction shared the rule, hundreds of
+entries could be missing their quotes. **They are not.** The Squarespace export contains **657**
+`<blockquote>` elements; the archive contains **658** entries carrying a blockquote — those 657 plus
+this newly added one. The original extraction handled quote blocks correctly and nothing is missing.
+Checked rather than assumed, in both directions.
 
 The archive README now records why the export was short: the post was absent from the Squarespace
 export but present in the live sitemap. If another gap ever appears, the sitemap is the place to
