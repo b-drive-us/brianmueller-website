@@ -2,15 +2,17 @@
 
 | | |
 |---|---|
-| **Stage** | Prompts 00–11 complete. Prompt 12 (production cutover) needs Brian’s explicit authorization. |
+| **Stage** | Prompts 00–12 complete. **The site is live on `www.brianmueller.com`.** Prompt 13 (post-launch checks and maintenance handoff) is next. |
 | **Repository** | `github.com/b-drive-us/brianmueller-website`, working copy at `Publishing/brianmueller-website/06 - Site` |
 | **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
 | **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |
-| **Deployed beta** | `https://brianmueller.org`, Cloudflare Worker `brianmueller-website`, serving the `b2761c8` build as of **2026-09-18**. Previous live version `6b802270` (`8ea45e5`) is retained in Version History and is the one-click rollback. |
+| **Production** | `https://www.brianmueller.com`, Worker `brianmueller-website`, `npm run build:production`, commit `0a985a0`, live **2026-09-18**. Apex 301s to www. |
+| **Beta** | `https://brianmueller.org`, Worker **`brianmueller-website-beta`**, `npm run build:beta`, still `noindex` on every response (D-23). |
+| **Rollback** | Recreate `www CNAME ext-sq.squarespace.com`. Squarespace was never stopped. Full detail in `cutover-2026-09-18.md`. |
 | **Divergence** | **None.** The live site serves `about.CM_4s7Jy.css`, the stylesheet this commit builds. |
 | **Baseline build** | `npm run build` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 5.18.2, Node 22.23.2 |
 | **Checks** | `tools/check-build.mjs` fails the build on any environment/artifact mismatch. Live journey harness: **76/76 passing** across 1280px and 390px, light and dark, plus a keyboard-only pass. |
-| **Readiness** | Beta is live and verified. **Not yet ready for production** — four owner decisions remain open (D-08, D-19, D-20, N20) and the cutover checklist in `release-plan.md` has not been run. |
+| **Readiness** | Live. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 is still outstanding and is now time-critical**: the recovered blog post exists only on Squarespace. |
 | **Records updated** | 2026-09-18 |
 
 ## What the audit actually examined
@@ -253,9 +255,23 @@ sampled redirect rules and all five catch-alls, 0 failures · four retained poli
 pages, assets and 404s · HTTP→HTTPS 301 · no external subresource but the one disclosed above ·
 nothing from `docs/`, `src/`, `tools/` or `.git/` reachable (12/12 probes 404).
 
+**Prompt 12 — production cutover: done 18 September 2026.** Full record in
+`cutover-2026-09-18.md`. Verified against the Cloudflare edge while the `.com` delegation was still
+propagating: 28/28 pages 200 with the right canonical and no `.org` reference, indexability guards
+removed, 51 sampled redirects and all catch-alls passing, apex→www with query strings preserved,
+**76/76 journey checks** on the production artifact.
+
 ## Next step
 
-Prompt 12 — the production cutover to `brianmueller.com`. **Needs Brian's explicit authorization,
-and the four decisions below settled first.** The cutover checklist is in `release-plan.md`; note
-that `www.brianmueller.com` will need its own Web Analytics site registered, or the beacon will be
-injected on a hostname with nowhere to report.
+Prompt 13 — post-launch checks and the maintenance handoff, once the nameserver delegation has
+propagated and there is real traffic to look at. Before that: re-run the checks against the real
+hostname without forcing DNS, submit the sitemap in Search Console, and add the recovered blog post
+to the archive before Squarespace is cancelled.
+
+### Superseded
+
+The cutover section of `release-plan.md` describes a DNS-record change on a zone already at
+Cloudflare. That was wrong: brianmueller.com was on NS1 nameservers, and one Worker could not serve
+both environments. **`cutover-2026-09-18.md` is the accurate record of what was actually done** and
+supersedes that section. The gates listed there are settled: D-08 and D-19 by Brian's affirmation
+(D-22), and the second-Worker question by D-23.
