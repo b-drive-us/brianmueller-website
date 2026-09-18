@@ -709,7 +709,30 @@ A caution worth recording: the overlap score conflates "wrong poem" with "poem l
 them side by side they are plainly the same poem, lightly reworked. Those sit in the review bucket
 by design — an unglamorous `/blog` landing is better than a confident wrong answer.
 
-### N20 — one blog post exists on the live site but is missing from the archive
+### N20 — one blog post exists on the live site but is missing from the archive — **CLOSED 18 Sept 2026**
+
+**Fixed before Squarespace could be cancelled.** The post was fetched directly from Squarespace on
+18 September 2026 — the old site was still serving it, reached by forcing the request to a Squarespace
+IP, since `www.brianmueller.com` now answers from Cloudflare — and added to
+`08 - Blog Archive/` by hand in the same format as the other 915 entries: full text with poem
+lineation preserved, the Anne Frank quote block as a markdown blockquote, the adaptation note, the
+copyright line and the outbound links. It sits in date order between `thursday-poem` (2023-03-02)
+and `darlings-of-the-status-quo` (2023-03-04) — the gap the finding predicted. The CSV index gained
+its row (now 916) and every count in both READMEs was corrected from 915 to 916, with the 2023 year
+total from 163 to 164.
+
+**One thing nearly went missing inside the fix.** The first extraction dropped the post’s Anne Frank
+epigraph, because the pass that removes Squarespace images strips `<figure>` elements — and a
+Squarespace quote block is a `<figure>`. Caught by reading the output against the source rather than
+trusting the converter. If the original 915-post extraction used the same rule, **other entries may
+be missing their quote blocks**; worth a spot-check on the 2,621 blockquotes now in the archive
+against the export, though it is not urgent and the words of the poems themselves are unaffected.
+
+The archive README now records why the export was short: the post was absent from the Squarespace
+export but present in the live sitemap. If another gap ever appears, the sitemap is the place to
+look, not the export.
+
+#### Original finding
 
 Reconciling the 915-row archive index against the 916 post URLs in the live sitemap leaves exactly
 one:
