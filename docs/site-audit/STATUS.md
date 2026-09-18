@@ -7,7 +7,8 @@
 | **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
 | **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |
 | **Production** | `https://www.brianmueller.com`, Worker `brianmueller-website`, `npm run build:production`, commit `0a985a0`, live **2026-09-18**. Apex 301s to www. |
-| **Staging** | `https://brianmueller-website-beta.brian-b89.workers.dev`, Worker `brianmueller-website-beta`, `npm run build:beta`, `noindex` on every response. **`brianmueller.org` was retired 18 Sept 2026** and now 301s to www.brianmueller.com (D-24). |
+| **Staging** | `https://brianmueller-website-beta.brian-b89.workers.dev`, Worker `brianmueller-website-beta`, `npm run build:beta`, `noindex` on every response. |
+| **brianmueller.org** | **Fully retired 18 Sept 2026** (D-25). Zone paused at Cloudflare with 0 DNS records, no Worker, no redirect rule. Nothing in the live site references it. Registration is not expected to be renewed. |
 | **Rollback** | Recreate `www CNAME ext-sq.squarespace.com`. Squarespace was never stopped. Full detail in `cutover-2026-09-18.md`. |
 | **Divergence** | **None.** The live site serves `about.CM_4s7Jy.css`, the stylesheet this commit builds. |
 | **Baseline build** | `npm run build` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 5.18.2, Node 22.23.2 |

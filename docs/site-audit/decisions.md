@@ -614,3 +614,40 @@ that no production artifact contains the string `brianmueller.org`.
 **Not done, and deliberately:** the `.org` domain registration was left alone. A retired domain that
 still redirects is only worth anything while it is registered, and letting it lapse would hand a
 live 301 into someone else's hands. Renew it, or decide separately to let the redirect die.
+
+## D-25 — `brianmueller.org` fully retired, the redirect included — **decided by Brian, 18 Sept 2026**
+
+Hours after D-24 Brian went further: remove every attachment to the domain, not just the hostname,
+because he does not expect to renew it and does not want anything of his still wired to a name
+someone else may register.
+
+**One premise in that reasoning is worth correcting, and it is reassuring rather than otherwise.**
+Removing the Cloudflare configuration is not what protects him. The moment the registration lapses
+and a new owner points the domain at their own nameservers, this account's zone becomes irrelevant
+regardless of what is in it. The actual protection was already in place and was measured before
+anything was touched: **nothing depends on .org.** No MX, no SPF, no TXT, and **zero references to
+the string `brianmueller.org` anywhere in the live site**, its sitemap or its robots.txt. The
+cleanup is tidiness, not risk reduction.
+
+**Removed, in this order:** the redirect rule created hours earlier under D-24; the `brianmueller.org`
+custom domain on `brianmueller-website-beta`; and with it the last DNS record. The zone now holds
+**0 of 200 records** and has been paused. The staging Worker is untouched and still serves at
+`brianmueller-website-beta.brian-b89.workers.dev`. Production is untouched.
+
+**What could not be achieved, stated plainly.** Brian asked for the domain to "appear as a parked
+domain at Cloudflare." It does not quite. With zero DNS records the apex *still* resolves to
+Cloudflare's anycast addresses and returns **HTTP 530** (error 1016, origin DNS error) — a
+Cloudflare-branded error page rather than a clean "site not found". Pausing the zone did not change
+it; Cloudflare's own pause notice says it "continues to resolve the DNS". `www.brianmueller.org`
+does correctly return NXDOMAIN; only the apex behaves this way.
+
+Two honest options remain, and neither is urgent:
+
+1. **Leave it.** The 530 is visible only to someone typing a .org address that was never promoted,
+   was `noindex` its whole life, and has essentially no inbound links. It disappears at expiry.
+2. **Remove the zone from Cloudflare** (Overview → Advanced Actions → Remove from Cloudflare). That
+   is what actually stops Cloudflare answering. It contradicts "parked *at Cloudflare*", which is
+   why it was not done unilaterally.
+
+**Also not done, deliberately:** the domain registration itself. Letting it lapse is Brian's stated
+intent and needs no action — but it is a decision, not an oversight, and it is recorded here as one.
