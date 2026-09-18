@@ -514,3 +514,64 @@ made to end. `public/_headers` says so at the point of the change.
 **At cutover this is not automatic.** The Web Analytics site is registered for `brianmueller.org`.
 `www.brianmueller.com` will need its own Web Analytics site, or the beacon will be injected on a
 hostname that has no place to report to. Listed in the cutover checklist in `release-plan.md`.
+
+## D-22 — D-08 and D-19 closed by Brian's affirmation, not by verification — **recorded 18 Sept 2026**
+
+At the Prompt 12 gate Brian was shown what cutover would publish and chose **"cut over as-is, I
+accept the claims."** Both are therefore closed for launch. The distinction this entry exists to
+preserve:
+
+- **D-08 (Bergamo room and meal promises)** and **D-19 (the Counterpoint Press permission for
+  Wendell Berry's work)** are closed **because Brian affirmed them from his own knowledge.**
+- Neither was verified against a source document. The premises agreement was not seen. The
+  permission grant was not produced. No source for either is recorded in `content-sources.md`.
+
+That is a legitimate way to close them — Brian is the person who would know, and it is his site and
+his retreat. It is recorded this way so that nobody later reads "closed" as "checked", and so that
+if either claim is ever questioned, the record says exactly what it rests on.
+
+**D-19 remains the more exposed of the two**, because it names a third party. If Counterpoint Press
+ever asks, the answer is Brian's recollection rather than a document. Softening the sentence to
+"used with permission" without naming the publisher would remove that exposure at no real cost to
+the page, and remains available at any time.
+
+**N20 is untouched by this and is not a launch blocker.** Cutover does not delete anything: the
+Squarespace site stays up. But `/living-workshop/let-the-mystery-be` still exists in only one place,
+and that place disappears the day Squarespace is cancelled. Add it to `08 - Blog Archive/` before
+then.
+
+## D-23 — Two Workers, because the artifact is environment-specific — **18 Sept 2026**
+
+The release plan assumed the cutover was a build-command change. It is not, and the reason is worth
+stating plainly because it was nearly missed.
+
+**This project bakes the environment into the files.** `npm run build:production` writes the
+canonical host, the robots meta, robots.txt, the sitemap origin and the `X-Robots-Tag` header into
+the artifact itself. That was a deliberate design — "one word is the whole switch", nothing to
+remember to remove at cutover — and it works. But it has a consequence nobody drew out until now:
+
+**One Worker cannot serve two environments.** `brianmueller.org` and `www.brianmueller.com` were
+both custom domains on the same Worker, serving one artifact. The moment the build command became
+`build:production`, brianmueller.org would have started serving indexable pages whose canonical
+pointed at brianmueller.com — a duplicate of the new site, live, competing with it in search, and in
+direct contradiction of D-03 and D-18, which say .org stays `noindex` on every response.
+
+Three ways out were put to Brian: a second Worker for the beta; retiring .org to a redirect; or
+keeping one Worker and forcing `noindex` on .org with a zone-level header rule. **Brian chose the
+second Worker.**
+
+It is also the right answer for a reason beyond this cutover. The third option would have
+reintroduced exactly the per-hostname state the build design exists to eliminate — one forgotten
+zone rule and .org competes with .com. The second option would have left the site with no staging
+host at all, on a project that has just spent twelve stages finding things that only appeared when
+something was deployed. The beta earns its keep.
+
+| Worker | Config | Build command | Hostname |
+|---|---|---|---|
+| `brianmueller-website` | `wrangler.jsonc` | `npm run build:production` | `www.brianmueller.com` |
+| `brianmueller-website-beta` | `wrangler.beta.jsonc` | `npm run build:beta` | `brianmueller.org` |
+
+Both build from `main`. **The beta project's deploy command must be
+`npx wrangler deploy -c wrangler.beta.jsonc`.** Without `-c` it reads `wrangler.jsonc`, whose name is
+`brianmueller-website`, and the beta project deploys over production. That is the single way to get
+this wrong, and it is called out at the top of `wrangler.beta.jsonc` as well as here.
