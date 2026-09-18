@@ -630,8 +630,8 @@ the string `brianmueller.org` anywhere in the live site**, its sitemap or its ro
 cleanup is tidiness, not risk reduction.
 
 **Removed, in this order:** the redirect rule created hours earlier under D-24; the `brianmueller.org`
-custom domain on `brianmueller-website-beta`; and with it the last DNS record. The zone now holds
-**0 of 200 records** and has been paused. The staging Worker is untouched and still serves at
+custom domain on `brianmueller-website-beta`; the last DNS record with it; and finally the **zone
+itself**. The staging Worker is untouched and still serves at
 `brianmueller-website-beta.brian-b89.workers.dev`. Production is untouched.
 
 **What could not be achieved, stated plainly.** Brian asked for the domain to "appear as a parked
@@ -641,13 +641,20 @@ Cloudflare-branded error page rather than a clean "site not found". Pausing the 
 it; Cloudflare's own pause notice says it "continues to resolve the DNS". `www.brianmueller.org`
 does correctly return NXDOMAIN; only the apex behaves this way.
 
-Two honest options remain, and neither is urgent:
+**Resolved the same evening: Brian chose to remove the zone entirely.** Done — Overview → Advanced
+Actions → Remove from Cloudflare, confirmed by typing the domain name. Cloudflare's own dialog
+states it does not touch the domain registration, and the account was on the Free plan, so no
+subscription was cancelled.
 
-1. **Leave it.** The 530 is visible only to someone typing a .org address that was never promoted,
-   was `noindex` its whole life, and has essentially no inbound links. It disappears at expiry.
-2. **Remove the zone from Cloudflare** (Overview → Advanced Actions → Remove from Cloudflare). That
-   is what actually stops Cloudflare answering. It contradicts "parked *at Cloudflare*", which is
-   why it was not done unilaterally.
+**The 530 is gone.** `https://brianmueller.org/` now fails to connect at all rather than serving a
+Cloudflare error page — which is the state Brian was after. Public resolvers will keep returning the
+old addresses until their cached TTLs expire; that is cache, not configuration.
+
+**One loose end, and it belongs at the registrar, not here.** The nameservers at NameCheap still
+delegate brianmueller.org to `david`/`dora.ns.cloudflare.com`, which no longer host a zone for it.
+For a domain being allowed to lapse that is harmless — it simply stays dark. If Brian wants it tidy
+before expiry, switching NameCheap back to its own BasicDNS takes a minute and is a registrar
+action, not a Cloudflare one.
 
 **Also not done, deliberately:** the domain registration itself. Letting it lapse is Brian's stated
 intent and needs no action — but it is a decision, not an oversight, and it is recorded here as one.
