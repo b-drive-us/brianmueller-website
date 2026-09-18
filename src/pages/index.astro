@@ -15,9 +15,11 @@ const latest = posts[0];
 const fmt = (d) => d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
 const taste = poems.find(p => p.slug === 'tomorrow-could-be-wonderful');
 import StructuredData from '../components/StructuredData.astro';
+import LegacyFragments from '../components/LegacyFragments.astro';
 ---
 <Base title="Brian J. Mueller — Poet"
       description="Poet in southwestern Ohio. Twelve collections of poetry since 2002, a curated selection to read, and Rooted in the Land — a men's writing retreat each January.">
+  <LegacyFragments />
   <StructuredData type="person" />
 
   <!-- ===== hero ===== -->

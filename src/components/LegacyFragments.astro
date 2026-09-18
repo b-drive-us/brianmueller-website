@@ -1,0 +1,59 @@
+---
+/**
+ * Legacy fragment links from the old Squarespace homepage.
+ *
+ * The old site was largely one long page: every book had a section, and links
+ * out in the world point at things like brianmueller.com/#jonah or
+ * /#mwfc-1. Those books now have pages of their own.
+ *
+ * A fragment is never sent to the server, so no redirect rule can see one.
+ * This is the only part of the migration that has to happen in the browser.
+ *
+ * Three rules it follows, in order of how easy they are to get wrong:
+ *   1. It runs ONLY on the home page. Anywhere else it does nothing.
+ *   2. It acts ONLY on the exact fragments listed below. An id the new site
+ *      actually uses - #main, #register, #is-it-for-me, a heading id - is not
+ *      in the list and is left completely alone.
+ *   3. It uses replace(), not assign(), so the legacy URL does not become a
+ *      back-button trap between the old address and the new one.
+ */
+---
+<script is:inline define:vars={{ FRAGMENTS: {
+      "home": "/",
+      "about": "/about",
+      "contact": "/contact",
+      "licensing": "/faq",
+      "trust": "/books/trust-stillness",
+      "haiku": "/books/cock-a-doodle-doo",
+      "bull-head": "/books/bull-head",
+      "bull-heart": "/books/bull-heart",
+      "more-bull": "/books/more-bull",
+      "complete-bull": "/books/complete-bull",
+      "tomorrow": "/books/tomorrow-could-be-wonderful",
+      "communion": "/books/second-communion",
+      "jonah": "/books/jonah",
+      "invitation": "/books/the-invitation",
+      "mwfc-1": "/books/men-writing-for-change-vol-1",
+      "mwfc-2": "/books/men-writing-for-change-vol-2",
+      "head": "/books/bull-head",
+      "heart": "/books/bull-heart",
+      "more": "/books/more-bull",
+      "complete": "/books/complete-bull",
+      "second": "/books/second-communion",
+      "tcbw": "/books/tomorrow-could-be-wonderful",
+      "mwfc-vol1": "/books/men-writing-for-change-vol-1",
+      "mwfc-vol2": "/books/men-writing-for-change-vol-2"
+    } }}>
+  (function () {
+    if (location.pathname.replace(/\/$/, "") !== "") return;   // home page only
+    function go() {
+      var id = location.hash.slice(1);
+      if (!id) return;
+      if (document.getElementById(id)) return;   // a real anchor on this page wins
+      var dest = FRAGMENTS[id];
+      if (dest) location.replace(dest);
+    }
+    go();
+    addEventListener("hashchange", go);
+  })();
+</script>

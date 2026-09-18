@@ -373,3 +373,49 @@ offers, no prices, no availability, no ratings, no reviews.
 
 **Revisit** when the Stripe registration flow is live. At that point `Event` with real `offers`
 becomes accurate rather than aspirational.
+
+## D-05 — resolved: `/refund-policy` redirects to Terms
+
+Direct digital sales are retired; every purchase now goes to Amazon from the book pages. The old
+`/refund-policy` said, in substance, "all sales are final, no refunds, purchases from other sellers
+follow that seller's policy".
+
+The new `/terms-conditions` already carries the same substance in its section **4) All Sales Final /
+No Refunds**, including the cancellation case. So `/refund-policy` **301s to `/terms-conditions`**
+rather than being dropped: a past customer following an old link still reaches the terms that bind
+their purchase, which is what step 4 of the prompt asks for. Nothing binding was removed.
+
+`/cart` and `/checkout` redirect to `/books`, where every title links to its Amazon listing.
+
+**Brian can overrule this** — the alternative is keeping `/refund-policy` as a standalone historical
+page. That is a content decision, not a technical one.
+
+## D-17 — the blog is redirected per-poem where the poem is identifiable, and to `/blog` otherwise
+
+916 legacy blog URLs, and Brian's standing decision that brianspoems.com is the definitive home for
+the poems while the new brianmueller.com is the author site.
+
+Sending all 916 to one page would throw away every specific inbound link. Sending all 916 to a
+same-titled poem would, demonstrably, send many readers to **the wrong poem** — 20 of the 35
+title-collision cases resolve to a `-2` or `-3` permalink rather than the bare slug (N19).
+
+So: **690 redirect to their specific poem, confirmed by comparing the actual text**; the remaining
+226 redirect to `/blog`, which explains where the archive lives. The unconfirmed ones are listed in
+`redirect-map.csv` with `confidence = low - needs review`, so the residue is visible and can be
+worked through later rather than being quietly papered over.
+
+## D-18 — `.org` after cutover, and no Change of Address
+
+**The production site address is not changing.** `www.brianmueller.com` is the production hostname
+today and remains so (D-02). What changes is the platform behind it.
+
+Therefore: **do not file a Search Console Change of Address.** That tool is for moving a site to a
+different domain. Filing one because a beta host is being retired would be telling Google about a
+move that is not happening.
+
+`brianmueller.org` stays as the beta (D-03): publicly reachable, `noindex` on every response, and
+never a canonical target. Nothing on the production site points at it — `tools/check-build.mjs`
+fails the build if a production artifact contains the string.
+
+What *does* need Search Console at cutover is the new sitemap, and watching Coverage for redirect
+and canonical warnings. Both are in `release-plan.md`.

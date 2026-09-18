@@ -37,7 +37,7 @@ Therefore, for Prompts 01–10:
 | Finding | State |
 |---|---|
 | F01 Contact | **implemented** — real address, no implementation notes |
-| F02 Legacy URLs | reproduced, **open** — Prompt 09. Scope is ~35 real mappings, not 1,646 |
+| F02 Legacy URLs | **implemented** — 1,653 legacy URLs, 100% classified, 0 unresolved. 690 poems matched by text, not slug |
 | F03 Indexing | reproduced (intentional), **open** — cutover gate; sitemap still missing |
 | F04 Permissions | **implemented** from Brian's decision; two wording questions outstanding |
 | F05 Policies | Privacy **implemented**; Cookies was marked implemented in error and was still describing Google Analytics and Squarespace — **fixed in Prompt 07**, see N15 |
@@ -147,7 +147,33 @@ training rather than Cloudflare's default. That belongs to **Prompt 08**.
 - **Regression clean**: 406 responsive checks, 58 enforced-CSP loads with zero violations, zero
   rendered-text regressions.
 
+**Prompt 09 — legacy link migration: done.**
+
+- **Inventory refreshed, not inherited.** The live .com sitemap still holds 1,646 URLs, but they
+  decompose to **916 real blog posts**, 691 tag listings, 13 archive pages, 15 store URLs and 7
+  others. Seven more URLs were found outside the sitemap, in the 2022 export's content links and by
+  live probing — four old series slugs that **404 on production today**.
+- **1,653 legacy URLs, every one with an explicit disposition, none unresolved.**
+- **Poems matched by text, not by slug — which changed the answer.** 20 of the 35 title collisions
+  resolve to a `-2` or `-3` permalink. The pack's named case is confirmed:
+  `/living-workshop/in-the-mirror` belongs to `/poem/in-the-mirror-2`, scoring 0.82 against it and
+  0.13 against `/poem/in-the-mirror`. All 729 candidates were fetched and scored; **690 confirmed**,
+  225 sent to `/blog` and listed for review rather than guessed at.
+- **734 rules**, all 301, tested: no new route shadowed, no loops, no chains, 1,653/1,653 resolving
+  as intended, query strings preserved, no open redirect possible.
+- **Fragments handled** — 24 legacy homepage anchors, browser-tested 12/12, with the new site's own
+  anchors untouched and no back-button trap.
+- **Found a content gap:** `/living-workshop/let-the-mystery-be` is live but missing from the
+  "complete" blog archive. Recovered; the archive should be corrected before the old site goes away.
+
+## Needs Brian
+
+| | What |
+|---|---|
+| N20 | One post is missing from `08 - Blog Archive/`. Recovered here — worth adding, and the README's 915 count corrected, before the old site is taken down. |
+| D-05 | `/refund-policy` now 301s to `/terms-conditions`, which carries the same substance. Overrule if you would rather keep it as a standalone historical page. |
+| 225 posts | Redirect to `/blog` because no poem match could be confirmed. Listed in `redirect-map.csv` as `low - needs review`. Improvable any time; not a launch blocker. |
+
 ## Next step
 
-Prompt 09 — legacy migration. Scope is ~35 real mappings plus one blanket rule for the 1,611
-archived blog posts, not 1,646 individual redirects.
+Prompt 10 — verify the integrated release candidate.

@@ -614,3 +614,118 @@ listed in `release-plan.md`:
 `robots.txt` is not access control, and `Disallow` is not `noindex`. The beta is readable by anyone
 with the link and always has been; what it is not is indexed. D-15 has the full reasoning and the
 per-environment table.
+
+---
+
+## Prompt 09 — legacy link migration
+
+### Inventory sources, and what could not be reached
+
+| Source | Used | Yield |
+|---|---|---|
+| Live `.com` sitemap, re-fetched 2026-09-18 | yes | 1,646 URLs, one flat file, no nested sitemaps |
+| Squarespace export, 2022-10-11 | yes | 916 posts, 19 pages, 914 attachments; **7 URLs absent from the sitemap** |
+| `08 - Blog Archive/` index | yes | 915 posts with title, date and original URL |
+| brianspoems.com sitemap | yes | 1,834 `/poem/` permalinks — the destination set |
+| Old homepage, fetched live | yes | 24 legacy fragment ids |
+| Live probing of shapes not in the sitemap | yes | `/archive-6`, `/archive-14`, `/cart`, `/checkout` all live |
+| **Search Console / analytics** | **no** | not connected to this session. URLs with inbound traffic but no sitemap entry would not appear in any source above. |
+| **`/s/` Squarespace download URLs** | **not found** | none in the sitemap, the export or the old homepage. Absence of evidence — if Brian shared a `/s/` link by email it would not be discoverable here. |
+
+**The inventory is not claimed to be exhaustive.** It is exhaustive with respect to every source
+reachable from this session, and the two gaps above are named rather than assumed empty.
+
+### Matching method
+
+Slug matching alone is not evidence, and the prompt pack says so. The method actually used:
+
+1. Propose candidates from the post title and URL slug, including `-2`/`-3` siblings.
+2. Fetch every candidate permalink from brianspoems.com, rate-limited ~0.5 s apart — 729 pages.
+3. Extract the poem body and score word-sequence overlap against the archived post text.
+4. Confirm only on overlap ≥ 0.75, or ≥ 0.50 with a ≥ 0.30 margin over the runner-up.
+
+| Outcome | Count | Share |
+|---|---|---|
+| confirmed by text | **690** | 75.4% |
+| no permalink with that title exists | 205 | 22.4% |
+| candidate exists, text does not support asserting it | 20 | 2.2% |
+
+**690 of 690 external destinations were verified to be real pages** carrying a poem body, and a
+random sample of 12 re-checked live: all 200.
+
+### Rule testing
+
+Tested against a faithful evaluator of Cloudflare's documented semantics — static rules first,
+top-most wins, then dynamic — and then against a local server applying the real `_redirects` and
+`_headers` files.
+
+| Check | Result |
+|---|---|
+| New site routes shadowed by a legacy rule | **none** (all 29 checked) |
+| Self-redirects | **none** |
+| Chains — a destination that is itself a source | **none** |
+| Every one of the 1,653 mapped URLs resolves to its intended target | **1,653 / 1,653, 0 mismatches** |
+| All rules permanent | **734 / 734 are 301** |
+| Specific poem rule beats the `/living-workshop/*` catch-all | yes — `/living-workshop/in-the-mirror` → `/poem/in-the-mirror-2` |
+| Query strings preserved | yes, on internal and external targets |
+| Open-redirect probes | **none possible** — no rule interpolates request input into a destination |
+| Rule budget | 729 static + 5 dynamic, against limits of 2,000 and 100 |
+
+Known gaps, deliberately not fixed: trailing-slash variants of the poem rules fall through to
+`/blog`, and matching is case-sensitive. Both are in findings N21 with reasoning.
+
+### Fragments, tested in a browser
+
+| Check | Result |
+|---|---|
+| Legacy fragments landing on the right page | **12 / 12** |
+| `/retreat#register`, `/retreat#is-it-for-me`, `/#main` left alone | yes — all still scroll correctly, element top = 85 px, clearing the 65 px sticky header |
+| Back button after `/#jonah` | returns to the previous page, no trap |
+| CSP violations | **0** |
+
+### Regression
+
+| | Result |
+|---|---|
+| Responsive sweep, 29 pages × 7 widths × 2 themes | **406 checks, 0 problems** |
+| Enforced CSP, 29 pages × 2 themes | **58 loads, 0 violations, 0 console errors** |
+| Rendered-text comparison | **0 regressions** |
+| Environment check, beta and production | both **ok** |
+
+The CSP needed updating: the fragment handler is a third inline script, and `script-src` is a hash
+allowlist. Its hash covers the fragment table baked into it, so **adding a legacy fragment changes
+the hash** — noted at the point of use in `public/_headers`.
+
+### What has NOT been tested, and cannot be until deployment
+
+Everything above ran against a local server reproducing Cloudflare's documented `_redirects`
+semantics. That is a model of production, not production.
+
+1. That Cloudflare evaluates these rules in the order the documentation describes.
+2. Whether trailing-slash normalisation happens before or after `_redirects` (N21).
+3. That 734 rules load without hitting an undocumented limit.
+4. That the external redirects to brianspoems.com are followed cleanly from a real browser.
+5. The critical smoke set below, against the real hostname.
+
+### Critical smoke set for cutover
+
+Twelve URLs, chosen to cover one case of each rule class. Run against the production hostname
+immediately after cutover:
+
+```
+/home                                   -> 301 /
+/store                                  -> 301 /books
+/store/p/jonah                          -> 301 /books/jonah
+/archive-1                              -> 301 /books/trust-stillness
+/archive-13                             -> 301 /series/the-bull-series
+/the-bull-series                        -> 301 /series/the-bull-series
+/refund-policy                          -> 301 /terms-conditions
+/privacy-policy                         -> 200  (retained, must NOT redirect)
+/living-workshop                        -> 301 /blog
+/living-workshop/in-the-mirror          -> 301 https://brianspoems.com/poem/in-the-mirror-2
+/living-workshop/2018/11/10/troubles    -> 301 https://brianspoems.com/poem/troubles
+/living-workshop/tag/love               -> 301 /blog
+```
+
+Plus, in a browser: `/#jonah` lands on `/books/jonah`, and `/retreat#register` still scrolls to the
+registration section.

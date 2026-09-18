@@ -619,3 +619,135 @@ would change every time a book's page count did.
 Not assumed — verified under an enforced policy: 58 page loads with JSON-LD present, **zero CSP
 violations**. The tool now skips any `<script>` whose `type` is not a JavaScript MIME type, and says
 why in its own docstring.
+
+---
+
+## Prompt 09 — legacy link migration
+
+### F02 — resolved. Every discovered legacy URL has an explicit disposition.
+
+**The inventory was refreshed rather than inherited.** The live `.com` sitemap was re-fetched on
+18 September 2026: **1,646 URLs**, a single flat file with no nested sitemaps, exactly matching the
+audit's figure. But the audit's framing — "1,646 legacy URLs" — hides what they actually are:
+
+| Kind | Count |
+|---|---|
+| `/living-workshop/tag/<tag>` listing pages | 691 |
+| `/living-workshop/` posts, dated form | 677 |
+| `/living-workshop/` posts, undated form | 239 |
+| `/living-workshop/category/<cat>` | 3 |
+| `/living-workshop` index | 1 |
+| `/archive-N` | 13 |
+| `/store/p/<product>` | 11 |
+| `/store` and store categories | 4 |
+| policies, `/home`, `/archive-14/baloney` | 7 |
+| **total** | **1,646** |
+
+So there are **916 real blog posts**, not 1,610 — the rest are the same posts under a second URL
+shape, plus tag listings. That matters: it is the difference between 916 destinations to establish
+and 1,610.
+
+**Seven URLs were found that the sitemap does not list**, from the 2022 Squarespace export's content
+links and from live probing. Step 2 says not to silently drop entries that disappeared from the
+latest sitemap, and these are exactly that:
+
+| URL | Where found | Live today |
+|---|---|---|
+| `/the-bull-series` | export content links | **404** |
+| `/brians-poem-of-the-day-series` | export content links | **404** |
+| `/men-writing-for-change-series` | export content links | **404** |
+| `/latest-books` | export content links | **404** |
+| `/archive-6` | export page list | **200**, absent from sitemap |
+| `/archive-14`, `/archive-14/baloney` | live probe | **200** |
+
+The four dead series slugs were renamed to `/archive-N` at some point; links to them still exist in
+the site's own content. They now redirect instead of 404ing — an improvement on production, not a
+regression.
+
+**Final map: 1,653 legacy URLs, 100% classified, 0 unresolved.**
+
+| Disposition | Count |
+|---|---|
+| Redirect to a specific poem on brianspoems.com | 690 |
+| Redirect to a specific new page | 733 |
+| Redirect to `/blog` (generic — no confident poem match) | 226 |
+| Retained at the same path (the four policy pages) | 4 |
+
+### N19 — slug matching would have sent poems to the wrong place
+
+The prompt pack warned about this and named a test case. It was real.
+
+Matching each archived post to a brianspoems.com permalink by **slug alone** produced 675 apparent
+one-to-one matches and 35 ambiguous ones. Resolving the ambiguous set by **comparing the archived
+post's text with the poem at each candidate permalink** showed the naive answer was wrong far more
+often than not:
+
+```
+/living-workshop/transformation  ->  /poem/transformation-2   (1.00 vs 0.07 for /poem/transformation)
+/living-workshop/2018/12/8/acceptance -> /poem/acceptance-3   (0.86 vs 0.10)
+/living-workshop/in-the-mirror   ->  /poem/in-the-mirror-2    (0.82 vs 0.13)  <- the pack's case
+```
+
+**Twenty of the thirty-five ambiguous cases resolve to a `-2` or `-3` permalink, not the bare slug.**
+Shipping slug matches would have sent each of those readers to a different poem with the same title.
+
+All 729 candidate permalinks were then fetched (rate-limited, ~0.5 s apart) and every one of the 915
+archived posts was scored against its candidates by word-sequence overlap of the poem body:
+
+| Result | Count |
+|---|---|
+| **confirmed** — overlap ≥ 0.75, or ≥ 0.50 with a ≥ 0.30 margin over the runner-up | **690** |
+| **no candidate** — no permalink with that title exists on brianspoems.com | 205 |
+| **needs review** — a candidate exists but the text does not support asserting it | 20 |
+
+The 225 unconfirmed posts redirect to `/blog`, which explains where the archive lives. They are
+listed by URL in `redirect-map.csv` with `confidence = low - needs review`, so the work is visible
+rather than buried.
+
+A caution worth recording: the overlap score conflates "wrong poem" with "poem later revised".
+`/living-workshop/2019/07/04/war-is-hell` scores only 0.41 against `/poem/war-is-hell`, but reading
+them side by side they are plainly the same poem, lightly reworked. Those sit in the review bucket
+by design — an unglamorous `/blog` landing is better than a confident wrong answer.
+
+### N20 — one blog post exists on the live site but is missing from the archive
+
+Reconciling the 915-row archive index against the 916 post URLs in the live sitemap leaves exactly
+one:
+
+**`/living-workshop/let-the-mystery-be`** — "Let the Mystery Be", published 2023-03-03. Live and
+returning 200 today; absent from `08 - Blog Archive/`, whose README describes itself as complete.
+
+It was fetched and preserved during this prompt. **The archive README's count should be corrected
+and the post added before the old site is taken down**, because after cutover there is no other copy.
+
+### F02.3 — homepage fragments — **implemented**
+
+The old site was largely one long homepage, so links in the world point at `brianmueller.com/#jonah`,
+`/#mwfc-1`, `/#trust` and so on. A fragment is never sent to the server, so no redirect rule can see
+one; this is the only part of the migration that has to run in the browser.
+
+24 legacy fragments were recovered from the live old homepage's own `id` attributes and internal
+links, and mapped to the pages those sections became. `src/components/LegacyFragments.astro` runs
+**only on the home page**, acts **only on that fixed list**, yields to any real element with that id,
+and uses `location.replace()` so the old URL does not become a back-button trap.
+
+Tested in a browser: **12 of 12** sample fragments land on the right page; `/retreat#register`,
+`/retreat#is-it-for-me` and `/#main` are untouched and still scroll to the right place; after
+`/#jonah` the back button returns to the previous page rather than bouncing.
+
+### N21 — known gaps in redirect coverage, stated rather than glossed
+
+Both are visible in testing and neither is fixed, on purpose:
+
+1. **Trailing-slash variants of the 690 poem rules fall through to `/blog`.**
+   `/living-workshop/in-the-mirror/` matches the catch-all, not the specific rule, because
+   `_redirects` static matching is exact. Doubling the file to 1,419 rules to cover a URL shape that
+   appears nowhere in the sitemap is a poor trade; Cloudflare also normalises trailing slashes for
+   asset requests (`/books/` → 307 → `/books`), and whether that happens before `_redirects` is
+   evaluated **can only be established on the deployed beta**. Recheck at Prompt 11.
+2. **Matching is case-sensitive.** `/LIVING-WORKSHOP/...` 404s. Squarespace URLs were lowercase
+   throughout, so the exposure is small.
+
+**No open redirect exists.** Every destination is a fixed literal; no rule interpolates any part of
+the request into its target. Probes with `/store/https://evil.example` and `/living-workshop//example.com`
+resolve to `/books` and `/blog` on this origin.
