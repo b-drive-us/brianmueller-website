@@ -2,16 +2,16 @@
 
 | | |
 |---|---|
-| **Stage** | Prompts 00-04 complete. Prompt 05 (design and accessibility) is next. |
+| **Stage** | Prompts 00–11 complete. Prompt 12 (production cutover) needs Brian’s explicit authorization. |
 | **Repository** | `github.com/b-drive-us/brianmueller-website`, working copy at `Publishing/brianmueller-website/06 - Site` |
-| **Branch** | `audit/2026-09`, **unpushed**. `main` and `origin/main` both still at `8ea45e5`. |
-| **Candidate commit** | `8ea45e5` — "Fix two layout bugs the audit turned up" (2026-08-30) |
-| **Deployed beta** | `https://brianmueller.org`, Cloudflare Worker `brianmueller-website`, last modified **2026-08-30T19:10:16Z** |
-| **Divergence** | **None.** Built stylesheet hash `about.4CFqJ8S2.css` is byte-identical to the one the live site serves. |
+| **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
+| **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |
+| **Deployed beta** | `https://brianmueller.org`, Cloudflare Worker `brianmueller-website`, serving the `b2761c8` build as of **2026-09-18**. Previous live version `6b802270` (`8ea45e5`) is retained in Version History and is the one-click rollback. |
+| **Divergence** | **None.** The live site serves `about.CM_4s7Jy.css`, the stylesheet this commit builds. |
 | **Baseline build** | `npm run build` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 5.18.2, Node 22.23.2 |
-| **Baseline tests** | **None exist.** No test runner, no lint, no typecheck, no CI. |
-| **Readiness** | Not ready for production. Not yet re-verified after the 9 September audit. |
-| **Records updated** | 2026-09-12 |
+| **Checks** | `tools/check-build.mjs` fails the build on any environment/artifact mismatch. Live journey harness: **76/76 passing** across 1280px and 390px, light and dark, plus a keyboard-only pass. |
+| **Readiness** | Beta is live and verified. **Not yet ready for production** — four owner decisions remain open (D-08, D-19, D-20, N20) and the cutover checklist in `release-plan.md` has not been run. |
+| **Records updated** | 2026-09-18 |
 
 ## What the audit actually examined
 
@@ -19,18 +19,34 @@ The Cloudflare Worker has not been modified since 2026-08-30. The September 9 au
 examined **exactly the build that is checked out today**. Nothing has drifted in between, so the
 audit's observations should reproduce against this commit without allowance for changes.
 
-## Safe working procedure for Prompts 01–10
+## How deployment actually works — confirmed 2026-09-18 (D-10 closed)
 
-**Pushing to `main` deploys.** Cloudflare Workers Builds is connected to this repository and
-builds on push to `main`. There is no separate deploy step to withhold.
+Read from the dashboard and then verified by doing it, rather than assumed:
 
-Therefore, for Prompts 01–10:
+| Setting | Value |
+|---|---|
+| Git repository | `b-drive-us/brianmueller-website` |
+| Build command | `npm run build` — which now chains `astro build`, `generate-seo.mjs` and `check-build.mjs` |
+| Deploy command | `npx wrangler deploy` |
+| Version command | `npx wrangler versions upload` |
+| Root directory | `/` — correct; the repository root is `06 - Site` |
+| Production branch | `main` |
+| Builds for non-production branches | **on** |
 
-- Work on branch `audit/2026-09` and **do not push it** until Prompt 11.
-- `npm run build` is safe: it writes only to `dist/`, which is gitignored, and publishes nothing.
-- `npm run preview` and `npx astro dev` serve locally and publish nothing.
-- Whether Cloudflare produces preview deployments for non-`main` branches is **not yet confirmed**;
-  until it is, treat any push of any branch as potentially publishing.
+What that means in practice, and it is the useful part:
+
+- **A push to `main` runs the deploy command and changes what `brianmueller.org` serves.** That
+  hostname is a Production custom domain on this Worker.
+- **A push to any other branch runs the *version* command instead.** It uploads a preview version,
+  reachable at `<version-prefix>-brianmueller-website.brian-b89.workers.dev`, and does **not**
+  touch `brianmueller.org`. Confirmed by pushing `audit/2026-09` first and watching the active
+  deployment stay on `6b802270`.
+- That makes a branch push a genuinely safe rehearsal: it proves the build succeeds in Cloudflare's
+  own environment, on a real URL, before production branch is touched. It was used that way here
+  and it is worth using that way again.
+- Preview URLs are public. Cloudflare adds its own `x-robots-tag: noindex` to `workers.dev`
+  responses, on top of the one this build sets.
+- `npm run build` locally is still safe and publishes nothing. Only a push does.
 
 ## Disposition summary after Prompt 04
 
@@ -212,7 +228,34 @@ worth making for a laboratory number. To be settled with field data after cutove
 | **N20** | Add the recovered post `let-the-mystery-be` to the blog archive and correct its count. After Squarespace goes, there is no other copy. |
 | **D-20** | The $350 rate ends 1 December; registration has no opening date and 74 days to run. |
 
+**Prompt 11 — beta deployed and verified live: done. Verdict — the beta is correct; production still gated on four owner decisions.**
+
+Deployed in two steps on purpose. `audit/2026-09` was pushed first, which uploads a preview version
+and leaves `brianmueller.org` alone — proving the build succeeds in Cloudflare's own environment
+before the production branch was touched. `main` was then fast-forwarded to the same commit, which
+deployed. Rollback is one click: promote version `6b802270` in Version History.
+
+**One real defect, and it only existed on the live origin.** Cloudflare was injecting its Web
+Analytics beacon into every HTML response, and the CSP was blocking it — a console error on every
+page, and a privacy policy that had quietly become false. Ten stages of local testing could not have
+caught it: the injection happens at the edge, is gated on a browser-looking User-Agent, and comes
+from a zone setting rather than from this repository. See N22.
+
+Brian chose to allow it and disclose it (D-21). The first fix named the wrong host — measuring on
+the live origin showed the beacon reports to `/cdn-cgi/rum` on the site's own hostname, not to
+`cloudflareinsights.com` (N23). Corrected, and the policy pages were then written from what was
+measured: zero cookies, zero local/session storage, zero IndexedDB, one script, HTTP 204 accepted.
+
+Verified live on `brianmueller.org`: 29/29 routes · 76/76 journey checks at two widths, two themes
+and keyboard-only · **0 CSP violations** · 24/24 legacy fragments, plus both negative cases · 51
+sampled redirect rules and all five catch-alls, 0 failures · four retained policy paths correctly
+**not** redirecting · canonical and noindex correct on all 28 · `X-Robots-Tag: noindex, nofollow` on
+pages, assets and 404s · HTTP→HTTPS 301 · no external subresource but the one disclosed above ·
+nothing from `docs/`, `src/`, `tools/` or `.git/` reachable (12/12 probes 404).
+
 ## Next step
 
-Prompt 11 — deploy the improved beta and verify it live. **Needs Brian's go-ahead; nothing has been
-deployed.**
+Prompt 12 — the production cutover to `brianmueller.com`. **Needs Brian's explicit authorization,
+and the four decisions below settled first.** The cutover checklist is in `release-plan.md`; note
+that `www.brianmueller.com` will need its own Web Analytics site registered, or the beacon will be
+injected on a hostname with nowhere to report.

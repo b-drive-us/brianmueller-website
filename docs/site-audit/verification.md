@@ -911,3 +911,132 @@ and the policy revision dates. Three apparent stray years (2030, 2061, 2054) are
    lands on the right ASIN every time — but return **HTTP 500 to this client**, which is Amazon
    refusing a datacentre IP. That is not evidence the links are broken, and not evidence they work
    for a visitor. Brian should click two or three from a phone.
+
+---
+
+# Prompt 11 — verification against the live beta
+
+Everything below was run against `https://brianmueller.org` after deployment, not against a local
+build. Where a number differs from the Prompt 10 figure, the live number is the one that counts.
+
+## Build identity
+
+| | |
+|---|---|
+| Deployed commit | `b2761c8` |
+| Stylesheet served | `_astro/about.CM_4s7Jy.css` (was `about.4CFqJ8S2.css`) |
+| Clean-room reproduction | `git archive b2761c8` into an empty directory, `npm ci` (326 packages), `npm run build` → exit 0, 29 pages, `check: beta ok` |
+| Rollback | promote version `6b802270` in the Worker's Version History |
+
+## Deployment mechanism — D-10 closed by doing it
+
+`audit/2026-09` was pushed first. Cloudflare built it and produced version `9335dc05` from the
+branch. **The active deployment stayed on `6b802270` and `brianmueller.org` kept serving the old
+stylesheet** — which is the proof that a non-production branch runs `wrangler versions upload`, not
+`wrangler deploy`. The preview version was then exercised directly before `main` was moved.
+
+## Headers, live
+
+| Check | Result |
+|---|---|
+| `http://brianmueller.org/` | 301 → `https://brianmueller.org/` |
+| `X-Robots-Tag` on a page | `noindex, nofollow` |
+| `X-Robots-Tag` on a 404 | `noindex, nofollow` |
+| `X-Robots-Tag` on a font | `noindex, nofollow` |
+| `robots.txt` | ours, blanket `Disallow: /`, **no Cloudflare-prepended `Allow: /`** |
+| `sitemap.xml` | 200, 28 `<loc>` entries |
+| `/_astro/*` | `max-age=31536000, immutable`, CORP `same-origin` |
+| `/fonts/*` | `max-age=31536000, immutable`, CORP `same-origin` |
+| `/covers/*`, `/img/*` | `max-age=604800`, CORP `cross-origin` — deliberate, so the artwork can be embedded |
+| `/books/` and `/books.html` | 307 → `/books`; `/books`, `/retreat`, `/about` all 200 |
+
+## Routing
+
+- **51 sampled `_redirects` rules** (first three, last eight, plus 40 drawn at random from 734) —
+  **0 failures**, all 301.
+- **All five catch-alls** behave: `/living-workshop/tag/*`, `/living-workshop/category/*`,
+  `/living-workshop/*` → `/blog`; `/store/p/*`, `/store/*` → `/books`.
+- **Four retained policy paths correctly do not redirect** — `/privacy-policy`,
+  `/terms-conditions`, `/disclaimer`, `/cookies-policy` all 200. A rule there would have looped.
+- **Legacy fragments: 24/24** resolve to the right page in a real browser. Both negative cases hold:
+  an unlisted fragment is left completely alone, and the handler does not fire off the home page.
+
+## Journeys, live
+
+76 checks — discover and buy a book, anthology overlap, read a poem and find its source, evaluate
+the retreat and express interest, contact, permissions, 404 recovery — across 1280px and 390px, in
+light and dark, plus a keyboard-only pass covering the skip link, focus rings and the FAQ
+disclosures. **76 passed, 0 failed, 0 CSP violations.**
+
+The first live run was **72/76**, and the four failures were all the same thing: nine CSP violations
+per context from the injected analytics beacon. That is recorded as N22 rather than smoothed over,
+because it is the one defect in this stage that local testing could not have found.
+
+## The beacon, measured rather than assumed
+
+Two page loads in a real browser on the live origin, before any policy copy was written:
+
+| | |
+|---|---|
+| Script | `static.cloudflareinsights.com/beacon.min.js`, with SRI |
+| Reports to | `POST https://brianmueller.org/cdn-cgi/rum` → **HTTP 204**, on every page load |
+| Cookies | none |
+| `localStorage` / `sessionStorage` / IndexedDB | empty / empty / no databases |
+| Other off-origin requests | none |
+
+The paired `ERR_ABORTED` entries in the network log are the page navigating away after the report
+was already accepted; the 204 precedes each one.
+
+## Leakage and copy
+
+- **12 probes** for audit evidence and build sources — `/docs`, `/docs/site-audit/findings.md`,
+  `/docs/site-audit/decisions.md`, `/docs/site-audit/redirect-map.csv`, `/README.md`,
+  `/package.json`, `/wrangler.jsonc`, `/src`, `/astro.config.mjs`, `/.git/config`,
+  `/tools/generate-seo.mjs`, `/docs/site-audit/STATUS.md` — **all 404**.
+- Contact copy scanned for implementation notes (`TODO`, `FIXME`, placeholder, framework and
+  environment names) — **clean**.
+- Every `mailto:` on the site: `brian@b-drive.us` and `tsparough@gmail.com`. Both intended.
+- No other page makes a no-analytics or no-third-party-script claim that the beacon would falsify.
+
+## Not tested, and why
+
+**No email or registration delivery test was run.** Prompt 11 permits one only where that specific
+live action has been authorized; it has not been, and the retreat has no form to submit — the
+interest route is a `mailto:` link. The remaining manual test is therefore one line: send a message
+to `brian@choosingpresence.org` from an address outside the account and confirm it arrives. Nothing
+in the deployment affects that path.
+
+## Confirming the figures actually arrive — and a false negative worth knowing about
+
+The Web Analytics **summary card on the sites list read 0** for a long time after the beacon was
+verified working, which looked like a failure and was not. That card defaults to `excludeBots=Yes`,
+and the traffic generated by the test harness is correctly classified as automated. The site's own
+overview page tells the truth:
+
+| | |
+|---|---|
+| Page views | **46** |
+| Visits | **32** |
+| Top URLs | `/`, `/books`, `/retreat`, `/books/complete-bull`, `/contact` |
+
+Recorded because the same card will read 0 on `www.brianmueller.com` the day after cutover and it
+would be easy to conclude the setup is broken. Open the site's overview before believing it.
+
+### Field performance, unexpectedly
+
+The same page carries real Core Web Vitals, which Prompt 10 said would have to wait for field data:
+
+| | |
+|---|---|
+| Page load time | 333 ms |
+| LCP | **100% Good**, 0% needs improvement, 0% poor |
+| LCP P50 / P75 / P90 / P99 | 248 ms / 428 ms / 596 ms / 1472 ms |
+| INP, CLS | Good |
+
+**This does not retire the Prompt 10 performance finding, and should not be quoted as if it does.**
+The sample is dominated by this session's own traffic from fast connections, with a couple of real
+browser visits — not by visitors on phones and slow links. The honest statement is: the 2536 ms lab
+figure came from a deliberately punishing 1.6 Mbps / 4× CPU profile, nothing in the field sample so
+far contradicts the site being fast for ordinary visitors, and the question genuinely settles once
+`www.brianmueller.com` has a week of real traffic. The decision not to trade away the font preload
+or the hero still stands on that basis.

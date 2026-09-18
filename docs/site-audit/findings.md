@@ -751,3 +751,56 @@ Both are visible in testing and neither is fixed, on purpose:
 **No open redirect exists.** Every destination is a fixed literal; no rule interpolates any part of
 the request into its target. Probes with `/store/https://evil.example` and `/living-workshop//example.com`
 resolve to `/books` and `/blog` on this origin.
+
+---
+
+## New during Prompt 11 — beta deployment
+
+### N22 — Cloudflare was injecting an analytics beacon the CSP was blocking · High · Stage 11
+
+**Found only on the live origin, and only by a real browser.** Prompts 01–10 tested 29 pages under
+enforcement and found zero CSP violations. The first browser run against deployed
+`brianmueller.org` found nine.
+
+Every HTML response from the `brianmueller.org` zone carries
+`static.cloudflareinsights.com/beacon.min.js`, inserted by Cloudflare at the edge. It is not in this
+repository, and `curl` does not see it: the injection is gated on a browser-looking `User-Agent`.
+That is the whole reason ten stages of local testing missed it. It comes from a zone setting —
+**Web Analytics → brianmueller.org → Automatic setup**, added 2026-08-28 — and it will reappear on
+any hostname where that setting is on, including `brianmueller.com` after cutover. Turning it off
+is a dashboard action; it cannot be fixed in this repository.
+
+Two things were wrong at once:
+
+1. **Every visitor got a console error**, on every page, because `script-src` did not name the host.
+2. **The privacy policy had become false.** It said Cloudflare's figures used "no cookie, no script
+   and no fingerprint". A script was being served on every page. The CSP was the only thing
+   stopping it, which is enforcement by accident: relax the CSP for any unrelated reason and the
+   site silently starts doing something its policy denies.
+
+Brian's decision (D-21) is to let it run and say so. See D-21 for what was measured, what the
+policy pages now claim, and what has to change together if it is ever switched off.
+
+### N23 — the first fix named the wrong host, and measuring caught it
+
+The obvious `connect-src https://cloudflareinsights.com` was wrong. Measured in a real browser on
+the live origin, the beacon POSTs to **`/cdn-cgi/rum` on the site's own hostname**, which Cloudflare
+answers at the edge. With that directive deployed the script loaded and the report was still
+blocked — a state that looks fixed in the dashboard settings and is not. `connect-src 'self'` is
+correct, and is also the form that survives the hostname change at cutover, since `_headers` is
+shared by beta and production.
+
+Recorded because the general lesson has now cost this project twice: a Cloudflare behaviour
+described in documentation is not evidence of the Cloudflare behaviour in front of you.
+
+### N24 — stale git lock files still block ordinary commits · Low (process) · Stage 11
+
+`.git/index.lock`, `.git/refs/heads/audit/2026-09.lock` and `.git/refs/tags/_probe.lock` exist and
+cannot be removed from this session — deletion inside the mounted folder returns "Operation not
+permitted" even after the permission change Brian applied. `git add`, `git commit`, `git checkout`
+and `git update-ref` all fail against them.
+
+Worked around with plumbing: a scratch index via `GIT_INDEX_FILE`, then `write-tree` /
+`commit-tree`, then writing the ref file directly. The commits are ordinary and correct; only the
+route to them is unusual. **Brian should delete those three files** from Finder or a terminal on his
+own machine, after which normal git works again. Nothing else depends on it.

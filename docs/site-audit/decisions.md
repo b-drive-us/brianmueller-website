@@ -465,3 +465,52 @@ before it changed. If it opens after December 1, the $350 rate never existed in 
 registration well before December 1, to move the price step, or to keep both and accept that the
 early rate is mostly a courtesy to people already on the interest list. Whichever he chooses, the
 page should then say it plainly.
+
+## D-21 — The site counts visitors, and the policy pages say so — **decided by Brian, 18 Sept 2026**
+
+The `brianmueller.org` zone had Cloudflare Web Analytics on automatic setup, so Cloudflare was
+injecting a beacon into every HTML response. The CSP was blocking it (N22). Brian was given the
+choice of turning the injection off or allowing it and updating the policies, and chose to allow it
+— consistent with `brianspoems.com` and `mroptalk.com`, which already run it.
+
+**What was measured, on the live origin, in a real browser, before any policy copy was written:**
+
+| | |
+|---|---|
+| Script | `static.cloudflareinsights.com/beacon.min.js`, loaded with an SRI `integrity` hash |
+| Reports to | `/cdn-cgi/rum` on **this site's own hostname** — not to a third-party endpoint |
+| Cookies set | none, after two page views |
+| `localStorage` | empty |
+| `sessionStorage` | empty |
+| IndexedDB | no databases |
+| Other off-origin requests | none |
+
+The `spa` mode in the injected token is 2, but this is a multi-page site, so each page load reports
+once and there is no history hooking to speak of.
+
+**What the CSP now allows**, and why each piece is the shape it is:
+
+- `script-src … https://static.cloudflareinsights.com` — the host serving the beacon. Hashes and a
+  host source coexist; the three inline-script hashes are unchanged and still enforced.
+- `connect-src 'self'` — not a third-party host, because the report is same-origin (N23), and not a
+  literal origin, because `_headers` is shared by beta and production and the hostname differs.
+  `'self'` stays tight here: the site makes no `fetch` or XHR of its own at all.
+
+**What the policy pages now say**, written from the table above rather than from Cloudflare's
+documentation:
+
+- The **cookie policy** keeps "this website sets no cookies", which is measured and true, but no
+  longer lets a reader infer "no analytics" from it. A new section names the script, separates what
+  it does see (IP address, which page) from what it does not do (cookie, identifier, cross-site
+  tracking), and states that a content blocker stops it with no loss of function.
+- The **privacy policy** replaces the claim that Cloudflare's figures used "no cookie, no script and
+  no fingerprint". The no-script half of that became false the moment the beacon ran.
+
+**The coupling to remember.** Three things now have to agree: the zone setting, the CSP, and the two
+policy pages. Switch Web Analytics off for a hostname and all three change together, or the site
+starts claiming something that is no longer true — which is exactly the failure this decision was
+made to end. `public/_headers` says so at the point of the change.
+
+**At cutover this is not automatic.** The Web Analytics site is registered for `brianmueller.org`.
+`www.brianmueller.com` will need its own Web Analytics site, or the beacon will be injected on a
+hostname that has no place to report to. Listed in the cutover checklist in `release-plan.md`.

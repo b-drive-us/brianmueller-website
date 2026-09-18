@@ -1,6 +1,7 @@
 # Release plan
 
-Rewritten at Prompt 10 to describe the candidate that actually exists.
+Rewritten at Prompt 10 to describe the candidate that actually exists. Updated at Prompt 11,
+after the beta was deployed and verified.
 
 ---
 
@@ -9,13 +10,15 @@ Rewritten at Prompt 10 to describe the candidate that actually exists.
 | | |
 |---|---|
 | **Branch** | `audit/2026-09` |
-| **Commit** | `fe2ead1` — *Prompt 10: verify the integrated release candidate* |
+| **Commit** | `b2761c8` — *Say on the policy pages that the site counts visitors, and how* |
 | **Base** | `main` at `8ea45e5`, which is what the 9 September audit examined |
 | **Build** | Astro 5.18.2, static output, zero JavaScript files emitted |
 | **Deploy** | Cloudflare Workers static assets, Worker `brianmueller-website`, via Workers Builds on push |
 | **Verified on** | a clean `npm ci` in a Linux container — i.e. a machine that behaves like the Cloudflare builder, not the sandboxed bridge |
 
-**Nothing has been deployed.** The beta at brianmueller.org is still serving `main`.
+**Deployed to beta on 2026-09-18.** `brianmueller.org` serves this commit. `main` and
+`audit/2026-09` are both at it. Production is untouched: `www.brianmueller.com` is still
+Squarespace.
 
 ---
 
@@ -59,11 +62,12 @@ pattern in any source file. The deploy credential is held by Cloudflare, never b
 
 ## 4. Rollback
 
-The rollback artifact is **`main` itself**. It is unchanged, currently deployed, and every commit
-of this work is on `audit/2026-09`.
+`main` is no longer the rollback artifact — it now carries this work. The rollback artifact is the
+**retained Cloudflare version** named below.
 
-- **To undo a beta deploy:** in Cloudflare, roll the Worker back to the previous deployment, or
-  push `main` again. Both restore exactly what is serving today.
+- **To undo the beta deploy:** promote version **`6b802270`** in the Worker's Version History. That
+  is the `8ea45e5` build, the one that served brianmueller.org until 2026-09-18, and it is retained.
+  One click, no rebuild, no push.
 - **To undo a production cutover:** the DNS change is the reversible step. Until it is made,
   `www.brianmueller.com` keeps serving Squarespace, untouched by anything here.
 - **Do not delete the Squarespace site** until production has been stable for a fortnight. It is the
@@ -95,11 +99,17 @@ which is public but unindexed.
 
 ### Beta deploy steps
 
-1. Push `audit/2026-09`, or merge to `main` — confirm first which the Cloudflare project builds
-   (D-10 is still unconfirmed; treat any push as potentially publishing).
-2. Watch the Workers Build log. It must show `seo: beta` and `check: beta ok`. If `check-build`
-   fails, **the deploy should fail** — that is the design.
-3. Then run the live checks in section 7.
+**Done on 2026-09-18.** Recorded here because the same shape is worth reusing:
+
+1. Push the working branch first. A non-production branch runs `wrangler versions upload`, so it
+   builds and publishes a preview version at `<prefix>-brianmueller-website.brian-b89.workers.dev`
+   and **leaves `brianmueller.org` alone**. This proves the build succeeds in Cloudflare's own
+   environment before anything visitors see changes.
+2. Exercise that preview URL directly.
+3. Fast-forward `main` and push. That runs `wrangler deploy` and is the moment the beta changes.
+4. Watch the Workers Build log for `seo: beta` and `check: beta ok`. If `check-build` fails, **the
+   deploy fails** — that is the design.
+5. Run the live checks in section 7.
 
 ---
 
@@ -114,6 +124,9 @@ which is public but unindexed.
 | **B3** | **N20** — add the recovered post `/living-workshop/let-the-mystery-be` to `08 - Blog Archive/` and correct the README's count from 915 to 916. After the Squarespace site is gone there is no other copy. | Brian |
 | **B4** | **D-20** — decide whether registration opens before 1 December, or the price step moves. As it stands the $350 rate has 74 days to live and no opening date. | Brian |
 
+**B5 is not a gate, but it will bite silently if missed:** the Web Analytics site is registered for
+`brianmueller.org` only. See step 2a of the cutover.
+
 Not blocking, but worth an answer before launch: **D-07**, whether the printed book says "Truth" or
 "Behold". F08 is implemented against the archive and is reversible either way.
 
@@ -122,7 +135,14 @@ Not blocking, but worth an answer before launch: **D-07**, whether the printed b
 1. **On the brianmueller.com zone in Cloudflare** — neither setting carries over from .org:
    - SSL/TLS → Edge Certificates → **Always Use HTTPS: On**
    - AI Crawl Control → Signals → **Managed robots.txt: Off**
-2. Change the Cloudflare build command to **`npm run build:production`**. That one word switches the
+2a. **Register `www.brianmueller.com` as a Web Analytics site** (Analytics → Web Analytics → Add a
+   site). The beacon is injected by the zone whether or not a site is registered, so skipping this
+   means every visitor loads a script that reports nowhere — all of the cost, none of the data, and
+   a privacy policy describing analytics that do not exist. Verify afterwards that page views appear.
+   If Brian would rather production not count visitors at all, the reverse applies: turn the zone's
+   Web Analytics off **and** revert the CSP and both policy pages together (D-21).
+
+2b. Change the Cloudflare build command to **`npm run build:production`**. That one word switches the
    canonical host, the robots meta, robots.txt, the sitemap origin and the `X-Robots-Tag` header
    together. There is nothing else to remember to remove.
 3. Deploy, and verify at the real hostname (section 7) **before** pointing DNS at it.
