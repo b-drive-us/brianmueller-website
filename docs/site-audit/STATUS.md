@@ -12,7 +12,7 @@
 | **Divergence** | **None.** The live site serves `about.CM_4s7Jy.css`, the stylesheet this commit builds. |
 | **Baseline build** | `npm run build` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 5.18.2, Node 22.23.2 |
 | **Checks** | `tools/check-build.mjs` fails the build on any environment/artifact mismatch. Live journey harness: **76/76 passing** across 1280px and 390px, light and dark, plus a keyboard-only pass. |
-| **Readiness** | Live. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 is still outstanding and is now time-critical**: the recovered blog post exists only on Squarespace. |
+| **Readiness** | Live and verified on the real hostname after DNS propagation. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 closed** — the recovered post is in the archive. Open: Search Console property (none exists on either Google account), and the HSTS ramp. |
 | **Records updated** | 2026-09-18 |
 
 ## What the audit actually examined
@@ -261,12 +261,26 @@ propagating: 28/28 pages 200 with the right canonical and no `.org` reference, i
 removed, 51 sampled redirects and all catch-alls passing, apex→www with query strings preserved,
 **76/76 journey checks** on the production artifact.
 
+**Post-propagation verification: done, same day.** Delegation landed a few hours after the cutover
+and everything was re-run against the real hostname with no forced DNS — 28/28 pages, 61 sampled
+redirects, 76/76 journeys, valid TLS, MX and SPF intact, legacy fragments confirmed in Brian's own
+browser. Recorded in `cutover-2026-09-18.md`.
+
+**N20: closed.** "Let the Mystery Be" is in `08 - Blog Archive/`, in date order, with its counts
+corrected to 916. Fetched from Squarespace while it was still serving.
+
 ## Next step
 
-Prompt 13 — post-launch checks and the maintenance handoff, once the nameserver delegation has
-propagated and there is real traffic to look at. Before that: re-run the checks against the real
-hostname without forcing DNS, submit the sitemap in Search Console, and add the recovered blog post
-to the archive before Squarespace is cancelled.
+Prompt 13 — post-launch checks and the maintenance handoff, once there is real traffic to look at.
+
+Two things need Brian first:
+
+1. **Search Console.** There is **no property for brianmueller.com** — neither `commodifyme@gmail.com`
+   nor `bdrive.co@gmail.com` has any property at all. One has to be created and verified before a
+   sitemap can be submitted, and which Google account owns it is Brian's decision, not a detail.
+   Verification by DNS TXT is straightforward now that the zone is on Cloudflare.
+2. **Squarespace.** Do not cancel for at least a fortnight. N20 is closed, so the last hard
+   dependency is gone, but it remains the only copy of anything else that turns out to be missing.
 
 ### Superseded
 
