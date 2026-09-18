@@ -9,7 +9,7 @@ Rewritten at Prompt 10 to describe the candidate that actually exists.
 | | |
 |---|---|
 | **Branch** | `audit/2026-09` |
-| **Commit** | *(the Prompt 10 commit — see `git log -1` on the branch)* |
+| **Commit** | `fe2ead1` — *Prompt 10: verify the integrated release candidate* |
 | **Base** | `main` at `8ea45e5`, which is what the 9 September audit examined |
 | **Build** | Astro 5.18.2, static output, zero JavaScript files emitted |
 | **Deploy** | Cloudflare Workers static assets, Worker `brianmueller-website`, via Workers Builds on push |
