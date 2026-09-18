@@ -22,18 +22,30 @@
 # --- SECURITY --------------------------------------------------------------
 # The policy below is written from an inventory of what this site actually
 # loads, not copied from a template. It is static files with no server
-# endpoints, no forms, no fetch or XHR, and no third-party subresources: every
-# stylesheet, font and image is same-origin. That is why it can start at
-# default-src 'none' and name only what really loads.
+# endpoints and no forms. Every stylesheet, font and image is same-origin.
+# There is exactly one third-party subresource, named below. That is why this
+# can start at default-src 'none' and name only what really loads.
 #
-# script-src is three SHA-256 hashes and nothing else — the pre-paint theme
-# read, the theme toggle, and the home page's legacy-fragment handler. The
-# third one is on the home page only, and its hash covers the fragment table
-# baked into it, so ADDING A LEGACY FRAGMENT CHANGES THE HASH. There is no
-# 'unsafe-inline'. CHANGING EITHER SCRIPT BY ONE BYTE CHANGES ITS HASH AND THE
-# BROWSER WILL SILENTLY REFUSE TO RUN IT. The build still succeeds and the page
-# still looks right; the only symptom is a dead theme button. Regenerate with:
+# script-src is three SHA-256 hashes plus one host. The hashes are the
+# pre-paint theme read, the theme toggle, and the home page's legacy-fragment
+# handler. The third one is on the home page only, and its hash covers the
+# fragment table baked into it, so ADDING A LEGACY FRAGMENT CHANGES THE HASH.
+# There is no 'unsafe-inline'. CHANGING EITHER SCRIPT BY ONE BYTE CHANGES ITS
+# HASH AND THE BROWSER WILL SILENTLY REFUSE TO RUN IT. The build still
+# succeeds and the page still looks right; the only symptom is a dead theme
+# button. Regenerate with:
 #   npm run build && python3 tools/csp-hashes.py
+#
+# The host is static.cloudflareinsights.com, and connect-src names
+# cloudflareinsights.com so the beacon can report. This is Cloudflare Web
+# Analytics, which the zone injects into every HTML response by itself — it is
+# not in this repository and it will reappear on any hostname where the zone
+# setting is on. It was blocked here until 2026-09-18, which is why nothing was
+# collected before that date. Allowing it is a deliberate decision (D-21): if
+# it is ever switched back off, REMOVE BOTH SOURCES AND FIX THE POLICY PAGES,
+# because the privacy and cookie policies now describe a running beacon. The
+# pages that must agree are src/pages/privacy-policy.astro and
+# src/pages/cookies-policy.astro.
 #
 # style-src is 'self' with no 'unsafe-inline'. That is only possible because
 # the site's nine inline style="" attributes were moved into utility classes in
@@ -54,7 +66,7 @@
 # covered, or it locks visitors out of a host that cannot answer over TLS.
 # See docs/site-audit/decisions.md D-12.
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-QglPjucdT69dXpFwbNOprT5n5t8LJheqSET5IZoqT6U=' 'sha256-S49WUIOFMKIF0xKnDAB2hQ5zXvQOgW8dBNU7hV7Du+M='; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-QglPjucdT69dXpFwbNOprT5n5t8LJheqSET5IZoqT6U=' 'sha256-S49WUIOFMKIF0xKnDAB2hQ5zXvQOgW8dBNU7hV7Du+M=' https://static.cloudflareinsights.com; connect-src https://cloudflareinsights.com; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()
