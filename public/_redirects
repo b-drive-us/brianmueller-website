@@ -8,7 +8,7 @@
 # stay above the /living-workshop/* catch-all, or every post would land on
 # /poems instead of on its own poem.
 #
-# Limits: 2,000 static + 100 dynamic. This file uses 756 static and 5 dynamic.
+# Limits: 2,000 static + 100 dynamic. This file uses 768 static and 5 dynamic.
 #
 # NOT redirected, on purpose: /privacy-policy, /cookies-policy, /disclaimer
 # and /terms-conditions keep their old paths on the new site. A rule for any
@@ -356,6 +356,7 @@
 /living-workshop/2019/10/18/birkenstock  https://brianspoems.com/poem/birkenstock  301
 /living-workshop/2019/10/19/did-not-last  https://brianspoems.com/poem/did-not-last  301
 /living-workshop/2019/10/20/inner-peace  https://brianspoems.com/poem/inner-peace  301
+/living-workshop/2019/10/21/whom-i-kidding  https://brianspoems.com/poem/who-am-i-kidding  301
 /living-workshop/2019/10/22/oh-grow-up  https://brianspoems.com/poem/oh-grow-up  301
 /living-workshop/2019/10/23/what-am-i-doing  https://brianspoems.com/poem/what-am-i-doing  301
 /living-workshop/2019/10/24/memories  https://brianspoems.com/poem/memories-2  301
@@ -371,6 +372,7 @@
 /living-workshop/2019/11/11/call-to-your-soul  https://brianspoems.com/poem/call-to-your-soul  301
 /living-workshop/2019/11/12/second-spring  https://brianspoems.com/poem/second-spring  301
 /living-workshop/2019/11/13/fold-em  https://brianspoems.com/poem/fold-em  301
+/living-workshop/2019/11/14/a-slave-ship-named-jesus  https://brianspoems.com/poem/a-slave-ship-called-jesus  301
 /living-workshop/2019/11/15/musical-chairs  https://brianspoems.com/poem/musical-chairs  301
 /living-workshop/2019/11/16/always-remember  https://brianspoems.com/poem/always-remember  301
 /living-workshop/2019/11/17/conformity  https://brianspoems.com/poem/conformity  301
@@ -425,6 +427,7 @@
 /living-workshop/2019/12/6/at-home  https://brianspoems.com/poem/at-home  301
 /living-workshop/2019/12/7/a-day-off  https://brianspoems.com/poem/a-day-off-2  301
 /living-workshop/2019/12/8/brian-shrugged  https://brianspoems.com/poem/brian-shrugged  301
+/living-workshop/2019/12/9/one-in-the-same  https://brianspoems.com/poem/one-and-the-same  301
 /living-workshop/2019/2/1/awe  https://brianspoems.com/poem/awe  301
 /living-workshop/2019/2/10/one-atom-at-a-time  https://brianspoems.com/poem/one-atom-at-a-time  301
 /living-workshop/2019/2/11/a-book-called-being-alive  https://brianspoems.com/poem/a-book-called-being-alive  301
@@ -494,6 +497,7 @@
 /living-workshop/2020/1/21/the-right-questions  https://brianspoems.com/poem/the-right-questions  301
 /living-workshop/2020/1/22/in-exile  https://brianspoems.com/poem/in-exile  301
 /living-workshop/2020/1/23/after-the-curtain  https://brianspoems.com/poem/after-the-curtain  301
+/living-workshop/2020/1/24/its-alright  https://brianspoems.com/poem/it-s-all-right  301
 /living-workshop/2020/1/25/the-heart-of-the-matter  https://brianspoems.com/poem/the-heart-of-the-matter  301
 /living-workshop/2020/1/26/right-now  https://brianspoems.com/poem/right-now-2  301
 /living-workshop/2020/1/27/the-market-mindset  https://brianspoems.com/poem/the-market-mindset  301
@@ -565,6 +569,7 @@
 /living-workshop/2020/3/4/theres-still-time  https://brianspoems.com/poem/there-s-still-time  301
 /living-workshop/2020/3/5/i-am-overcome  https://brianspoems.com/poem/i-am-overcome  301
 /living-workshop/2020/3/6/the-veil-lifted  https://brianspoems.com/poem/the-veil-lifted  301
+/living-workshop/2020/3/7/imperfect-love  https://brianspoems.com/poem/imp-rf-ct-lov  301
 /living-workshop/2020/3/8/growing-space  https://brianspoems.com/poem/growing-space  301
 /living-workshop/2020/3/9/my-plans  https://brianspoems.com/poem/my-plans  301
 /living-workshop/2020/4/01/just-let-it-happen  https://brianspoems.com/poem/just-let-it-happen  301
@@ -646,6 +651,7 @@
 /living-workshop/2020/6/23/not-voting  https://brianspoems.com/poem/not-voting  301
 /living-workshop/2020/6/24/i-keep-on-writing  https://brianspoems.com/poem/i-keep-on-writing  301
 /living-workshop/2020/6/25/the-specialist  https://brianspoems.com/poem/the-specialist  301
+/living-workshop/2020/6/26/your-life-story  https://brianspoems.com/poem/my-life-story  301
 /living-workshop/2020/6/27/the-perfect-space  https://brianspoems.com/poem/the-perfect-space  301
 /living-workshop/2020/6/28/change-of-heart  https://brianspoems.com/poem/change-of-heart  301
 /living-workshop/2020/6/29/morning-bell  https://brianspoems.com/poem/morning-bell  301
@@ -682,6 +688,7 @@
 /living-workshop/a-healthy-heart  https://brianspoems.com/poem/a-healthy-heart  301
 /living-workshop/a-journey-in-all-directions  https://brianspoems.com/poem/a-journey-in-all-directions  301
 /living-workshop/a-new-day-will-come  https://brianspoems.com/poem/a-new-day-will-come  301
+/living-workshop/allow-yourself-to-sit  https://brianspoems.com/poem/choosing-presence  301
 /living-workshop/are-we-going-the-right-way  https://brianspoems.com/poem/are-we-going-the-right-way  301
 /living-workshop/at-the-crossroads  https://brianspoems.com/poem/at-the-crossroads  301
 /living-workshop/be-very-quiet  https://brianspoems.com/poem/be-very-quiet  301
@@ -694,9 +701,11 @@
 /living-workshop/come-wisdom  https://brianspoems.com/poem/come-wisdom  301
 /living-workshop/compromise  https://brianspoems.com/poem/compromise  301
 /living-workshop/confessions  https://brianspoems.com/poem/confessions  301
+/living-workshop/darlings-of-the-status-quo  https://brianspoems.com/poem/we-were-among-the-young-and-sexy  301
 /living-workshop/deep-blue-ocean  https://brianspoems.com/poem/deep-blue-ocean  301
 /living-workshop/deliver-me-the-ocean  https://brianspoems.com/poem/deliver-me-the-ocean  301
 /living-workshop/desert-pilgrim  https://brianspoems.com/poem/desert-pilgrim  301
+/living-workshop/dont-interfere-with-love  https://brianspoems.com/poem/everywhere  301
 /living-workshop/dont-look-away  https://brianspoems.com/poem/don-t-look-away  301
 /living-workshop/ego-surrender  https://brianspoems.com/poem/ego-surrender  301
 /living-workshop/emily  https://brianspoems.com/poem/emily  301
@@ -733,6 +742,7 @@
 /living-workshop/ode-to-joy  https://brianspoems.com/poem/ode-to-joy  301
 /living-workshop/ode-to-the-wild-god  https://brianspoems.com/poem/ode-to-the-wild-god  301
 /living-workshop/our-grip-weakens  https://brianspoems.com/poem/our-grip-weakens  301
+/living-workshop/pet-alligator-psa  https://brianspoems.com/poem/alligator-psa  301
 /living-workshop/practicing-presence  https://brianspoems.com/poem/practicing-presence  301
 /living-workshop/prayer-flag  https://brianspoems.com/poem/prayer-flag  301
 /living-workshop/prayer-for-our-fireside-council  https://brianspoems.com/poem/prayer-for-our-fireside-council  301
@@ -771,6 +781,8 @@
 /living-workshop/transformation  https://brianspoems.com/poem/transformation-2  301
 /living-workshop/trinity  https://brianspoems.com/poem/trinity  301
 /living-workshop/trinity-explodes  https://brianspoems.com/poem/trinity-explodes  301
+/living-workshop/trust-stillness-journey-into-midlife  https://brianspoems.com/poem/trust-stillness  301
+/living-workshop/vulnerable-and-open  https://brianspoems.com/poem/a-speck-of-truth  301
 /living-workshop/waking-up-to-the-dark  https://brianspoems.com/poem/waking-up-to-the-dark  301
 /living-workshop/war-is-a-force  https://brianspoems.com/poem/war-is-a-force  301
 /living-workshop/weve-drifted-too-far  https://brianspoems.com/poem/we-ve-drifted-too-far  301

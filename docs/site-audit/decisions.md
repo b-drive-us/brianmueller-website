@@ -783,3 +783,25 @@ the API enforces the same list, so the ramp was not available on this zone.
 Brian chose 6 months (`max-age=15552000`), `includeSubDomains` off, `preload`
 off. Preload stays off: it is close to irreversible and is not worth it here.
 Verified on the live origin with `curl -sSI`, not in the dashboard.
+
+## D-33 — The twelve title-changed poems are the same poems; ship the redirects
+
+**Brian, 19 September 2026.** Section C of `poem-matches-for-review.md`, the
+matches found by body text after the title changed. Brian approved all twelve:
+the eight where the title was only rewritten (*Who'm I Kidding?* → *Who am I
+Kidding?*, *A Slave Ship Named Jesus* → *…Called Jesus*, *One in the Same* →
+*One and the Same*, *It's Alright* → *It's All Right*, the schwa spelling of
+*Imperfect Love*, *Your Life Story* → *My Life Story*, *Pet Alligator PSA* →
+*Alligator PSA*, *Trust Stillness (Journey into Midlife)* → *Trust Stillness*)
+and the four renamed outright (*Allow Yourself to Sit* → *Choosing Presence*,
+*Darlings of the Status Quo* → *We Were Among the Young and Sexy*, *Vulnerable
+and Open* → *A Speck of Truth*, *Don't Interfere (With Love)* → *Everywhere*).
+
+All twelve destinations verified HTTP 200 on 19 September 2026.
+
+## D-34 — The 174 unmatched legacy URLs stay pointed at /poems
+
+**Brian, 19 September 2026.** Section D. Nothing scored above 0.30 against any
+of the 1,834 archive poems and many of the titles are announcements rather than
+poems. `/poems` carries a line written for a reader arriving from an old link,
+which is the right landing for them. Question closed.
