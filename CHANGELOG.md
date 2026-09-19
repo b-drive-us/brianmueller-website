@@ -19,6 +19,71 @@ curl -s https://www.brianmueller.com/ | grep 'name="version"'
 
 ---
 
+## 1.4.0 — 19 September 2026
+
+**Brian's address is no longer printed on the website.** It was in the markup as
+a `mailto:` link on five pages — contact, retreat (twice), privacy policy,
+cookies policy — which is precisely the shape an address harvester looks for.
+Tom Sparough's was there twice as well. All seven are now assembled in the
+browser by `src/components/MailLink.astro` and one script in `Base.astro`: the
+two halves of each address are ROT13'd into data attributes and joined on load.
+
+A grep of the whole build for anything shaped like an address now returns
+nothing. That is the honest limit of it — the page is public, and a scraper that
+runs JavaScript can assemble what a browser can. It defeats the ordinary case,
+which is the one that fills an inbox. **The contact form is the real fix and is
+next.**
+
+Without JavaScript each of those spots falls back to a link to `/contact`,
+never to a readable address. The registration button on the retreat page keeps
+its appearance and remains clickable either way.
+
+The new script is the fifth CSP hash. `tools/check-build.mjs` caught its absence
+on the first build and then caught the stale hash left behind when the script
+changed, which is the whole reason that guard exists.
+
+**Review copies and PDF downloads are gone from the site.** The site offered PDF
+copies on request in three places and carried a review-copy policy in two. There
+is no mechanism behind either — /store has not existed for years. Reviewers are
+welcome to write; the contact page covers it. PDFs may come back as something to
+buy, at which point they get a page of their own rather than a footnote.
+(Decision D-30.)
+
+**The retreat schedule has gone.** "Six writing experiences" and the six-session
+grid described a weekend that is not yet fixed. The heading is now *Multiple
+Writing Experiences*, and what survived — evening social time, optional morning
+prayer, wandering or rest, the Sunday open mic — reads as prose. The `.sessions`
+CSS went with it.
+
+**The anthology copyright note was wrong.** It said contributors released their
+poems into the public domain. They granted Brian the copyright, which is why
+those poems carry the same Creative Commons licence as everything else on the
+site. Corrected on the questions page; the men are still credited as the authors
+they are.
+
+**The disclaimer now points at the licence.** Its fair-use section told readers
+to seek permission from the copyright owner without mentioning that, for almost
+everything here, permission has already been granted.
+
+**HSTS is on at the edge** — `max-age=15552000`, no `includeSubDomains`, no
+preload. Verified on the live origin rather than in the dashboard:
+
+```
+curl -sSI https://www.brianmueller.com/ | grep -i strict-transport
+strict-transport-security: max-age=15552000
+```
+
+Cloudflare's control offers 0 or one to twelve months and nothing shorter, so
+the graduated ramp that was planned (300s, then a day, then a year) is not
+available on this zone; Brian chose the value Cloudflare marks as recommended.
+
+Still open from the interview and carried to the next release: the page-count
+caveats on *Bull Heart* and *Jonah*, *Men Writing for Change* Vol. 1 re-recorded
+to its second printing, `author` and `editor` in the anthologies' JSON-LD, and
+the Terms rewrite (`R07`).
+
+---
+
 ## 1.3.0 — 19 September 2026
 
 **The Cookie Policy now performs the reset it describes.** It said: *"So does

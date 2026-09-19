@@ -1,14 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-
-const sessions = [
-  { n: "1", t: "Friday, 7:00 p.m.", d: "We arrive, we eat, and we begin. An opening circle, the first Berry poem, and the first prompt — short, so no one has to be brilliant on a Friday night." },
-  { n: "2", t: "Saturday morning", d: "The longest stretch of writing in the weekend, with the day still ahead of it. Optional morning prayer beforehand for those who want it." },
-  { n: "3", t: "Saturday midday", d: "Paired writing. One other man, one conversation, one prompt that goes somewhere you would not have gone alone." },
-  { n: "4", t: "Saturday afternoon", d: "Free time first — 150 acres of forest, field and pond to wander, or a quiet room and a nap. Then we write again." },
-  { n: "5", t: "Saturday evening", d: "Council circle in small groups, then social time. Sharing is optional, and it is where the weekend usually turns." },
-  { n: "6", t: "Sunday morning", d: "The last prompt, then an open mic. Whatever you have written, read aloud if you want to. We close, we eat lunch, and you drive home different." },
-];
+import MailLink from '../components/MailLink.astro';
 ---
 <Base title="Rooted in the Land — a men's writing retreat, January 2027"
       ogImage="/img/og-retreat-1200x630.jpg"
@@ -59,26 +51,15 @@ const sessions = [
   <section class="wrap">
     <div class="stack stack-m measure">
       <div class="eyebrow">The shape of it</div>
-      <h2>Six writing experiences</h2>
+      <h2>Multiple Writing Experiences</h2>
       <p>Each session opens with poetic inspiration from Wendell Berry and leads into a writing
          prompt. We gather as a large group, spend one-on-one time with another participant, and
          meet in small council circles where sharing your work is optional but deeply encouraged.</p>
+      <p>Around the writing there is evening social time, optional morning prayer, an outdoor
+         wandering or an indoor rest, and an open mic before we close on Sunday.</p>
     </div>
     <p class="arrival"><b>Friday arrival.</b> Doors from 4:00 p.m., rooms ready by 5:00,
        dinner at 6:00. The first session begins at about 7:00.</p>
-    <ol class="sessions">
-      {sessions.map(s => (
-        <li>
-          <span class="s-n">{s.n}</span>
-          <div>
-            <div class="s-t">{s.t}</div>
-            <p class="s-d">{s.d}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
-    <p class="small u-measure-34">Around the sessions: evening social time, optional
-       morning prayer, an outdoor wandering or an indoor rest, and an open mic on Sunday.</p>
   </section>
 
   <section class="band-dark">
@@ -134,14 +115,19 @@ const sessions = [
         <div><dt>Access needs</dt><dd>Tell us when you register, or before. We pass dietary and accessibility needs to the Bergamo Center ten days ahead.</dd></div>
       </div>
       <div class="btn-row">
-        <a class="btn" href="mailto:brian@b-drive.us?subject=Rooted%20in%20the%20Land%202027&amp;body=I%27d%20like%20to%20know%20when%20registration%20opens%20for%20Rooted%20in%20the%20Land%2C%20January%2015%E2%80%9317%2C%202027.%0A%0AName%3A%0A">Email me about registration</a>
+        <MailLink class="btn" user="brian" domain="b-drive.us"
+                  label="Email me about registration"
+                  subject="Rooted in the Land 2027"
+                  body={"I'd like to know when registration opens for Rooted in the Land, January 15\u201317, 2027.\n\nName:\n"}
+          ><a class="btn" href="/contact">Email me about registration</a></MailLink>
       </div>
       <p class="small">That button opens a pre-addressed email in your mail app — you still have to
          send it. Brian keeps the list himself and writes back to everyone on it when registration
          opens. It is not a booking and it does not hold a place.</p>
       <p class="small">Questions in the meantime: Brian Mueller —
-         <a href="mailto:brian@b-drive.us">brian@b-drive.us</a> · Tom Sparough —
-         <a href="mailto:tsparough@gmail.com">tsparough@gmail.com</a></p>
+         <MailLink user="brian" domain="b-drive.us"><a href="/contact">write to Brian</a></MailLink>
+         · Tom Sparough —
+         <MailLink user="tsparough" domain="gmail.com"><a href="/contact">write to Brian, who will pass it on</a></MailLink></p>
     </div></div>
   </section>
 

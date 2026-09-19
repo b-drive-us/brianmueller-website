@@ -26,10 +26,11 @@
 # There is exactly one third-party subresource, named below. That is why this
 # can start at default-src 'none' and name only what really loads.
 #
-# script-src is three SHA-256 hashes plus one host. The hashes are the
-# pre-paint theme read, the theme toggle, and the home page's legacy-fragment
-# handler. The third one is on the home page only, and its hash covers the
-# fragment table baked into it, so ADDING A LEGACY FRAGMENT CHANGES THE HASH.
+# script-src is five SHA-256 hashes plus one host. The hashes are the pre-paint
+# theme read, the theme toggle, the home page's legacy-fragment handler, the
+# Cookie Policy's theme reset, and the mail-link assembler. The legacy-fragment
+# one is on the home page only, and its hash covers the fragment table baked
+# into it, so ADDING A LEGACY FRAGMENT CHANGES THE HASH.
 # There is no 'unsafe-inline'. CHANGING EITHER SCRIPT BY ONE BYTE CHANGES ITS
 # HASH AND THE BROWSER WILL SILENTLY REFUSE TO RUN IT. The build still
 # succeeds and the page still looks right; the only symptom is a dead theme
@@ -71,7 +72,7 @@
 # covered, or it locks visitors out of a host that cannot answer over TLS.
 # See docs/site-audit/decisions.md D-12.
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-mewFM0LyLvulgC/AqvToLhLD2XG6t/L2rs/PivEYzQY=' 'sha256-1zyjjWDFAyDpeeGeNNAHnd9dWi1Og24f1aT9m8C7y2I=' 'sha256-S49WUIOFMKIF0xKnDAB2hQ5zXvQOgW8dBNU7hV7Du+M=' https://static.cloudflareinsights.com; connect-src 'self'; manifest-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; script-src 'sha256-ReSDczqo9O4scYD5ybiApwi8nuYRL7TmsLCxHhxUqKA=' 'sha256-mewFM0LyLvulgC/AqvToLhLD2XG6t/L2rs/PivEYzQY=' 'sha256-1zyjjWDFAyDpeeGeNNAHnd9dWi1Og24f1aT9m8C7y2I=' 'sha256-S49WUIOFMKIF0xKnDAB2hQ5zXvQOgW8dBNU7hV7Du+M=' 'sha256-VwCWEX/V+QUBCeRso12d4twoUJs/Lw6vkulxjZM1JFE=' https://static.cloudflareinsights.com; connect-src 'self'; manifest-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()
