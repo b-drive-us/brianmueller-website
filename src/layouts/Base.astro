@@ -206,5 +206,36 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
         paint();
       })();
     </script>
+    <script is:inline>
+      // Builds the mail links that src/components/MailLink.astro leaves half
+      // finished, so no address sits in the page source for a harvester to
+      // scrape. See that component for what this does and does not protect
+      // against. Until this runs, each of those spans shows its own fallback —
+      // a pointer to /contact, never an address.
+      //
+      // CHANGING THIS SCRIPT BY ONE BYTE CHANGES ITS CSP HASH and the browser
+      // will silently refuse to run it. Regenerate with:
+      //   npm run build:production && python3 tools/csp-hashes.py
+      (function () {
+        function r13(s) {
+          return s.replace(/[a-z]/gi, function (c) {
+            var base = c <= "Z" ? 65 : 97;
+            return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+          });
+        }
+        var nodes = document.querySelectorAll("[data-mail-u][data-mail-d]");
+        for (var i = 0; i < nodes.length; i++) {
+          var el = nodes[i];
+          var addr = r13(el.getAttribute("data-mail-u")) + "@" + r13(el.getAttribute("data-mail-d"));
+          var q = el.getAttribute("data-mail-q");
+          var a = document.createElement("a");
+          a.setAttribute("href", "mailto:" + addr + (q ? "?" + r13(q) : ""));
+          var cls = el.getAttribute("data-mail-class");
+          a.className = "mail-link" + (cls ? " " + cls : "");
+          a.textContent = el.getAttribute("data-mail-label") || addr;
+          el.parentNode.replaceChild(a, el);
+        }
+      })();
+    </script>
   </body>
 </html>

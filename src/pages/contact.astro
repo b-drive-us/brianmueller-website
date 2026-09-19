@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import MailLink from '../components/MailLink.astro';
 ---
 <Base title="Contact — Brian J. Mueller"
       description="Write to Brian with questions, reflections, your own poems, or speaking and retreat inquiries.">
@@ -16,9 +17,11 @@ import Base from '../layouts/Base.astro';
       <p class="small">Please, no unsolicited business offers.</p>
       <div class="contact-card">
         <div class="eyebrow">Write to me</div>
-        <p class="contact-address"><a href="mailto:brian@b-drive.us">brian@b-drive.us</a></p>
-        <p class="small">That address reaches me directly. A form will replace it here in time;
-           until then this is the quickest way to me, and it works from any device.</p>
+        <p class="contact-address"><MailLink user="brian" domain="b-drive.us"
+          ><span class="small">My address loads here a moment after the page does.</span></MailLink></p>
+        <p class="small">That address reaches me directly, and a form will take its place here
+           shortly. It is assembled by script rather than printed in the page, which keeps it out
+           of the hands of the machines that trawl the web for addresses to sell.</p>
       </div>
 
       <div class="stack stack-s">
@@ -26,12 +29,9 @@ import Base from '../layouts/Base.astro';
         <ul class="contact-list">
           <li><b>Permission to use a poem.</b> Most are already shared under a Creative Commons
               licence — see <a href="/faq">the questions page</a> first; it may already say yes.</li>
-          <li><b>A review copy.</b> Say where and roughly when the review will appear. PDFs are
-              usual; a physical copy can be arranged.</li>
-          <li><b>A PDF of a book</b>, if the purchase price is difficult. Just ask.</li>
           <li><b>Speaking, retreats, and the January writing retreat.</b> For
-              <a href="/retreat">Rooted in the Land</a> you can also write to Tom Sparough at
-              <a href="mailto:tsparough@gmail.com">tsparough@gmail.com</a>.</li>
+              <a href="/retreat">Rooted in the Land</a> you can also write to Tom Sparough, whose
+              address is on <a href="/retreat">the retreat page</a>.</li>
           <li><b>Privacy requests</b> under the <a href="/privacy-policy">privacy policy</a>.</li>
         </ul>
       </div>

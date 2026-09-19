@@ -1,0 +1,66 @@
+---
+/**
+ * A mail link that puts no address in the page source.
+ *
+ * Why this exists: brian@b-drive.us and tsparough@gmail.com were sitting in the
+ * markup as `mailto:` links on five pages, which is exactly the shape every
+ * address harvester looks for. Removed 19 September 2026 at Brian's request.
+ *
+ * What it does and does not do. The two halves of the address are ROT13'd into
+ * data attributes and joined by script at load. That is not secrecy — the page
+ * is public, and anything a browser can assemble a determined scraper running a
+ * headless browser can assemble too. It defeats the ordinary case, which is the
+ * one that actually fills an inbox: a crawler that regexes the HTML for
+ * `mailto:` or for name@host, and a slightly cleverer one that concatenates
+ * whatever data attributes it finds. Neither finds an address here.
+ *
+ * THE REAL FIX IS THE CONTACT FORM. When that ships, most uses of this
+ * component should go away rather than be kept "just in case".
+ *
+ * No-JavaScript behaviour is the caller's choice, and it must not be the
+ * address. Pass fallback content as children: on the legal pages that is a link
+ * to /contact, on the retreat page the same. Children are replaced wholesale
+ * once the link is built.
+ *
+ * `class` styles the ASSEMBLED link, not the placeholder — otherwise a fallback
+ * <a class="btn"> would sit inside a span that is also a .btn until script runs.
+ *
+ *   <MailLink user="brian" domain="b-drive.us">
+ *     <a href="/contact">the contact page</a>
+ *   </MailLink>
+ *
+ * The assembling script lives in Base.astro so that one CSP hash covers every
+ * page. Changing it changes that hash — see public/_headers.
+ */
+interface Props {
+  user: string;
+  domain: string;
+  subject?: string;
+  body?: string;
+  class?: string;
+  /** Link text once assembled. Defaults to the address itself. */
+  label?: string;
+}
+
+const { user, domain, subject, body, class: className, label } = Astro.props;
+
+// Symmetric, so the same three lines decode it on the other side. Applied to
+// the already-encoded query string too: ROT13 touches letters only, and it is
+// its own inverse, so %E2 survives the round trip unharmed.
+const rot13 = (s: string) =>
+  s.replace(/[a-z]/gi, (c) => {
+    const base = c <= 'Z' ? 65 : 97;
+    return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+  });
+
+const query = [
+  subject ? 'subject=' + encodeURIComponent(subject) : null,
+  body ? 'body=' + encodeURIComponent(body) : null,
+].filter(Boolean).join('&');
+---
+<span class="mail-link"
+      data-mail-class={className}
+      data-mail-u={rot13(user)}
+      data-mail-d={rot13(domain)}
+      data-mail-q={query ? rot13(query) : undefined}
+      data-mail-label={label}><slot /></span>

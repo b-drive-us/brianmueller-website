@@ -658,3 +658,128 @@ action, not a Cloudflare one.
 
 **Also not done, deliberately:** the domain registration itself. Letting it lapse is Brian's stated
 intent and needs no action — but it is a decision, not an oversight, and it is recorded here as one.
+
+---
+
+## D-26 — Page counts: the site counts numbered pages, Amazon counts printed leaves
+
+**Brian, 19 September 2026**, from the books in his hands.
+
+| | site | numbered pages, verified | Amazon |
+|---|---|---|---|
+| Bull Heart (978-0996812023) | 86 | **86** | 100 |
+| Jonah (978-1733501200) | 450 | **450** | 476 |
+
+Both Amazon links resolve to the same ISBN the site shows (`/dp/0996812024`,
+`/dp/1733501207`), so these compare the same printing. Amazon's figure counts
+every printed leaf, including unnumbered front and back matter; the site counts
+numbered pages. **Both site numbers stand.** The caveat changes from "may sell a
+later printing with a different date or page count" — which explains nothing —
+to naming the actual difference, which a reader can check.
+
+Closes the Bull Heart and Jonah halves of `R05`.
+
+## D-27 — Men Writing for Change Vol. 1 is recorded from the second printing
+
+The site showed "Pages 50 · ISBN 978-1979552424". The 50 is real — Brian counted
+it — but the copy he counted is **978-1717351692, the second printing**. The
+Amazon link resolves to `/dp/1979552428` = 978-1979552424, the **first**
+printing, listed at 48 pages. The two sides were never describing the same book,
+so Amazon's 48 was never a contradiction; and the site's page count was attached
+to a printing nobody has verified.
+
+**Decision:** the second printing becomes the primary record — 978-1717351692,
+50 numbered pages — with the first printing (978-1979552424, 2017) noted, and a
+line saying which one the Amazon link sells. Record what can be vouched for.
+
+Closes `R05`.
+
+## D-28 — Men Writing for Change: contributors stay off the structured data
+
+**Brian, 19 September 2026.** Credit him as **author and editor** on both
+volumes. The contributing men are not named in the machine-readable record.
+
+They are real people and a poem written in a council circle is a personal
+thing; nothing goes into a public dataset without their say-so, and nobody is
+invented. The visible prose on both pages already says the poems are the
+retreat's rather than Brian's alone, which is where a reader learns it. Adding
+`editor` alongside `author` narrows the gap between the two.
+
+Closes `R06`.
+
+## D-29 — The Men Writing for Change poems were assigned to Brian, not released to the public domain
+
+**Brian, 19 September 2026:** *"When I published the poems in the Men Writing
+for Change series, they explicitly granted the copyright to me. I've licensed
+everything under the CC-BY-NC-ND terms."*
+
+This settles a contradiction the FAQ carried in a single answer: one paragraph
+licensed the Men Writing for Change poems under CC BY-NC-ND, and the next said
+those poems were "released by their authors into the public domain". Both cannot
+be true — CC BY-NC-ND is a copyright licence, and nobody can attach
+non-commercial and no-derivatives conditions to a work in the public domain.
+
+Because the copyright was **assigned**, the licensing statement is the correct
+one and the footer's flat "Poems licensed CC BY-NC-ND 4.0" is accurate across all
+twelve books. Only the public-domain sentence is wrong. It is replaced with a
+statement of the assignment that still credits the men who wrote the poems.
+
+The Disclaimer also gains a pointer to the licence: it told readers to "obtain
+permission from the copyright owner" without mentioning that almost everything
+here is already licensed, so someone following it wrote to ask for permission
+they had been granted before they asked.
+
+Closes `R04`.
+
+## D-30 — The retreat's refund schedule governs, and PDFs come off the site
+
+**Brian, 19 September 2026.**
+
+- **Refunds.** The schedule published on `/retreat` is the policy and the one he
+  will hold to when Stripe is live: full refund less a $35 administrative fee
+  through 1 December 2026, half from 2 December to 1 January, none after
+  1 January because the Bergamo Center bills for the room and meals either way —
+  with a standing invitation to write if something serious happens. Terms §4
+  ("All purchases are final. We do not offer refunds") is scoped to historical
+  direct sales and explicitly does not reach retreat bookings.
+- **Direct sales did happen.** brianmueller.com sold PDF copies of the books in
+  the past, through a `/store` page that no longer exists. So §§3–5 are not
+  fiction; they are history, and they are written in the present tense. They get
+  scoped rather than deleted, which also preserves any obligation to a past
+  buyer.
+- **PDFs come off for now.** Brian intends to sell PDFs again later. Until then
+  the site should not offer them.
+- **The weekend schedule comes off `/retreat`.** The six numbered sessions and
+  their times are removed; the heading becomes "Multiple Writing Experiences".
+  The programme is not being committed to in public at this level of detail.
+
+Feeds `R07` and the Terms rewrite.
+
+## D-31 — Both addresses come out of the markup; the form is the real fix
+
+**Brian, 19 September 2026.** *"Get my email off the contact page ASAP. I don't
+want that out there."* Tom Sparough's gets the same treatment.
+
+Shipped in 1.4.0: `src/components/MailLink.astro` plus one assembling script in
+`Base.astro`. No address, and no `mailto:`, survives in the built HTML.
+
+What this is worth, stated plainly so nobody later mistakes it for more than it
+is: it stops a crawler that regexes the HTML, which is the kind that actually
+fills an inbox. It does not stop a scraper driving a headless browser, and it
+cannot — the page is public and the browser has to be able to assemble the
+address for a visitor to use it. **The contact form removes the need for the
+address to be on the page at all, and it is the next piece of work.**
+
+Blocked, as Stripe is, on item 24: a way for the site to send mail. Note that
+the CSP carries `form-action 'none'`, which the form will have to change.
+
+## D-32 — HSTS at six months, because Cloudflare offers nothing shorter
+
+**Brian, 19 September 2026.** The plan called for a graduated ramp — 300
+seconds, then a day, then a year — so that a mistake could be undone quickly.
+Cloudflare's control offers 0 or one to twelve months and nothing between, and
+the API enforces the same list, so the ramp was not available on this zone.
+
+Brian chose 6 months (`max-age=15552000`), `includeSubDomains` off, `preload`
+off. Preload stays off: it is close to irreversible and is not worth it here.
+Verified on the live origin with `curl -sSI`, not in the dashboard.

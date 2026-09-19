@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import MailLink from '../components/MailLink.astro';
 ---
 <Base title="Cookie Policy — Brian J. Mueller"
       description="This website sets no cookies. The one third-party script it loads, what is stored in your browser, and how to remove it.">
@@ -100,7 +101,7 @@ import Base from '../layouts/Base.astro';
          live, and the date at the top will change.</p>
 
       <h2>Contact</h2>
-      <p>Questions about this policy: <a href="mailto:brian@b-drive.us">brian@b-drive.us</a>, or use
+      <p>Questions about this policy: <MailLink user="brian" domain="b-drive.us"><a href="/contact">write to Brian</a></MailLink>, or use
          <a href="/contact">the contact page</a>.</p>
     </div>
   </section>
