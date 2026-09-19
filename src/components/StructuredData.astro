@@ -37,6 +37,14 @@ if (type === 'person') {
     '@type': 'Book',
     name: book.titleFull ?? book.title,
     author: person,
+    // Brian is credited as both on the two Men Writing for Change volumes: he
+    // wrote poems in them and he assembled them. The contributing men are
+    // deliberately NOT named here — they are real people, a poem written in a
+    // council circle is a personal thing, and nothing goes into a public
+    // dataset without their say-so (D-28). The visible prose on both pages
+    // already tells a reader the poems are not Brian's alone; adding `editor`
+    // narrows the gap between what the page says and what the markup claims.
+    ...(book.kind === 'multi-author' ? { editor: person } : {}),
     url: absolute(`/books/${book.slug}`),
     image: absolute(`${book.cover.src}-640.webp`),
     description: book.description,

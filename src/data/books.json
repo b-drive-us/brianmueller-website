@@ -91,7 +91,8 @@
     "publisher": "Digital Alphabet Books",
     "buy": "https://amzn.to/4aCcuYN",
     "description": "A collection of poems chronicling more than a year spent processing and recovering from divorce.",
-    "pagesSource": "counted from the printed book"
+    "pagesSource": "counted from the printed book",
+    "editionNote": "The page count above is the book's numbered pages, counted from a copy in hand. Amazon's listing for this ISBN shows a higher number because it counts every printed leaf, including the unnumbered front and back matter. Both describe the same book."
   },
   {
     "slug": "more-bull",
@@ -217,7 +218,8 @@
     "publisher": "Digital Alphabet Books",
     "buy": "https://amzn.to/4gUAfPJ",
     "description": "Volume three of Brian's Poem of the Day: a poem for every day of the year, each with its own theme, subtitle and accompanying quote.",
-    "pagesSource": "counted from the printed book"
+    "pagesSource": "counted from the printed book",
+    "editionNote": "The page count above is the book's numbered pages, counted from a copy in hand. Amazon's listing for this ISBN shows a higher number because it counts every printed leaf, including the unnumbered front and back matter. Both describe the same book."
   },
   {
     "slug": "the-invitation",
@@ -259,15 +261,16 @@
       "h": 960
     },
     "pages": 50,
-    "isbn13": "978-1979552424",
-    "isbn10": "1979552428",
+    "isbn13": "978-1717351692",
+    "isbn10": "1717351697",
     "publisher": "Digital Alphabet Books",
     "occasion": "Poems by men from Indiana, Michigan and Ohio, written at the retreat of May 19–20, 2017.",
     "buy": "https://amzn.to/3QBoIu9",
-    "isbnNote": "A second printing exists under ISBN 978-1717351692.",
+    "isbnNote": "The ISBN above is the second printing, which is the copy these 50 numbered pages were counted from. The first printing (2017) is ISBN 978-1979552424, listed at 48 pages — that is the one the Amazon link sells.",
     "description": "Poetry is not some esoteric art, practiced by cloistered academics. Rather it is the language of nature in which we are all fluent.",
     "titleFull": "Men Writing for Change, Vol. 1",
-    "pagesSource": "counted from the printed book"
+    "pagesSource": "counted from the printed book (second printing)",
+    "editionNote": null
   },
   {
     "slug": "men-writing-for-change-vol-2",

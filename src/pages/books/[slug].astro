@@ -68,8 +68,17 @@ import StructuredData from '../../components/StructuredData.astro';
         </dl>
         {book.published && <p class="small">Published {book.published}.</p>}
         {book.isbnNote && <p class="small">{book.isbnNote}</p>}
-        <p class="small edition-note">These details describe the first edition. The Amazon link
-           above may sell a later printing with a different date or page count.</p>
+        {/* editionNote in books.json: a string overrides the generic caveat, and
+            null suppresses it because that book's isbnNote already says the same
+            thing in more detail. Absent — the usual case — falls back to the
+            generic line. The generic line used to be the *only* line, and it
+            explained nothing: "a different date or page count" told a reader who
+            had spotted the mismatch with Amazon precisely nothing about why.
+            Bull Heart and Jonah now name the actual difference (D-26), and
+            Men Writing for Change Vol. 1 names which printing is which (D-27). */}
+        {book.editionNote !== null && (
+          <p class="small edition-note">{book.editionNote ?? "These details describe the first edition. The Amazon link above may sell a later printing with a different date or page count."}</p>
+        )}
 
         {book.kind === "multi-author" && (
           <div class="notice">
