@@ -190,11 +190,19 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
           root.setAttribute("data-theme", next);
           try { localStorage.setItem("theme", next); } catch (e) {}
           paint();
+          // Anything on the page that reports what is stored needs to hear this,
+          // or it keeps describing the state from before the click. The Cookie
+          // Policy's reset control does exactly that.
+          document.dispatchEvent(new Event("themechanged"));
         });
         // Follow the system only while no explicit choice has been stored.
         media.addEventListener("change", function () {
           if (!root.hasAttribute("data-theme")) paint();
         });
+        // The Cookie Policy carries a control that clears the stored preference.
+        // It announces itself here rather than reaching into this script, so the
+        // two stay independent and neither depends on the other loading first.
+        document.addEventListener("themecleared", paint);
         paint();
       })();
     </script>

@@ -56,16 +56,29 @@ import Base from '../layouts/Base.astro';
          script above adds nothing here.</p>
 
       <h3>Removing it</h3>
-      <p>Clearing site data for this website in your browser removes it. So does switching the theme
-         button back — the site then simply follows whatever your device is set to. Nothing else of
-         yours is held in the browser to clear.</p>
+      <p>The button below deletes the <code>theme</code> key and puts this site back to following
+         whatever your device is set to. It works immediately, here, without changing anything else.</p>
+
+      <div class="btn-row">
+        <button id="theme-reset" class="btn" type="button">Use my device setting</button>
+      </div>
+      <p class="small" id="theme-reset-status" role="status" aria-live="polite"></p>
+
+      <p>Clearing site data for this website in your browser does the same thing, along with
+         anything else a site might have stored — here, that is only this one key.</p>
       <ul>
       <li><a href="https://support.google.com/chrome/answer/95647">Google Chrome</a></li>
       <li><a href="https://support.apple.com/en-us/105082">Safari</a></li>
-      <li><a href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop">Mozilla Firefox</a></li>
+      <li><a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox">Mozilla Firefox</a></li>
       <li><a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09">Microsoft Edge</a></li>
-      <li><a href="https://brave.com/privacy-features/">Brave</a></li>
+      <li><a href="https://support.brave.app/hc/en-us/articles/360048833872-How-Do-I-Clear-Cookies-And-Site-Data-In-Brave">Brave</a></li>
       </ul>
+
+      <p>One thing worth saying plainly, because this page said the opposite until
+         19 September 2026: <b>switching the theme button in the header back does not remove
+         anything.</b> It stores the other choice. Once you have used it at all, the site follows
+         what you stored rather than what your device says, until you clear it here or in your
+         browser.</p>
 
       <h2>What the host records</h2>
       <p>The site is delivered by Cloudflare. Like every web host, Cloudflare's servers write a log
@@ -91,4 +104,45 @@ import Base from '../layouts/Base.astro';
          <a href="/contact">the contact page</a>.</p>
     </div>
   </section>
+<script is:inline>
+  // The control this page promises. It removes the stored preference and the
+  // explicit override, then tells the header toggle to repaint itself.
+  //
+  // This exists because the policy described a reset the site did not perform:
+  // the header toggle calls localStorage.setItem on every click and has no path
+  // that removes the key, so "switch it back" stored the opposite value instead
+  // of restoring system behaviour. Found by the Codex audit, 19 September 2026.
+  (function () {
+    var btn = document.getElementById("theme-reset");
+    var out = document.getElementById("theme-reset-status");
+    if (!btn || !out) return;
+
+    function stored() {
+      try { return localStorage.getItem("theme"); } catch (e) { return null; }
+    }
+    // The button is never disabled. Disabling it after a click drops keyboard
+    // focus to the top of the document, and clearing a key that is not there is
+    // a no-op anyway - so it is always safe to press and the line below always
+    // says what is true.
+    function describe(msg) {
+      var v = stored();
+      out.textContent = msg ? msg
+        : (v === "light" || v === "dark")
+          ? "Right now this browser is storing: " + v + "."
+          : "Nothing is stored — this site is already following your device setting.";
+    }
+    btn.addEventListener("click", function () {
+      var had = stored();
+      try { localStorage.removeItem("theme"); } catch (e) {}
+      document.documentElement.removeAttribute("data-theme");
+      document.dispatchEvent(new Event("themecleared"));
+      describe(had ? "Removed. This site now follows your device setting again."
+                   : "Nothing was stored — this site was already following your device setting.");
+    });
+    // Keep the description true while the visitor is on this page: the header
+    // toggle sits a few centimetres above and changes exactly what this reports.
+    document.addEventListener("themechanged", function () { describe(); });
+    describe();
+  })();
+</script>
 </Base>
