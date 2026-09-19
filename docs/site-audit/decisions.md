@@ -870,3 +870,21 @@ goes in as a Worker secret and **Claude never sees it**. Implementation plan in
 
 Worth revisiting if Cloudflare's external sending leaves beta and lands on the
 free plan — at which point the argument above stops holding.
+
+## D-37 — The hardship-copy offer stays off the site
+
+**Brian, 19 September 2026.** *"Remove the following text: 'Copies are also
+gladly provided to anyone who can't afford the purchase price.'"*
+
+It left the site in 1.4.0, along with the review-copy entry it was attached to,
+and it was raised back to Brian because it was the one thing removed that he had
+not explicitly asked to remove — it is not about review copies, and it is a
+standing commitment rather than a policy note. He has confirmed it goes.
+
+The reason it matters: with PDFs off the site (D-30) the only way to honour that
+sentence is to mail a physical book at Brian's own cost, to anyone who asks,
+without a mechanism for asking. Nothing on the site now promises it. Someone in
+that position can still write, and Brian can still say yes — which is where a
+decision like that belongs.
+
+**Verified absent** from `src/`, from `dist/`, and from the live pages.
