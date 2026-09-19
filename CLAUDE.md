@@ -88,6 +88,11 @@ D-35) — do not reopen it without a reason.
 
 ## Email addresses
 
+Brian's address is **bdrive.co@gmail.com** as of 19 September 2026. It was
+`brian@b-drive.us` before that, and the old one is gone from `src/` — including
+the component's own doc comment, which kept it alive after every call site had
+moved on. Do not write either address into a source comment.
+
 **No email address appears in the built HTML, and it must stay that way.**
 `src/components/MailLink.astro` emits the two halves ROT13'd into data
 attributes; one script in `Base.astro` joins them on load. Read the component's
@@ -165,7 +170,14 @@ and `git push` works.
 
 `alphatax200` and `ChoosingPresence` are also authenticated in `gh` on this
 machine. **They are separate accounts and separate projects of Brian's.** This
-repository belongs to neither. Before pushing:
+repository belongs to neither.
+
+**If work ever moves to the alphatax200 project, stop and ask Brian to switch
+accounts before touching git.** His instruction, 19 September 2026. Do not run
+`gh auth switch` on his behalf and then carry on as if nothing happened — the
+wrong active account is how a commit ends up pushed to the wrong repository.
+
+Before pushing:
 
 ```
 gh api repos/b-drive-us/brianmueller-website --jq .permissions.push   # expect true

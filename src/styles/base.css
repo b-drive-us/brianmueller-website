@@ -80,8 +80,16 @@ body{
   text-rendering:optimizeLegibility;
 }
 img{max-width:100%;height:auto;display:block}
-a{color:var(--ember-deep);text-underline-offset:3px;text-decoration-thickness:1px}
-a:hover{text-decoration-thickness:2px}
+/* Links carry no underline until hover or keyboard focus (Brian, 19 Sept 2026,
+   D-38). Colour is therefore the only always-on cue in prose, and it is a weak
+   one: measured, link against surrounding body text is 2.00:1 in light and
+   1.62:1 in dark, where WCAG 1.4.1 wants 3:1. The focus-visible rule below is
+   what keeps a keyboard user oriented, so do not drop it, and do not let a
+   later rule cancel the underline on both :hover and :focus-visible together.
+   Nav, footer, buttons and card links set their own text-decoration further
+   down this file and come later, so they keep their own affordances. */
+a{color:var(--ember-deep);text-underline-offset:3px;text-decoration-thickness:1px;text-decoration:none}
+a:hover,a:focus-visible{text-decoration:underline;text-decoration-thickness:2px}
 a:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:2px}
 
 /* ---------- type roles ---------- */
@@ -507,8 +515,10 @@ section{padding-block:clamp(3.4rem,7.5vw,6rem)}
 .contact-card{background:var(--ember-soft);border:1px solid var(--rule);border-radius:4px;
               padding:1.3rem 1.5rem;max-width:var(--measure)}
 .contact-address{font-size:clamp(1.25rem,3vw,1.6rem);margin:.35rem 0 .7rem;word-break:break-word}
-.contact-address a{color:var(--ember-deep);text-decoration:none;border-bottom:2px solid var(--rule-2)}
-.contact-address a:hover{border-bottom-color:var(--ember)}
+/* The big address keeps its border-bottom rather than a text underline, so it
+   gets ONE line on hover and not two. Transparent by default, per D-38. */
+.contact-address a{color:var(--ember-deep);text-decoration:none;border-bottom:2px solid transparent}
+.contact-address a:hover,.contact-address a:focus-visible{text-decoration:none;border-bottom-color:var(--ember)}
 .contact-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule);max-width:var(--measure)}
 .contact-list li{border-bottom:1px solid var(--rule);padding:.85rem 0;font-size:.98rem;
                  line-height:1.6;color:var(--ink-2)}
