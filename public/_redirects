@@ -8,7 +8,7 @@
 # stay above the /living-workshop/* catch-all, or every post would land on
 # /poems instead of on its own poem.
 #
-# Limits: 2,000 static + 100 dynamic. This file uses 768 static and 5 dynamic.
+# Limits: 2,000 static + 100 dynamic. This file uses 781 static and 5 dynamic.
 #
 # NOT redirected, on purpose: /privacy-policy, /cookies-policy, /disclaimer
 # and /terms-conditions keep their old paths on the new site. A rule for any
@@ -685,6 +685,7 @@
 /living-workshop/2020/7/8/dnr-do-not-resuscitate  https://brianspoems.com/poem/dnr-do-not-resuscitate  301
 /living-workshop/2020/7/9/34  https://brianspoems.com/poem/34  301
 /living-workshop/a-day-off  https://brianspoems.com/poem/a-day-off-3  301
+/living-workshop/a-difficult-space  https://brianspoems.com/poem/stardate-10191-5  301
 /living-workshop/a-healthy-heart  https://brianspoems.com/poem/a-healthy-heart  301
 /living-workshop/a-journey-in-all-directions  https://brianspoems.com/poem/a-journey-in-all-directions  301
 /living-workshop/a-new-day-will-come  https://brianspoems.com/poem/a-new-day-will-come  301
@@ -713,13 +714,18 @@
 /living-workshop/emptiness  https://brianspoems.com/poem/emptiness-2  301
 /living-workshop/every-detail-is-grace  https://brianspoems.com/poem/every-detail-is-grace  301
 /living-workshop/field-theory  https://brianspoems.com/poem/field-theory  301
+/living-workshop/first-to-let-go  https://brianspoems.com/poem/to-detach-with-love  301
 /living-workshop/follow-your-heartbreak  https://brianspoems.com/poem/follow-your-heartbreak  301
 /living-workshop/forgotten-bridge  https://brianspoems.com/poem/forgotten-bridge  301
 /living-workshop/gathering-the-sacred  https://brianspoems.com/poem/gathering-the-sacred  301
 /living-workshop/going-on-a-spiritual-journey  https://brianspoems.com/poem/going-on-a-spiritual-journey  301
 /living-workshop/going-there  https://brianspoems.com/poem/going-there  301
+/living-workshop/here-i-am-love  https://brianspoems.com/poem/here-i-am  301
+/living-workshop/hold-steady  https://brianspoems.com/poem/steady  301
 /living-workshop/how-to-live-forever  https://brianspoems.com/poem/how-to-live-forever  301
 /living-workshop/i-close-my-eyes-and-breathe  https://brianspoems.com/poem/i-close-my-eyes-and-breathe  301
+/living-workshop/i-drink-for-a-reason  https://brianspoems.com/poem/the-pint-glass  301
+/living-workshop/i-love-you  https://brianspoems.com/poem/embrace-this-world  301
 /living-workshop/i-must-remember  https://brianspoems.com/poem/i-must-remember  301
 /living-workshop/impermanence  https://brianspoems.com/poem/impermanence  301
 /living-workshop/in-the-mirror  https://brianspoems.com/poem/in-the-mirror-2  301
@@ -732,17 +738,21 @@
 /living-workshop/leave-it  https://brianspoems.com/poem/leave-it  301
 /living-workshop/let-the-mystery-be  https://brianspoems.com/poem/let-the-mystery-be  301
 /living-workshop/maybe-my-story  https://brianspoems.com/poem/maybe-my-story  301
+/living-workshop/maybe-tomorrow-the-sun  https://brianspoems.com/poem/the-spring-rains-gush  301
 /living-workshop/messy  https://brianspoems.com/poem/messy  301
 /living-workshop/monday-mornings  https://brianspoems.com/poem/monday-mornings  301
 /living-workshop/mordita  https://brianspoems.com/poem/mordita  301
 /living-workshop/mud-and-mystery  https://brianspoems.com/poem/mud-and-mystery  301
 /living-workshop/next-letter  https://brianspoems.com/poem/next-letter  301
+/living-workshop/no-hard-feelings  https://brianspoems.com/poem/men-and-their-feelings  301
 /living-workshop/no-need-to-explain  https://brianspoems.com/poem/no-need-to-explain  301
 /living-workshop/not-speaking  https://brianspoems.com/poem/not-speaking  301
 /living-workshop/ode-to-joy  https://brianspoems.com/poem/ode-to-joy  301
+/living-workshop/ode-to-mortality  https://brianspoems.com/poem/landfill  301
 /living-workshop/ode-to-the-wild-god  https://brianspoems.com/poem/ode-to-the-wild-god  301
 /living-workshop/our-grip-weakens  https://brianspoems.com/poem/our-grip-weakens  301
 /living-workshop/pet-alligator-psa  https://brianspoems.com/poem/alligator-psa  301
+/living-workshop/poets-wanted  https://brianspoems.com/poem/handful-of-poems  301
 /living-workshop/practicing-presence  https://brianspoems.com/poem/practicing-presence  301
 /living-workshop/prayer-flag  https://brianspoems.com/poem/prayer-flag  301
 /living-workshop/prayer-for-our-fireside-council  https://brianspoems.com/poem/prayer-for-our-fireside-council  301
@@ -754,6 +764,8 @@
 /living-workshop/seeing-from-within  https://brianspoems.com/poem/seeing-from-within  301
 /living-workshop/seek-the-edge  https://brianspoems.com/poem/seek-the-edge  301
 /living-workshop/shadow-work  https://brianspoems.com/poem/shadow-work-2  301
+/living-workshop/share-my-heart  https://brianspoems.com/poem/show-you-my-palms-a-prayer  301
+/living-workshop/sharing-our-gifts  https://brianspoems.com/poem/a-want-to-give  301
 /living-workshop/shit-is-going-haywire  https://brianspoems.com/poem/shit-is-going-haywire  301
 /living-workshop/somewhere-spinning  https://brianspoems.com/poem/somewhere-spinning  301
 /living-workshop/soul-must-come-first  https://brianspoems.com/poem/soul-must-come-first  301
@@ -782,6 +794,7 @@
 /living-workshop/trinity  https://brianspoems.com/poem/trinity  301
 /living-workshop/trinity-explodes  https://brianspoems.com/poem/trinity-explodes  301
 /living-workshop/trust-stillness-journey-into-midlife  https://brianspoems.com/poem/trust-stillness  301
+/living-workshop/tsunami-of-poems  https://brianspoems.com/poem/handful-of-poems  301
 /living-workshop/vulnerable-and-open  https://brianspoems.com/poem/a-speck-of-truth  301
 /living-workshop/waking-up-to-the-dark  https://brianspoems.com/poem/waking-up-to-the-dark  301
 /living-workshop/war-is-a-force  https://brianspoems.com/poem/war-is-a-force  301

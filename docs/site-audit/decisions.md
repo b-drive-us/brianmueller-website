@@ -805,3 +805,28 @@ All twelve destinations verified HTTP 200 on 19 September 2026.
 of the 1,834 archive poems and many of the titles are announcements rather than
 poems. `/poems` carries a line written for a reader arriving from an old link,
 which is the right landing for them. Question closed.
+
+## D-35 — The thirteen adaptations redirect to the poems they were adapted from
+
+**Brian, 19 September 2026.** The "plausible" band of Section C, scored 0.30 to
+0.55, turned out not to need a judgement about similarity at all. Every one of
+those thirteen blog posts ends with a line Brian wrote: *"This poem has been
+adapted and was originally shared on April 6, 2017, and was titled Men and
+Their Feelings."* All thirteen name their original and all thirteen confirm the
+match the scores had proposed. The one exception, *Here I Am Love*, gives only a
+date — 28 March 2017 — which is the date the archive carries for *Here I am!*,
+along with the same opening line.
+
+The thing to be clear about, and the reason this was put to Brian rather than
+shipped: **these are adaptations, not the same text.** *Ode to Mortality* is a
+rewrite of *Landfill*. The archive holds *Landfill*; the adaptation is not in
+the archive at all. A visitor following the old link reaches the poem's
+ancestor. Brian's judgement, and mine: that is a better landing than a
+directory page, and his own closing line is what establishes the lineage.
+
+*Poets Wanted* and *Tsunami of Poems* are both adaptations of *Handful of
+Poems*, so two legacy URLs share one destination.
+
+All twelve distinct destinations verified HTTP 200 on 19 September 2026. This
+closes Section C and, with D-34, the whole of the legacy-poem redirect work:
+52 of the 226 legacy URLs now reach a poem; the remaining 174 reach `/poems`.
