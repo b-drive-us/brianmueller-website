@@ -2,6 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "brianmueller-website",
   "compatibility_date": "2026-08-28",
+  // Off: with it on, brianmueller-website.brian-b89.workers.dev serves the
+  // PRODUCTION build - a second, fully indexable copy of the site on a hostname
+  // nobody needs. The canonical tags point at www, which is most of the
+  // protection, but a canonical is a hint and there is no reason for that
+  // address to answer at all. The custom domain is a separate route and is
+  // unaffected. (M04)
+  "workers_dev": false,
   "assets": {
     "directory": "./dist",
     "html_handling": "drop-trailing-slash",

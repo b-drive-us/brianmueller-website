@@ -10,6 +10,7 @@
  *
  * Neither shows up in a page, a screenshot or a link check. Both show up here.
  */
+import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { site } from '../src/site.config.mjs';
@@ -18,6 +19,7 @@ const VERSION = JSON.parse(readFileSync('package.json', 'utf8')).version;
 
 const DIST = 'dist';
 const problems = [];
+let cspHashes = { allowed: 0, used: 0 };
 const fail = (m) => problems.push(m);
 
 function htmlFiles(dir) {
@@ -125,6 +127,41 @@ else {
     fail(`sitemap: ${locs.length} urls but ${expected} indexable pages were built`);
 }
 
+// ---- the CSP script-src hashes -------------------------------------------
+// script-src allows three SHA-256 hashes and no 'unsafe-inline'. Change one
+// character of an inline script and the hash changes, the browser silently
+// refuses to run it, and nothing else in this build notices: the page still
+// renders, the link check still passes, and the only evidence is a console
+// error no visitor will report. That is the failure this catches (M06).
+//
+// JSON-LD blocks are data, not script: script-src does not apply to them and
+// they must not be hashed. The type filter below is what separates them.
+{
+  const headersText = readFileSync(join(DIST, '_headers'), 'utf8');
+  const csp = headersText.match(/Content-Security-Policy:([^\n]*)/)?.[1] ?? '';
+  const allowed = new Set([...csp.matchAll(/'sha256-([A-Za-z0-9+/=]+)'/g)].map(m => m[1]));
+  const found = new Map();                       // hash -> first file that had it
+
+  for (const file of pages) {
+    const html = readFileSync(file, 'utf8');
+    for (const m of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+      const [, attrs, body] = m;
+      if (/\ssrc=/.test(attrs)) continue;                       // external, covered by host rules
+      const type = attrs.match(/type="([^"]+)"/)?.[1];
+      if (type && type !== 'text/javascript' && type !== 'module') continue;   // ld+json etc.
+      const h = createHash('sha256').update(body, 'utf8').digest('base64');
+      if (!found.has(h)) found.set(h, file);
+    }
+  }
+  for (const [h, file] of found)
+    if (!allowed.has(h))
+      fail(`${file}: an inline script is not in the CSP. Add 'sha256-${h}' to script-src.`);
+  for (const h of allowed)
+    if (!found.has(h))
+      fail(`_headers: script-src allows 'sha256-${h}', which no page uses. Remove it.`);
+  cspHashes = { allowed: allowed.size, used: found.size };
+}
+
 const headers = readFileSync(join(DIST, '_headers'), 'utf8');
 const headerNoindex = /^[ \t]+X-Robots-Tag:\s*noindex/m.test(headers);
 if (site.indexable && headerNoindex) fail('production _headers still sets X-Robots-Tag: noindex');
@@ -139,5 +176,6 @@ if (problems.length) {
 }
 console.log(
   `check: ${site.name} v${VERSION} ok · ${pages.length} pages · canonical on ${site.origin} · ` +
-  `noindex on ${noindexCount} · _headers X-Robots-Tag ${headerNoindex ? 'set' : 'absent'}`
+  `noindex on ${noindexCount} · CSP ${cspHashes.used}/${cspHashes.allowed} hashes · ` +
+  `_headers X-Robots-Tag ${headerNoindex ? 'set' : 'absent'}`
 );

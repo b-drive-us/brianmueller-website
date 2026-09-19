@@ -1,14 +1,14 @@
 {
   "name": "brianmueller-website",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "SITE_ENV=preview astro dev",
-    "build": "npm run build:beta",
-    "build:beta": "SITE_ENV=beta astro build && SITE_ENV=beta node tools/generate-seo.mjs && SITE_ENV=beta node tools/check-build.mjs",
-    "build:production": "SITE_ENV=production astro build && SITE_ENV=production node tools/generate-seo.mjs && SITE_ENV=production node tools/check-build.mjs",
-    "build:preview": "SITE_ENV=preview astro build && SITE_ENV=preview node tools/generate-seo.mjs && SITE_ENV=preview node tools/check-build.mjs",
+    "build": "node tools/which-site.mjs",
+    "build:beta": "node tools/generate-redirects.mjs --check && SITE_ENV=beta astro build && SITE_ENV=beta node tools/generate-seo.mjs && SITE_ENV=beta node tools/check-build.mjs",
+    "build:production": "node tools/generate-redirects.mjs --check && SITE_ENV=production astro build && SITE_ENV=production node tools/generate-seo.mjs && SITE_ENV=production node tools/check-build.mjs",
+    "build:preview": "node tools/generate-redirects.mjs --check && SITE_ENV=preview astro build && SITE_ENV=preview node tools/generate-seo.mjs && SITE_ENV=preview node tools/check-build.mjs",
     "preview": "SITE_ENV=preview astro preview"
   },
   "dependencies": {

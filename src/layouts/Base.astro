@@ -61,6 +61,26 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
         tools/check-build.mjs fails the build if the artifact disagrees. */}
     {!indexable && <meta name="robots" content="noindex, nofollow" />}
 
+    {/* Icons. There were none at all until 1.1.0, so every first visit made a
+        404 request for /favicon.ico and every tab and bookmark showed a blank
+        page icon (M07). The SVG is the site's own Newsreader B and carries its
+        own dark-mode rule; the .ico is the fallback for browsers that ignore
+        SVG icons; the touch icon is opaque because iOS composites alpha on
+        black. The manifest needs `manifest-src 'self'` in the CSP - it falls
+        back to default-src, which is 'none'.
+
+        The SVG carries its colours as presentation attributes, not a <style>
+        block. style-src is 'self' with no 'unsafe-inline', so an inline
+        stylesheet inside an SVG document is refused - and a refused stylesheet
+        means fill defaults to black, which renders a black B on a black tile.
+        Caught by rendering it under the real policy, not by reading it. */}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#F7F4EF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1B1714" media="(prefers-color-scheme: dark)" />
+
     {/* The build's own version, from package.json. One request answers "what
         is live?" - which matters for a rollback, and will matter more once
         payments are involved. tools/check-build.mjs enforces that it matches. */}
