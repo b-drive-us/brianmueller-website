@@ -8,6 +8,7 @@
 | **Staging** | https://brianmueller-website-beta.brian-b89.workers.dev — Worker `brianmueller-website-beta`, `noindex` on every response. |
 | **Deploys** | Push to `main` → Cloudflare Workers Builds runs `npm run build:production` and `npx wrangler deploy`. Push to any other branch uploads a preview version and leaves production alone. |
 | **Rollback** | Promote the previous version in the Worker's Version History. |
+| **Version** | **1.0.0** — stamped into every page and readable from outside: `curl -s https://www.brianmueller.com/ \| grep 'name="version"'`. See `CHANGELOG.md`. |
 
 ## Building
 
@@ -22,7 +23,15 @@ npm run build:preview      # localhost
 ```
 
 `tools/check-build.mjs` runs after every build and fails it if the artifact does not
-match the environment it claims to be.
+match the environment it claims to be, or if any page's version stamp disagrees
+with `package.json`.
+
+The version lives in `package.json` and nowhere else. `astro.config.mjs` reads it
+there and hands it to the build as a constant, which `Base.astro` emits as
+`<meta name="version">`. It is deliberately not read inside `src/site.config.mjs`:
+that module is imported by `Base.astro` and therefore ends up inside the page
+bundle, where `import.meta.url` points into `dist/` and `package.json` is not
+there.
 
 > `npm run build` with no suffix currently means **beta**. See finding `M16` in
 > `docs/site-audit/audit-2026-09-18.md`.

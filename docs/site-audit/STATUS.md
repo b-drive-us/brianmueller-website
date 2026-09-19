@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com`. **Audited 2026-09-18** — `audit-2026-09-18.md`, 18 findings (`M01`–`M18`), 1 high. Next: merge with the parallel Codex audit, then the maintenance release, then Stripe. |
+| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com` at **version 1.0.0** (tagged `v1.0.0`, 2026-09-19 — see `../../CHANGELOG.md`). **Audited 2026-09-18** — `audit-2026-09-18.md`, 18 findings (`M01`–`M18`), 1 high. Next: merge with the parallel Codex audit, then the maintenance release, then Stripe. |
 | **Repository** | `github.com/b-drive-us/brianmueller-website`, working copy at `Publishing/brianmueller-website/06 - Site` |
 | **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
 | **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |
@@ -12,7 +12,7 @@
 | **Rollback** | Recreate `www CNAME ext-sq.squarespace.com`. Squarespace was never stopped. Full detail in `cutover-2026-09-18.md`. |
 | **Divergence** | **None.** The live site serves `about.CM_4s7Jy.css`, the stylesheet this commit builds. |
 | **Baseline build** | `npm run build` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 5.18.2, Node 22.23.2 |
-| **Checks** | `tools/check-build.mjs` fails the build on any environment/artifact mismatch. Live journey harness: **76/76 passing** across 1280px and 390px, light and dark, plus a keyboard-only pass. |
+| **Checks** | `tools/check-build.mjs` fails the build on any environment/artifact mismatch, and on any page whose `<meta name="version">` is missing or disagrees with `package.json`. Live journey harness: **76/76 passing** across 1280px and 390px, light and dark, plus a keyboard-only pass. |
 | **Readiness** | Live and verified on the real hostname after DNS propagation. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 closed** — the recovered post is in the archive. Open: Search Console property (none exists on either Google account), and the HSTS ramp. |
 | **Records updated** | 2026-09-18 |
 

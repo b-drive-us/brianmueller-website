@@ -3,6 +3,9 @@ import '../styles/fonts.css';
 import '../styles/base.css';
 import { site, absolute, NON_INDEXABLE_PATHS } from '../site.config.mjs';
 
+// Replaced at build time by astro.config.mjs from package.json.
+const VERSION = __SITE_VERSION__;
+
 const {
   title = "Brian J. Mueller",
   description = "Poet. Twelve collections of poetry, and a men's writing retreat each January.",
@@ -57,6 +60,11 @@ const isCurrent = (href) => path === href || path.startsWith(href + "/");
         line to remember to remove: `npm run build:production` turns this off and
         tools/check-build.mjs fails the build if the artifact disagrees. */}
     {!indexable && <meta name="robots" content="noindex, nofollow" />}
+
+    {/* The build's own version, from package.json. One request answers "what
+        is live?" - which matters for a rollback, and will matter more once
+        payments are involved. tools/check-build.mjs enforces that it matches. */}
+    <meta name="version" content={VERSION} />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="Brian J. Mueller" />

@@ -14,6 +14,8 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { site } from '../src/site.config.mjs';
 
+const VERSION = JSON.parse(readFileSync('package.json', 'utf8')).version;
+
 const DIST = 'dist';
 const problems = [];
 const fail = (m) => problems.push(m);
@@ -44,6 +46,14 @@ for (const file of pages) {
   if (!canonical) fail(`${file}: no canonical link`);
   else if (!canonical.startsWith(site.origin + '/') && canonical !== site.origin + '/')
     fail(`${file}: canonical "${canonical}" is not on ${site.origin}`);
+
+  // The version stamp. A page without one, or with one that disagrees with
+  // package.json, means the artifact cannot be identified from outside - which
+  // is the entire reason the stamp exists.
+  const stamped = html.match(/<meta name="version" content="([^"]*)"/)?.[1];
+  if (!stamped) fail(`${file}: no <meta name="version">`);
+  else if (stamped !== VERSION)
+    fail(`${file}: version stamp "${stamped}" does not match package.json "${VERSION}"`);
 
   const hasNoindex = /<meta name="robots"[^>]*noindex/i.test(html);
   if (hasNoindex) noindexCount++;
@@ -128,6 +138,6 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(
-  `check: ${site.name} ok · ${pages.length} pages · canonical on ${site.origin} · ` +
+  `check: ${site.name} v${VERSION} ok · ${pages.length} pages · canonical on ${site.origin} · ` +
   `noindex on ${noindexCount} · _headers X-Robots-Tag ${headerNoindex ? 'set' : 'absent'}`
 );
