@@ -156,3 +156,27 @@ the evidence; `CHANGELOG.md` holds what shipped and why.
 
 When you make a decision with Brian, **write it into `decisions.md` in the same
 session.** That file is the reason this project can be picked up cold.
+
+## Which GitHub account, and the SSH key that is not a GitHub key
+
+The remote is `https://github.com/b-drive-us/brianmueller-website.git`, on
+Brian's **brian@b-drive.us** account. `gh` is authenticated for it over HTTPS
+and `git push` works.
+
+`alphatax200` and `ChoosingPresence` are also authenticated in `gh` on this
+machine. **They are separate accounts and separate projects of Brian's.** This
+repository belongs to neither. Before pushing:
+
+```
+gh api repos/b-drive-us/brianmueller-website --jq .permissions.push   # expect true
+```
+
+The only SSH key on the Mac, `~/.ssh/id_choosingpresence`, is a **SiteGround
+deploy key for choosingpresence.com** — port 18765, comment
+`choosingpresence-deploy`. It is not a GitHub key, `~/.ssh/config` has no
+`github.com` block, and loading it will not authenticate you. I suggested it
+once and was wrong.
+
+If `node_modules` will not build, it is probably holding **linux**-arm64
+bindings from an earlier containerised session. `npm ci` fixes it and leaves
+`package-lock.json` byte-identical.
