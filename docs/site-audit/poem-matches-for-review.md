@@ -4,7 +4,7 @@
 announcement. **27 of them now go to a real poem** and the rest go to `/poems`,
 which carries a line written for someone arriving from an old link.
 
-Sections A and B are shipped in 1.1.0. C and D need you.
+Sections A and B shipped in 1.1.0. **C and D were settled on 19 September 2026 (D-33, D-34, D-35) and shipped in 1.4.1:** all 25 of Section C now redirect to a poem, and Section D's 174 stay pointed at `/poems`. The counts in the paragraph above are the pre-1.4.1 state — 52 of the 226 legacy URLs now reach a poem.
 ---
 
 ## A. Shipped, confirmed — 15

@@ -19,6 +19,45 @@ curl -s https://www.brianmueller.com/ | grep 'name="version"'
 
 ---
 
+## 1.4.1 — 19 September 2026
+
+**Twenty-five more legacy poem URLs now reach a poem instead of a directory
+page.** All of Section C of `docs/site-audit/poem-matches-for-review.md`, which
+had been sitting unshipped because each entry asserts that two differently
+titled pieces are the same work — Brian's call, not the matcher's.
+
+Twelve are the same poem under a rewritten title (*Who'm I Kidding?* → *Who am
+I Kidding?*, *One in the Same* → *One and the Same*, *Allow Yourself to Sit* →
+*Choosing Presence*, and nine more). Confirmed by Brian (`D-33`).
+
+The other thirteen settled themselves. Each of those blog posts ends with a
+line Brian wrote at the time — *"This poem has been adapted and was originally
+shared on April 6, 2017, and was titled Men and Their Feelings"* — which names
+the original outright. All thirteen agreed with what the scores had proposed.
+*Here I Am Love* gives only a date, 28 March 2017, which is the date the
+archive carries for *Here I am!*, with the same opening line.
+
+Worth stating plainly, because the redirect implies more than it delivers:
+**these thirteen are adaptations, not the same text.** *Ode to Mortality* is a
+rewrite of *Landfill*; the archive holds *Landfill* and the adaptation exists
+nowhere. A reader following the old link arrives at the poem's ancestor.
+Better than a directory page, and Brian's own closing line is what establishes
+the lineage — but not the thing they clicked (`D-35`).
+
+*Poets Wanted* and *Tsunami of Poems* are both adaptations of *Handful of
+Poems*, so two legacy URLs share one destination. All twenty-four distinct
+destinations verified HTTP 200 before the commit.
+
+The 174 legacy URLs with no counterpart anywhere in the 1,834-poem archive stay
+pointed at `/poems`, which carries a line written for a reader arriving from an
+old link (`D-34`). That closes the legacy-redirect work: **52 of 226 reach a
+poem, 174 reach `/poems`, none reach a dead end.**
+
+Every row is recorded in `redirect-map.csv` with its evidence and approval, and
+`public/_redirects` is regenerated from that file rather than edited.
+
+---
+
 ## 1.4.0 — 19 September 2026
 
 **Brian's address is no longer printed on the website.** It was in the markup as
