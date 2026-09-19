@@ -2,19 +2,21 @@
 
 | | |
 |---|---|
-| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com` at **version 1.3.0** (tagged; see `../../CHANGELOG.md`). 1.1.0 shipped the merged audit fixes, 1.2.0 the Astro 7 upgrade, 1.3.0 the Cookie Policy theme reset (`R03`). **Audited 2026-09-18** — `audit-2026-09-18.md`, 18 findings (`M01`–`M18`), 1 high. Next: merge with the parallel Codex audit, then the maintenance release, then Stripe. |
+| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com` at **version 1.4.1** (tagged; see `../../CHANGELOG.md`). 1.1.0 shipped the merged audit fixes, 1.2.0 the Astro 7 upgrade, 1.3.0 the Cookie Policy theme reset (`R03`), 1.4.0 took both email addresses out of the markup and removed PDFs, review copies and the retreat schedule, 1.4.1 closed the legacy-poem redirects. **Next: the contact form, then Stripe** — both blocked on the same thing, item 24, a way for the site to send mail. |
 | **Repository** | `github.com/b-drive-us/brianmueller-website`, working copy at `Publishing/brianmueller-website/06 - Site` |
-| **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
-| **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |
-| **Production** | `https://www.brianmueller.com`, Worker `brianmueller-website`, `npm run build:production`, commit `0a985a0`, live **2026-09-18**. Apex 301s to www. |
+| **Branch** | `main` at `da7ec4e`, pushed, tagged `v1.4.1`. |
+| **Candidate commit** | `da7ec4e` — "Merge Step 5 — the legacy poem redirects" (2026-09-19) |
+| **Production** | `https://www.brianmueller.com`, Worker `brianmueller-website`, `npm run build:production`, commit `da7ec4e`, live **2026-09-19** (v1.4.1). Apex 301s to www. **HSTS on at the edge**, `max-age=15552000`, no `includeSubDomains`, no preload (D-32). |
 | **Staging** | `https://brianmueller-website-beta.brian-b89.workers.dev`, Worker `brianmueller-website-beta`, `npm run build:beta`, `noindex` on every response. |
 | **brianmueller.org** | **Fully retired 18 Sept 2026** (D-25). Zone **removed from Cloudflare**; the domain no longer resolves. No Worker, no redirect rule, nothing in the live site references it. Registration is not expected to be renewed; the NameCheap nameservers still point at Cloudflare, which is harmless for a lapsing domain. |
 | **Rollback** | Recreate `www CNAME ext-sq.squarespace.com`. Squarespace was never stopped. Full detail in `cutover-2026-09-18.md`. |
 | **Divergence** | **None.** The live site serves `about.CM_4s7Jy.css`, the stylesheet this commit builds. |
-| **Baseline build** | `npm run build` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 5.18.2, Node 22.23.2 |
+| **Baseline build** | `npm run build:production` → exit 0, 29 HTML files (28 published pages + `404.html`), Astro 7.3.3, Node 22.23.2. Bare `npm run build` fails deliberately (`M16`). |
 | **Checks** | `tools/check-build.mjs` fails the build on any environment/artifact mismatch, and on any page whose `<meta name="version">` is missing or disagrees with `package.json`. Live journey harness: **76/76 passing** across 1280px and 390px, light and dark, plus a keyboard-only pass. |
-| **Readiness** | Live and verified on the real hostname after DNS propagation. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 closed** — the recovered post is in the archive. Open: Search Console property (none exists on either Google account), and the HSTS ramp. |
-| **Records updated** | 2026-09-18 |
+| **Legacy poem URLs** | **Closed 2026-09-19.** Of the 226, **52 now reach a poem** and 174 reach `/poems`, which carries a line written for a reader arriving from an old link. None reach a dead end. All 25 of Section C shipped in 1.4.1 (D-33, D-35); Section D stays as it is (D-34). Every row's evidence and approval is in `redirect-map.csv`, and `public/_redirects` is generated from it. |
+| **Readiness** | Live and verified on the real hostname after DNS propagation. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 closed** — the recovered post is in the archive. **HSTS closed** (D-32). Open: Search Console property (none exists on either Google account). |
+| **Carried to the next release** | The *Bull Heart* and *Jonah* page-count caveats, *Men Writing for Change* Vol. 1 re-recorded to its second printing, `author` and `editor` in the anthologies' JSON-LD, and the Terms rewrite (`R07`, scoping §§3–5 per D-30). |
+| **Records updated** | 2026-09-19 |
 
 ## What the audit actually examined
 
