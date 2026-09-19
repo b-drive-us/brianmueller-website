@@ -2,9 +2,14 @@
 /**
  * A mail link that puts no address in the page source.
  *
- * Why this exists: brian@b-drive.us and tsparough@gmail.com were sitting in the
+ * Why this exists: Brian's address and tsparough@gmail.com were sitting in the
  * markup as `mailto:` links on five pages, which is exactly the shape every
  * address harvester looks for. Removed 19 September 2026 at Brian's request.
+ *
+ * Do not write either address into this comment. The build greps the whole of
+ * dist/ for anything address-shaped, but a source comment is a habit worth not
+ * starting: Brian's address changed once already (to bdrive.co@gmail.com, 19
+ * September 2026) and the stale one lived on here until it was noticed.
  *
  * What it does and does not do. The two halves of the address are ROT13'd into
  * data attributes and joined by script at load. That is not secrecy — the page
@@ -25,7 +30,7 @@
  * `class` styles the ASSEMBLED link, not the placeholder — otherwise a fallback
  * <a class="btn"> would sit inside a span that is also a .btn until script runs.
  *
- *   <MailLink user="brian" domain="b-drive.us">
+ *   <MailLink user="bdrive.co" domain="gmail.com">
  *     <a href="/contact">the contact page</a>
  *   </MailLink>
  *

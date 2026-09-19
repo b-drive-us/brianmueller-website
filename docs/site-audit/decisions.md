@@ -773,11 +773,10 @@ Feeds `R07` and the Terms rewrite.
   at the point of confusion rather than a contradiction repair. The line drawn
   is the one the licence draws: the poems, **not** the book's design,
   typesetting or the downloaded file.
-- **The collection-agent arrangement stays out of Terms for now.** B:Drive
-  collects retreat money as agent for the Ohio Illuman Board (agreement signed
-  2026-08-30), and Terms reads as though B:Drive is the principal. Deferred to
-  the Stripe work, when money actually moves and the agreement can be read
-  beside the text. **This is an open item, not a closed one.**
+- **The collection-agent arrangement stays out of Terms for now.** ~~Deferred to
+  the Stripe work.~~ **Closed by D-39, 19 September 2026:** Brian owns the
+  retreat and collects the fees himself, so Terms naming B:Drive as the party
+  you transact with is accurate as published. No wording change was needed.
 
 ## D-31 — Both addresses come out of the markup; the form is the real fix
 
@@ -912,3 +911,59 @@ that position can still write, and Brian can still say yes — which is where a
 decision like that belongs.
 
 **Verified absent** from `src/`, from `dist/`, and from the live pages.
+
+## D-38 — Links carry no underline until hover or keyboard focus
+
+**Brian, 19 September 2026:** *"Remove all the underlines from the links on the
+website. Add a hover effect to the link that creates the underline."*
+
+Done in `base.css`: the base `a` rule gains `text-decoration:none`, and
+`a:hover, a:focus-visible` restores it at 2px. The big address on `/contact`
+keeps its `border-bottom` mechanism rather than a text underline, made
+transparent at rest, so it shows **one** line on hover and not two. Nav, footer,
+buttons and card links already set their own `text-decoration` further down the
+file and come later in source order, so they keep the affordances they had —
+verified in a browser, not inferred: hovering a nav link colours its
+`border-bottom` and leaves `text-decoration` at `none`.
+
+**The trade-off, measured rather than assumed.** In prose, colour is now the
+only always-on cue. Link text against surrounding body text is **2.00:1 in
+light and 1.62:1 in dark**. WCAG 1.4.1 (Use of Color) wants **3:1** where colour
+is the sole distinguisher. Both themes are below it. Against the background the
+links are fine — 8.43:1 and 9.60:1 — so this is a legibility question about
+*telling a link from text*, not about reading it.
+
+Who this reaches: a sighted person scanning a paragraph, on a device where
+hovering is awkward or impossible. A keyboard user is covered — focus gives both
+an underline and a 3px outline. A screen-reader user is unaffected.
+
+Brian was shown the measurement and the options — ship as asked, lift the link
+colour until it clears 3:1 against body text in both themes, or keep underlines
+inside prose only and drop them everywhere else — and chose to ship as asked.
+
+Related: the `/poems` button at 1.37:1 (`M01` / `R02`) is the precedent for
+measuring this rather than eyeballing it.
+
+## D-39 — The collection-agent agreement is dropped; Brian is the principal
+
+**Brian, 19 September 2026:** *"Drop the collection-agent agreement. It is not
+necessary. I own the rights to the writing retreat and am legally allowed to
+collect all registration fees. I'm also the one with the legal responsibility to
+pay all parties involved. From what I can tell, there's no need for this
+agreement."*
+
+This closes the item D-30 left open. The Terms describe B:Drive Communications
+LLC as the party you transact with, and on Brian's account that is simply
+accurate — he owns the retreat, collects the fees, and carries the obligation to
+pay Bergamo and everyone else. There is no agency relationship for the Terms to
+disclose, so **no wording changes**: the page as shipped in 1.5.0 is correct as
+it stands.
+
+What this removes is a dependency, not a fact. The agreement **was** signed on
+2026-08-30 by the Acting President of the Ohio Illuman Board, and
+`content-sources.md` still records that, annotated. Whether to formally rescind
+a signed agreement with a third party is between Brian and the Board; it is not
+a website matter and nothing here turns on it.
+
+**Stripe is unaffected.** The refund schedule on `/retreat` is still the policy
+Stripe must implement (D-30), and the money still lands with B:Drive.

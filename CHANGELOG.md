@@ -19,6 +19,59 @@ curl -s https://www.brianmueller.com/ | grep 'name="version"'
 
 ---
 
+## 1.6.0 — 19 September 2026
+
+**Brian's address changed, and links lost their underlines.**
+
+### The address
+
+`brian@b-drive.us` becomes **`bdrive.co@gmail.com`**, in all five places it was
+assembled from — `/contact`, `/retreat` twice, `/privacy-policy` and
+`/cookies-policy`. Neither address is in the built HTML: `MailLink.astro` still
+ROT13s the two halves into data attributes and one script in `Base.astro` joins
+them on load, so what ships is `data-mail-u="oqevir.pb"` and
+`data-mail-d="tznvy.pbz"`. Verified assembled in a browser, and the standing
+grep of `dist/` for anything address-shaped still returns nothing.
+
+The old address also survived in `MailLink.astro`'s own doc comment, which every
+call site had long since moved past. It is gone, and the comment now says not to
+write an address there again.
+
+### Links
+
+**No underline until hover or keyboard focus (`D-38`).** The base rule gains
+`text-decoration:none`; `a:hover, a:focus-visible` restores it at 2px. The
+address on `/contact` keeps its `border-bottom` mechanism, transparent at rest,
+so it shows one line on hover rather than two.
+
+Nav, footer, buttons and card links set their own `text-decoration` later in the
+file and keep the affordances they already had. That was verified in a browser
+rather than reasoned about: hovering a nav link colours its `border-bottom` and
+leaves `text-decoration` at `none`, and a real Tab press — not `.focus()` —
+confirms a prose link takes both the underline and the 3px outline.
+
+**The trade-off is real and was measured.** In prose, colour is now the only
+always-on cue, and link text against surrounding body text is **2.00:1 in light
+and 1.62:1 in dark**, where WCAG 1.4.1 wants 3:1. Against the background the
+links are unchanged and fine — 8.43:1 and 9.60:1 — so this is about telling a
+link from text, not about reading it. It reaches a sighted person scanning a
+paragraph without hovering. Keyboard users keep both cues; screen-reader users
+are unaffected. Brian was given the measurement and three options and chose to
+ship as asked.
+
+### The collection-agent agreement is dropped (`D-39`)
+
+The item `D-30` left open is closed, and closed without a code change. Brian
+owns the retreat, collects the registration fees and carries the obligation to
+pay everyone involved, so the Terms naming B:Drive Communications LLC as the
+party you transact with is accurate as published. There is no agency
+relationship to disclose.
+
+The 2026-08-30 signing stays on the record in `content-sources.md`, annotated as
+superseded. Dropping it removes a dependency, not a fact.
+
+---
+
 ## 1.5.0 — 19 September 2026
 
 **The four items carried out of 1.4.1, all of them decided before the work

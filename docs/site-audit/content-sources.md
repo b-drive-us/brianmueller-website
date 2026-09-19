@@ -38,7 +38,7 @@ Covers are generated from `03 - Assets/covers-source/`, which came from
 | 2026-08-30 | Retreat Friday: arrive 4:00, rooms by 5:00, dinner 6:00, first session ~7:00 |
 | 2026-08-30 | Dayton and Beavercreek are interchangeable for the venue at ZIP 45430 |
 | 2026-08-30 | Tom Sparough approved his own biography |
-| 2026-08-30 | Collection agent agreement signed by the Acting President, Ohio Illuman Board |
+| 2026-08-30 | Collection agent agreement signed by the Acting President, Ohio Illuman Board — **superseded 2026-09-19 by D-39: Brian owns the retreat and collects the fees himself, so the site depends on no agency relationship. The signing is left on the record because it happened; it is simply no longer load-bearing.** |
 
 ## Known fabrications to remove
 
