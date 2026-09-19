@@ -19,6 +19,69 @@ curl -s https://www.brianmueller.com/ | grep 'name="version"'
 
 ---
 
+## 1.3.0 — 19 September 2026
+
+**The Cookie Policy now performs the reset it describes.** It said: *"So does
+switching the theme button back — the site then simply follows whatever your
+device is set to."* The toggle calls `localStorage.setItem` on every click and
+has no path that removes the key, so switching back stored the opposite value.
+The published instruction for removing stored data did not remove it. Found by
+the Codex audit (`R03`).
+
+### What changed
+
+- **A real control.** `/cookies-policy` carries a **Use my device setting**
+  button that deletes the `theme` key, drops the `data-theme` override and tells
+  the header toggle to repaint. The two inline scripts talk through two events
+  (`themechanged`, `themecleared`) rather than reaching into each other, so
+  neither depends on the other loading first.
+- **A status line** that says what is actually stored right now, updated live —
+  including while the header toggle a few centimetres above is being used.
+- **The copy rewritten**, and it says plainly that the page previously claimed
+  the opposite: switching the header toggle back stores the other choice, it
+  does not clear anything.
+- **Two help links corrected.** Firefox pointed at *enhanced tracking
+  protection* and Brave at a *marketing page* — neither explains clearing site
+  data. Now the Firefox and Brave articles that do. All five opened in a real
+  browser; Firefox's help site blocks automated requests, so that one is correct
+  by article name but unconfirmed by rendering.
+
+### Three things the first attempt got wrong
+
+Each found by exercising the control rather than reading it, and worth recording
+because they are the same class of defect as the bug being fixed:
+
+1. **The status line went stale.** Clicking the header toggle left the page
+   still saying "nothing is stored" until a reload — the page telling a visitor
+   something false, on the page whose whole job is being accurate.
+2. **Disabling the button dropped keyboard focus** to the top of the document.
+   It is never disabled now: clearing a key that is not there is a no-op, so the
+   button is always safe to press and the line always says what is true.
+3. A keyboard test reported the button unreachable. That was the **test** being
+   wrong — `.focus()` does not trigger `:focus-visible`. Confirmed reachable by
+   real Tab navigation, with a 3px focus outline.
+
+### The CSP guard earned its keep
+
+The hash verification added in 1.1.0 caught **all four** inline-script changes
+this work took. Each time it failed the build, named the hash to add and the
+stale one to remove, and refused to proceed until `_headers` agreed. Without it
+the theme toggle would have silently stopped running on all 28 pages, with a
+console error as the only evidence. `script-src` now carries four hashes.
+
+### Verified
+
+- Behaviour walked end to end in both device schemes: fresh visit, pressing
+  reset with nothing stored, toggle out and back (which **does** leave a value
+  stored, as the new copy states), reset, and persistence across navigation.
+- Keyboard: reachable by Tab, activates on Enter, focus retained afterwards.
+- 128 loads under the enforced CSP at 305, 320, 390 and 1440 px in both themes —
+  zero console errors, zero CSP violations, zero overflow.
+- The button measures 6.74:1 light and 7.90:1 dark, hover 9.24 and 9.96, and the
+  status line 7.88 and 8.76.
+
+---
+
 ## 1.2.0 — 19 September 2026
 
 **Astro 5.18.2 → 7.3.3.** `npm audit` goes from 1 critical, 1 high and 1 low to
