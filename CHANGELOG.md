@@ -19,6 +19,110 @@ curl -s https://www.brianmueller.com/ | grep 'name="version"'
 
 ---
 
+## 1.5.0 — 19 September 2026
+
+**The four items carried out of 1.4.1, all of them decided before the work
+started and shipped unchanged from the decisions.** Three corrections that had
+been waiting on Brian's physical copies, and the Terms rewrite.
+
+### Page counts
+
+**The caveat now explains the discrepancy instead of waving at it (`D-26`).**
+Every book page carried one line: *"These details describe the first edition.
+The Amazon link above may sell a later printing with a different date or page
+count."* That is written for a reader who noticed the site says 86 and Amazon
+says 100 — and it tells them nothing. Both figures are correct. Amazon counts
+every printed leaf, front and back matter included; the site counts numbered
+pages. Brian counted 86 for *Bull Heart* and 450 for *Jonah* from the books in
+his hands, and both Amazon links resolve to the ISBN the site shows, so the two
+sides are describing the same printing. Those two pages now name the difference,
+which a reader can check.
+
+The note names the mechanism rather than Amazon's numbers. Those live on someone
+else's site and can change without anyone here being told.
+
+The other eight books keep the generic line. Their counts have no recorded
+source, so there is nothing more honest to say about them yet.
+
+**Men Writing for Change Vol. 1 is recorded from the copy that was actually
+counted (`D-27`).** The page paired "Pages 50" with ISBN 978-1979552424. The 50
+is real, but the book Brian counted is 978-1717351692 — the second printing. The
+Amazon link sells the first, listed at 48 pages. The two sides were never
+describing the same book, so Amazon's 48 was never the contradiction it looked
+like. The second printing becomes the primary record because it is the one that
+can be vouched for; the first printing keeps its ISBN and its year, and a line
+now says which one the Amazon link sells.
+
+### Credit
+
+**Both anthologies credit Brian as `editor` as well as `author` (`D-28`).** He
+wrote poems in both volumes and assembled both; the markup claimed only the
+first. The contributing men stay off the structured data by his decision — a
+poem written in a council circle is a personal thing, and nothing goes into a
+public dataset without the say-so of the person who wrote it. The visible prose
+on both pages already tells a reader the poems are not Brian's alone.
+
+### The Terms rewrite (`R07`, `D-30`)
+
+Sections 3 to 5 described a shop this website does not have. They were written
+in the present tense about placing Orders and buying Goods here, and section 4
+said flatly *"All purchases are final. We do not offer refunds."* Nothing is
+sold directly here, so a reader had no way to tell which sentence was about
+them.
+
+The fiction was only half a fiction, which is why the sections are scoped rather
+than deleted: **brianmueller.com did sell PDF copies directly, through a store
+page that no longer exists.** Those terms may still matter to someone who bought
+one, so they are kept and labelled as history.
+
+Section 3 now names the three transactions separately and says which rules reach
+each: historical direct sales, books bought from a retailer, and retreat
+registration. Sections 4 and 5 open by saying they apply only to the first.
+
+**The point of the exercise is that section 4 does not govern a retreat
+booking.** It now says so twice — once in section 3(c) and again in section 4.
+A retreat booking is governed by the refund schedule published on `/retreat`,
+which is the policy Brian will hold to when Stripe is live (`D-30`).
+
+Terms points at that schedule rather than restating it. Two copies of a refund
+policy can drift apart, and a contradiction is worth more to a reader in a
+contract than anywhere else on the site. This site has published a policy page
+describing behaviour it did not have three times (`R03`, `N15`, `N22`). The
+dates are also specific to the January 2027 retreat and expire with it; the
+retreat page gets rewritten each cycle and Terms would not.
+
+Section 5 gained one clarification beyond the scoping. It forbids sharing a
+digital product, while section 6 licenses almost all the poems under CC
+BY-NC-ND and invites exactly that. Section 6's closing line — *"Where the
+Creative Commons license applies, it governs"* — already resolves this, but only
+for a reader who gets there and connects it back. Section 5 now says it at the
+point of confusion, **and draws the line the licence actually draws: it covers
+the poems, not the book's design, typesetting, or the downloaded file.**
+
+The revision date moves from February 7, 2026 to September 19, 2026. It had been
+wrong since before the site left Squarespace.
+
+Sections 1 and 2 pick up matching definitions; sections 6 to 15 are untouched.
+
+Brian read the Terms draft before it was committed and settled the three open
+questions in it: point at the retreat page rather than restate the numbers,
+tighten the section 5 wording rather than drop or broaden it, and leave the
+collection-agent arrangement to the Stripe work, when money actually moves and
+the agreement can be read alongside the text. That last one is **open**, not
+closed — it is recorded against `D-30` and in the runbook.
+
+### Verification
+
+Built against `main` before shipping. Visible text changed on exactly four
+pages — *Bull Heart*, *Jonah*, *Men Writing for Change* Vol. 1 and
+`terms-conditions`. Vol. 2 changed only inside its JSON-LD. The remaining eight
+book pages differ only in source whitespace within a sentence and render
+identically. `compare-build-text.py` clean across 29 pages, build guards pass,
+no address anywhere in `dist`, and both `/retreat` and `/faq` link targets exist
+in the build.
+
+---
+
 ## 1.4.1 — 19 September 2026
 
 **Twenty-five more legacy poem URLs now reach a poem instead of a directory

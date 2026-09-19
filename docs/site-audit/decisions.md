@@ -679,6 +679,11 @@ to naming the actual difference, which a reader can check.
 
 Closes the Bull Heart and Jonah halves of `R05`.
 
+**Shipped in 1.5.0.** The note names the mechanism rather than Amazon's own
+figures — those are on someone else's site and can change without notice, and a
+number this site cannot verify is the thing this decision was made to stop
+publishing.
+
 ## D-27 — Men Writing for Change Vol. 1 is recorded from the second printing
 
 The site showed "Pages 50 · ISBN 978-1979552424". The 50 is real — Brian counted
@@ -692,7 +697,7 @@ to a printing nobody has verified.
 50 numbered pages — with the first printing (978-1979552424, 2017) noted, and a
 line saying which one the Amazon link sells. Record what can be vouched for.
 
-Closes `R05`.
+Closes `R05`. **Shipped in 1.5.0**, with `isbn10` moved to 1717351697 to match.
 
 ## D-28 — Men Writing for Change: contributors stay off the structured data
 
@@ -705,7 +710,10 @@ invented. The visible prose on both pages already says the poems are the
 retreat's rather than Brian's alone, which is where a reader learns it. Adding
 `editor` alongside `author` narrows the gap between the two.
 
-Closes `R06`.
+Closes `R06`. **Shipped in 1.5.0**, keyed on `kind === 'multi-author'`, which is
+the two Men Writing for Change volumes and nothing else — *Complete Bull* is
+`anthology` but it collects Brian's own three books, so `editor` would say
+something different there and is not emitted.
 
 ## D-29 — The Men Writing for Change poems were assigned to Brian, not released to the public domain
 
@@ -754,6 +762,22 @@ Closes `R04`.
   The programme is not being committed to in public at this level of detail.
 
 Feeds `R07` and the Terms rewrite.
+
+**Shipped in 1.5.0**, with three sub-questions settled by Brian on the draft:
+
+- **Terms points at `/retreat` rather than restating the refund numbers.** Two
+  copies drift apart, and the schedule expires with the January 2027 retreat —
+  the retreat page is rewritten each cycle and Terms would not be.
+- **§5 keeps a tightened licence clarification.** §6's "Where the Creative
+  Commons license applies, it governs" already reaches §5, so this is clarity
+  at the point of confusion rather than a contradiction repair. The line drawn
+  is the one the licence draws: the poems, **not** the book's design,
+  typesetting or the downloaded file.
+- **The collection-agent arrangement stays out of Terms for now.** B:Drive
+  collects retreat money as agent for the Ohio Illuman Board (agreement signed
+  2026-08-30), and Terms reads as though B:Drive is the principal. Deferred to
+  the Stripe work, when money actually moves and the agreement can be read
+  beside the text. **This is an open item, not a closed one.**
 
 ## D-31 — Both addresses come out of the markup; the form is the real fix
 
