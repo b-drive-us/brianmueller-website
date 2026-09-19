@@ -1,7 +1,7 @@
 {
   "name": "brianmueller-website",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "SITE_ENV=preview astro dev",
@@ -12,7 +12,8 @@
     "preview": "SITE_ENV=preview astro preview"
   },
   "dependencies": {
-    "astro": "^5.18.2"
+    "astro": "^7.3.3",
+    "pngjs": "^7.0.0"
   },
   "devDependencies": {
     "wrangler": "^4.131.1"

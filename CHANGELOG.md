@@ -19,6 +19,63 @@ curl -s https://www.brianmueller.com/ | grep 'name="version"'
 
 ---
 
+## 1.2.0 — 19 September 2026
+
+**Astro 5.18.2 → 7.3.3.** `npm audit` goes from 1 critical, 1 high and 1 low to
+zero. Nothing a visitor sees changes: 68 full-page renders across all 29 pages,
+two viewports and both themes are **pixel-identical** to 1.1.0.
+
+### The upgrade needs two configuration lines, and neither is optional
+
+**`vite.build.cssTarget`.** Astro 7 minifies CSS with Lightning CSS, which by
+default rewrites every width media query to Level 4 range syntax —
+`@media (max-width:640px)` becomes `@media (width<=640px)`. Browsers older than
+Chrome 104 / Firefox 102 / **Safari 16.4** do not parse that and skip the whole
+block. All six of this site's breakpoints are width queries, so on an iPhone
+still on iOS 15 the mobile layout would simply stop applying, silently. Naming a
+browser target restores the classic syntax.
+
+**`compressHTML: false`.** Astro 7's HTML compressor removes the whitespace
+between a text node and an adjacent *inline* element. Prose written across two
+source lines comes out with the words run together:
+
+```
+a chapter of
+<a href="https://illuman.org">Illuman</a>     renders as   "a chapter ofIlluman"
+```
+
+**12 places across 7 pages**, including the contact page's line giving Tom
+Sparough's address, the retreat page's Illuman attribution, and the `/poems`
+closing paragraph. Astro 5's compressor did not do this.
+
+This is the same defect that got the 7.3.2 upgrade rejected in Prompt 07, and
+**it is not fixed in 7.3.3.** The 18 September audit said it was; that was wrong,
+and the correction matters more than the claim did. The audit compared rendered
+text after collapsing whitespace, which erases exactly this difference — a gate
+blind to the one bug it existed to catch. `tools/compare-build-text.py`, written
+in Prompt 07 for precisely this, finds all 12 and exits 1. It is the gate for
+this upgrade and for any future one; the ad-hoc comparison is not.
+
+Cost of turning the compressor off: **+142 gzipped bytes per page**, +4.0% of
+total HTML weight. Against 12 places where two words run together in Brian's own
+prose, that is not a close call.
+
+### Verified
+
+- `tools/compare-build-text.py`: 29 pages, no regressions — and exit 1 with 12
+  findings on the unfixed build, so the gate is known to work in both directions.
+- **68 of 68 renders pixel-identical** to 1.1.0 (mobile and desktop, light and
+  dark, full page, 2-pixel channel tolerance).
+- All three CSP script hashes unchanged, so `_headers` needed no edit.
+- Media queries confirmed still in `max-width:` form in the built stylesheet.
+- Every logical-property shorthand Lightning CSS expanded (`padding-block` →
+  `padding-block-start`/`-end`, and 16 others) checked value by value.
+- 128 page loads under the enforced CSP at 305, 320, 390 and 1440 px in both
+  themes: zero console errors, zero CSP violations, zero overflow.
+- Contrast re-measured on everything 1.1.0 fixed; all still pass.
+
+---
+
 ## 1.1.0 — 19 September 2026
 
 The first maintenance release, built from two independent audits of the live

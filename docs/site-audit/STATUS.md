@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com` at **version 1.0.0** (tagged `v1.0.0`, 2026-09-19 — see `../../CHANGELOG.md`). **Audited 2026-09-18** — `audit-2026-09-18.md`, 18 findings (`M01`–`M18`), 1 high. Next: merge with the parallel Codex audit, then the maintenance release, then Stripe. |
+| **Stage** | Prompts 00–12 complete and the site is live on `www.brianmueller.com` at **version 1.2.0** (tagged; see `../../CHANGELOG.md`). 1.1.0 shipped the merged audit fixes, 1.2.0 the Astro 7 upgrade. **Audited 2026-09-18** — `audit-2026-09-18.md`, 18 findings (`M01`–`M18`), 1 high. Next: merge with the parallel Codex audit, then the maintenance release, then Stripe. |
 | **Repository** | `github.com/b-drive-us/brianmueller-website`, working copy at `Publishing/brianmueller-website/06 - Site` |
 | **Branch** | `audit/2026-09` and `main` both pushed, both at `b2761c8`. |
 | **Candidate commit** | `b2761c8` — "Say on the policy pages that the site counts visitors, and how" (2026-09-18) |

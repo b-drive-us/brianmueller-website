@@ -197,8 +197,10 @@ Alone, because it is the only change that touches every file.
 - Astro 5.18.2 → 7.3.3, **with** `vite: { build: { cssTarget: [...] } }`. Without that
   line Lightning CSS rewrites all six width media queries to Level 4 range syntax and
   the responsive layout silently stops applying below Safari 16.4.
-- Gate: `tools/compare-build-text.py` — rendered text byte-identical on all 29 pages,
-  all three CSP hashes unchanged, `npm audit` at zero.
+- Gate: `tools/compare-build-text.py` — and it must be **that** harness, not a
+  whitespace-normalising text diff, which cannot see the inline-space bug.
+  **Shipped in 1.2.0**, and it needed `compressHTML: false` as well: the Prompt 07
+  whitespace regression is not fixed in 7.3.3.
 
 ### Stage 4 — after deployment, one at a time
 
