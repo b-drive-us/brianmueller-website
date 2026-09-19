@@ -1,5 +1,12 @@
 # Release plan
 
+> **Historical, and kept deliberately.** This describes the release candidate as
+> it stood before the 18 September 2026 cutover, when staging still lived on
+> `brianmueller.org`. That domain was retired at cutover (D-25) and the site has
+> since shipped five tagged releases. For the current state read `STATUS.md`;
+> for what is next, `../../../RUNBOOK - Next Session.md`. Nothing here should be
+> acted on.
+
 Rewritten at Prompt 10 to describe the candidate that actually exists. Updated at Prompt 11,
 after the beta was deployed and verified.
 

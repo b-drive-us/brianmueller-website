@@ -830,3 +830,43 @@ Poems*, so two legacy URLs share one destination.
 All twelve distinct destinations verified HTTP 200 on 19 September 2026. This
 closes Section C and, with D-34, the whole of the legacy-poem redirect work:
 52 of the 226 legacy URLs now reach a poem; the remaining 174 reach `/poems`.
+
+## D-36 — Resend, not Cloudflare Email Service, for the site's mail
+
+**Brian, 19 September 2026.** *"I defer to your best judgement. I like the
+'Cloudflare Email Routing + a Worker' since it requires no additional accounts.
+You helped me to setup Resend for another project and that worked well. And I'd
+rather not use MailChannels since it is likely going to be a paid service."*
+
+MailChannels is out, and Brian is right about why — its free tier for Cloudflare
+Workers ended some time ago.
+
+The Cloudflare option is more attractive than it first looks and deserves to be
+recorded accurately rather than waved away. **Cloudflare Email Service** (the
+successor to Email Routing, checked 19 September 2026) gives a Worker a
+`send_email` binding, and **sending to a verified destination address in your own
+account is free on all plans.** A contact form always sends to Brian, which is
+exactly that case. It would have worked, it would have cost nothing, and it
+would have added no vendor.
+
+**It loses on the next piece of work, not this one.** Sending to an *arbitrary
+external* recipient — a registrant's confirmation email — is a separate,
+**beta** capability that requires the **Workers Paid** plan. This zone is on the
+free plan. So the Cloudflare path would build the contact form now and then need
+replacing, or doubling, the moment Stripe registration needs to email the person
+who just paid. Two sending paths, two sets of failure modes, and two places to
+look when a message does not arrive — on the system Brian has said must be
+bullet-proof with no revision after it opens.
+
+**Resend does both, today, out of one account Brian already knows.** It is not
+an additional vendor in the sense that mattered to him: he has used it and it
+worked. It also brings delivery logs and bounce handling, which is what you
+actually want at 2 a.m. when a registrant says they paid and got nothing.
+
+Sender: an authenticated `brianmueller.com`. Brian adds the SPF, DKIM and
+return-path records at Cloudflare and creates a send-scoped API key; the key
+goes in as a Worker secret and **Claude never sees it**. Implementation plan in
+`contact-form-plan.md`.
+
+Worth revisiting if Cloudflare's external sending leaves beta and lands on the
+free plan — at which point the argument above stops holding.

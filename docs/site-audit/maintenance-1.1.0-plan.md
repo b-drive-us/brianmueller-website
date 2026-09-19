@@ -1,5 +1,14 @@
 # Maintenance release 1.1.0 — merged plan
 
+> **Historical, and kept deliberately.** This is the merged plan for what became
+> **1.1.0**, written on 19 September 2026 from the two audits. It shipped, and so
+> did everything it deferred: 1.2.0 the Astro 7 upgrade, 1.3.0 the Cookie Policy
+> reset, 1.4.0 the content and email-address work, 1.4.1 the legacy-poem
+> redirects. **One item from it is still open: the Terms rewrite (`R07`),**
+> scoped per D-30. Kept because it records how two independent audits were
+> reconciled — including the three places they disagreed, which were settled by
+> measurement rather than by averaging. For the current state read `STATUS.md`.
+
 **Inputs:** the Claude audit of 18 September (`audit-2026-09-18.md`, findings `M01`–`M18`)
 and the Codex audit of the production site, delivered 19 September (findings `R01`–`R08`).
 **Baseline:** `v1.0.0`, commit `afff1aa`, live.

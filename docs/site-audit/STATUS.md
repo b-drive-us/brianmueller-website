@@ -16,6 +16,8 @@
 | **Legacy poem URLs** | **Closed 2026-09-19.** Of the 226, **52 now reach a poem** and 174 reach `/poems`, which carries a line written for a reader arriving from an old link. None reach a dead end. All 25 of Section C shipped in 1.4.1 (D-33, D-35); Section D stays as it is (D-34). Every row's evidence and approval is in `redirect-map.csv`, and `public/_redirects` is generated from it. |
 | **Readiness** | Live and verified on the real hostname after DNS propagation. D-08 and D-19 were closed **by Brian’s affirmation rather than by verification** (D-22). **N20 closed** — the recovered post is in the archive. **HSTS closed** (D-32). Open: Search Console property (none exists on either Google account). |
 | **Carried to the next release** | The *Bull Heart* and *Jonah* page-count caveats, *Men Writing for Change* Vol. 1 re-recorded to its second printing, `author` and `editor` in the anthologies' JSON-LD, and the Terms rewrite (`R07`, scoping §§3–5 per D-30). |
+| **Mail path** | **Decided 2026-09-19: Resend** on an authenticated `brianmueller.com` (D-36). Cloudflare Email Service would send to a verified own-account address free, but external recipients — a registrant's confirmation — are beta and Workers Paid. Plan in `contact-form-plan.md`. Waiting on Brian for DNS records and a send-scoped API key. |
+| **Moving to Claude Code** | 2026-09-19. `../../CLAUDE.md` carries the working rules; this file stays the state of record. |
 | **Records updated** | 2026-09-19 |
 
 ## What the audit actually examined

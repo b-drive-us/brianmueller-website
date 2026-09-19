@@ -1,5 +1,11 @@
 # Beta handoff — brianmueller.org
 
+> **Historical, and kept deliberately.** This is the beta handoff written on
+> 18 September 2026, when the beta was served from `brianmueller.org`. That
+> domain was fully retired at cutover the same day (D-25); staging now lives on
+> the beta Worker's own `workers.dev` address. Kept because it records how the
+> candidate was verified before it went live. Nothing here should be acted on.
+
 **18 September 2026 · Prompt 11 · the beta is live and checked. Production is untouched.**
 
 | | |
